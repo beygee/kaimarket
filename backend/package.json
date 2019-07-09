@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env NODE_PATH=./ node index.js",
+    "start": "cross-env NODE_PATH=./ forever start index.js",
+    "clean": "fuser -k -n tcp 3000"
   },
   "keywords": [],
   "author": "",
@@ -12,7 +14,11 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "consola": "^2.9.0",
+    "cross-env": "^5.2.0",
     "express": "^4.17.1",
+    "koa": "^2.7.0",
+    "koa-body": "^4.1.0",
+    "koa-router": "^7.4.0",
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "mongoose": "^5.6.4"
