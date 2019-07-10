@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">kaimarket</string>
+    <string name="facebook_app_id">446460636177242</string> 
+    <string name="fb_login_protocol_scheme">fb446460636177242</string>
+    <string name="kakao_app_key">04a8125be3934be680e9bef651735120</string>
+    <string name="naver_client_id">4Wvtvdy5d0rhfthK3TjR</string>
+    <string name="naver_client_secret">xMRm7bLEuY</string>
+    <string name="naver_client_name">kaimarket</string>
+</resources>

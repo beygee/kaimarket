@@ -34,11 +34,12 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.week_3"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        // testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -56,6 +57,35 @@ flutter {
 
 dependencies {
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    //멀티덱스
+    implementation 'com.android.support:multidex:1.0.3'
+
+    //페북
+    implementation 'com.facebook.android:facebook-login:[5,6)'
+
+    //구글
+    // implementation 'com.google.firebase:firebase-core:17.0.0'
+
+    //카카오
+    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: project.KAKAO_SDK_VERSION
+
+    // 네이버
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support:support-core-utils:26.1.0'
+    implementation 'com.android.support:customtabs:26.1.0'
+    implementation 'com.android.support:support-v4:26.1.0'
 }
+
+// configurations.all {
+//     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+//         if (details.requested.group == 'androidx.core'
+//                 && !details.requested.name.contains('androidx') ) {
+//             details.useVersion "1.0.2"
+//         }
+//     }
+// }
+
+apply plugin: 'com.google.gms.google-services'

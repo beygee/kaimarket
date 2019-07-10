@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "852111566125",
+    "firebase_url": "https://kaimarket-1bf8c.firebaseio.com",
+    "project_id": "kaimarket-1bf8c",
+    "storage_bucket": "kaimarket-1bf8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852111566125:android:eb816024ef33bb9e",
+        "android_client_info": {
+          "package_name": "com.example.week_3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "852111566125-mltapjuk69np1e87lri5jbcgcotj882o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.week_3",
+            "certificate_hash": "41230d791886c580c26257371013c89df87a2aa9"
+          }
+        },
+        {
+          "client_id": "852111566125-q4je9n24nb5lpmshjh2b4u8tdmuir9iv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPrAL981aZL-k2wKhefeoi8zHE6TZxhic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "852111566125-q4je9n24nb5lpmshjh2b4u8tdmuir9iv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
