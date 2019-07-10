@@ -9,6 +9,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:week_3/layout/default.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -156,6 +157,7 @@ class _LoginPageState extends State<LoginPage> {
           if (res.statusCode == 200) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('access_token', res.data);
+            _goToHomePage(context);
           }
           break;
         case NaverLoginStatus.cancelledByUser:
@@ -183,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
           if (res.statusCode == 200) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('access_token', res.data);
-            log.i(res.data);
+            _goToHomePage(context);
           }
           break;
         case KakaoLoginStatus.loggedOut:
@@ -222,6 +224,7 @@ class _LoginPageState extends State<LoginPage> {
           if (res.statusCode == 200) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             await prefs.setString('access_token', res.data);
+            _goToHomePage(context);
           } else {
             showSnackBar(context, "로그인 실패");
           }
@@ -231,5 +234,10 @@ class _LoginPageState extends State<LoginPage> {
       log.e(e);
       showSnackBar(context, "로그인 실패");
     });
+  }
+
+  void _goToHomePage(context) {
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => DefaultLayout()));
   }
 }
