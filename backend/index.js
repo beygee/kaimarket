@@ -4,6 +4,7 @@ const consola = require("consola")
 const koaBody = require("koa-body")
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
+const { jwtMiddleware } = require("lib/token")
 
 consola.wrapConsole()
 
@@ -30,6 +31,9 @@ const start = async () => {
 
   //바디 파서
   app.use(koaBody())
+
+  //JWT 인증
+  app.use(jwtMiddleware)  
 
   //라우터 연결
   const router = new Router()
