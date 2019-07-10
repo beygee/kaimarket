@@ -11,13 +11,18 @@ consola.wrapConsole()
 const app = new Koa()
 const port = 3000
 
+//소켓서버
+const http = require('http')
+const createSocketServer = require("socket/index")
+const server = http.createServer(app.callback())
+
 //시작 함수
 const start = async () => {
   //DB 연결
   await mongoose.connect("mongodb://localhost:27017/kaimarket", {
     useNewUrlParser: true
   })
-  const db = require("./lib/db")
+  const db = require("lib/db")
   app.use((ctx, next) => {
     ctx.db = db
     return next()
@@ -32,7 +37,9 @@ const start = async () => {
   router.use("/api", api.routes())
   app.use(router.routes()).use(router.allowedMethods())
 
-  app.listen(port)
+  server.listen(port)
+  createSocketServer(server)
+
   console.ready({
     message: `서버 오픈 :) ${port} >_ <`,
     badge: true
