@@ -159,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
       switch (result.status) {
         case NaverLoginStatus.loggedIn:
           var tokenResult = await FlutterNaverLogin.currentAccessToken;
-          final res = await Dio().postUri(getUri('/api/auth/naver'),
+          final res = await dio.postUri(getUri('/api/auth/naver'),
               data: {'access_token': tokenResult.accessToken});
           if (res.statusCode == 200) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -187,7 +187,7 @@ class _LoginPageState extends State<LoginPage> {
       switch (result.status) {
         case KakaoLoginStatus.loggedIn:
           var token = await kakaoSignIn.currentAccessToken;
-          final res = await Dio().postUri(getUri('/api/auth/kakao'),
+          final res = await dio.postUri(getUri('/api/auth/kakao'),
               data: {'access_token': token.token});
           if (res.statusCode == 200) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -225,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
         case FacebookLoginStatus.loggedIn:
           print("LoggedIn");
           var token = result.accessToken.token;
-          var res = await Dio().postUri(getUri('/api/auth/facebook'),
+          var res = await dio.postUri(getUri('/api/auth/facebook'),
               data: {'access_token': token});
 
           if (res.statusCode == 200) {
@@ -245,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _loginWithGuest(context) {
     _loadingWrapperKey.currentState.loadFuture(() async {
-      var res = await Dio().postUri(getUri('/api/auth/guest'));
+      var res = await dio.postUri(getUri('/api/auth/guest'));
 
       if (res.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
