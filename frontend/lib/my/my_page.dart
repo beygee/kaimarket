@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:week_3/utils/utils.dart';
 
 class MyPage extends StatefulWidget {
@@ -8,23 +7,13 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  final FirebaseMessaging _messaging = FirebaseMessaging();
-  @override
-  void initState() {
-    super.initState();
-
-    _messaging.getToken().then((token) {
-      log.i(token);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: RaisedButton(
           onPressed: () async {
-            await dio.getUri(getUri('/api/me/test'));
+            // await dio.getUri(getUri('/api/me/test'));
           },
           child: Text("버튼"),
         ),
