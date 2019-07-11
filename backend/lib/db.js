@@ -7,7 +7,9 @@ const UserSchema = new Schema({
   name: String,
   email: { type: String, unique: true, required: true },
   purchases: [{ type: Schema.Types.ObjectId, ref: "post" }], //구매내역
-  sales: [{ type: Schema.Types.ObjectId, ref: "post" }] //판매내역
+  sales: [{ type: Schema.Types.ObjectId, ref: "post" }], //판매내역
+  valid: Boolean, //학번 인증 여부
+  hakbun: String //학번
 })
 const PostSchema = new Schema({
   _user: { type: Schema.Types.ObjectId, ref: "user" },
