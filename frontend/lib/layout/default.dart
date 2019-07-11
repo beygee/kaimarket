@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:week_3/home/home_page.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -40,16 +41,16 @@ class _DefaultLayoutState extends State<DefaultLayout> {
         controller: _pageController,
         itemCount: 4,
         itemBuilder: (context, idx) {
-          return Scaffold(
-            body: Column(
-              children: <Widget>[
-                SizedBox(
-                  height: 100.0,
-                ),
-                Text("$idx")
-              ],
-            ),
-          );
+          switch(idx){
+            case 0:
+            return HomePage();
+            case 1: 
+            return Container();
+            case 2: 
+            return Container();
+            case 3:
+            return Container();
+          }
         },
       ),
     );
