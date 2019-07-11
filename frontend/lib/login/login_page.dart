@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:week_3/login/login_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -35,9 +35,9 @@ class _LoginPageState extends State<LoginPage> {
                       width: 340.0,
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: 200.0),
+                          SizedBox(height: screenAwareSize(100.0, context)),
                           _buildHeader(context),
-                          SizedBox(height: 50.0),
+                          SizedBox(height: screenAwareSize(50.0, context)),
                           _buildButtons(context),
                         ],
                       ),
@@ -79,9 +79,6 @@ class _LoginPageState extends State<LoginPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        SizedBox(
-          height: 30.0,
-        ),
         LoginButton(
           text: "게스트 로그인",
           icon: FontAwesomeIcons.user,
@@ -94,7 +91,6 @@ class _LoginPageState extends State<LoginPage> {
         //   color: Color(0xff3488f1),
         //   onPressed: () => _loginWithGoogle(context),
         // ),
-        // SizedBox(height: 10.0),
         SizedBox(height: 10.0),
         LoginButton(
           text: "페이스북과 연결하기",
@@ -130,9 +126,9 @@ class _LoginPageState extends State<LoginPage> {
   //구글로 연결
   void _loginWithGoogle(context) {
     _loadingWrapperKey.currentState.loadFuture(() async {
-      // final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+      final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
 
-      // GoogleSignInAccount googleUser = await googleSignIn.signIn();
+      GoogleSignInAccount googleUser = await googleSignIn.signIn();
       // GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       // var token = googleAuth.accessToken;
@@ -159,7 +155,7 @@ class _LoginPageState extends State<LoginPage> {
       switch (result.status) {
         case NaverLoginStatus.loggedIn:
           var tokenResult = await FlutterNaverLogin.currentAccessToken;
-          final res = await Dio().postUri(getUri('/api/auth/naver'),
+          final res = await dio.postUri(getUri('/api/auth/naver'),
               data: {'access_token': tokenResult.accessToken});
           if (res.statusCode == 200) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -187,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
       switch (result.status) {
         case KakaoLoginStatus.loggedIn:
           var token = await kakaoSignIn.currentAccessToken;
-          final res = await Dio().postUri(getUri('/api/auth/kakao'),
+          final res = await dio.postUri(getUri('/api/auth/kakao'),
               data: {'access_token': token.token});
           if (res.statusCode == 200) {
             SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -225,7 +221,7 @@ class _LoginPageState extends State<LoginPage> {
         case FacebookLoginStatus.loggedIn:
           print("LoggedIn");
           var token = result.accessToken.token;
-          var res = await Dio().postUri(getUri('/api/auth/facebook'),
+          var res = await dio.postUri(getUri('/api/auth/facebook'),
               data: {'access_token': token});
 
           if (res.statusCode == 200) {
@@ -245,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _loginWithGuest(context) {
     _loadingWrapperKey.currentState.loadFuture(() async {
-      var res = await Dio().postUri(getUri('/api/auth/guest'));
+      var res = await dio.postUri(getUri('/api/auth/guest'));
 
       if (res.statusCode == 200) {
         SharedPreferences prefs = await SharedPreferences.getInstance();

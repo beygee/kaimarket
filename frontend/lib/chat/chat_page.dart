@@ -157,7 +157,7 @@ class DetailItemsState extends State<DetailItems> {
             height: 30,
             child: new RaisedButton(
               color: Colors.amber[200],
-              child: Text('톡으로 연락하기', style: _buttonFont,),
+              child: Text('톡으로 거래하기', style: _buttonFont,),
               elevation: 0.0,
               shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(10.0)),
               onPressed: () {
