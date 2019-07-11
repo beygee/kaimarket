@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:week_3/home/item_config.dart';
+import 'package:week_3/models/item_config.dart';
 import 'package:week_3/utils/base_height.dart';
 
 const String _kGalleryAssetsPackage = 'madcamp_week_3/frontend';
