@@ -82,6 +82,12 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(
           height: 30.0,
         ),
+        LoginButton(
+          text: "게스트 로그인",
+          icon: FontAwesomeIcons.user,
+          color: Color(0xffaaaaaa),
+          onPressed: () => _loginWithGuest(context),
+        ),
         // LoginButton(
         //   text: "구글과 연결하기",
         //   icon: FontAwesomeIcons.google,
@@ -89,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
         //   onPressed: () => _loginWithGoogle(context),
         // ),
         // SizedBox(height: 10.0),
+        SizedBox(height: 10.0),
         LoginButton(
           text: "페이스북과 연결하기",
           icon: FontAwesomeIcons.facebookF,
@@ -236,8 +243,25 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  void _loginWithGuest(context) {
+    _loadingWrapperKey.currentState.loadFuture(() async {
+      var res = await Dio().postUri(getUri('/api/auth/guest'));
+
+      if (res.statusCode == 200) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('access_token', res.data);
+        _goToHomePage(context);
+      } else {
+        showSnackBar(context, "로그인 실패");
+      }
+    }, onError: (e) {
+      log.e(e);
+      showSnackBar(context, "로그인 실패");
+    });
+  }
+
   void _goToHomePage(context) {
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => DefaultLayout()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => DefaultLayout()));
   }
 }
