@@ -46,9 +46,9 @@ class _DefaultLayoutState extends State<DefaultLayout> {
             case 0:
             return HomePage();
             case 1: 
-            return DetailView();
-            case 2: 
             return Container();
+            case 2: 
+            return DetailView();
             case 3:
             return Container();
           }

@@ -28,12 +28,6 @@ class DetailItemsState extends State<DetailItems> {
   final _paddingFormat = const EdgeInsets.only(left: 26, top: 21, bottom: 12, right: 26);
 
   final bool alreadySaved = false;
-  // this.dotSize = 8.0,
-  //   this.dotSpacing = 25.0,
-  //   this.dotIncreaseSize = 2.0,
-  //   this.dotColor = Colors.white,
-  //   this.dotBgColor,
-  //   this.dotIncreasedColor = Colors.white,
 
   Widget _imageCarousel() {
     return Container(
@@ -102,10 +96,21 @@ class DetailItemsState extends State<DetailItems> {
       padding: _paddingFormat,
       child: new Row(
         children: <Widget>[
-          new Image.asset(
-            'assets/images/logo.jpg',
-            width: 40,
-            height: 40,
+          new Container(
+            width: 50,
+            height: 50,
+            decoration: new BoxDecoration(
+              border: Border.all(color: Colors.grey[400], width: 1.0),
+              shape: BoxShape.circle,
+              image: new DecorationImage(
+                fit: BoxFit.fill,
+                //image: new NetworkImage(
+                //  "url"
+                image: ExactAssetImage(
+                  'assets/images/logo.jpg'
+                ),
+              )
+            ),
           ),
           SizedBox(width: 30,),
           new Text(_sellerName, style: _sellerFont),
