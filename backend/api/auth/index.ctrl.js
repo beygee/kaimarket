@@ -106,4 +106,26 @@ ctrl.authWithKakao = async ctx => {
   }
 }
 
+ctrl.authWithGuest = async ctx => {
+  const { User } = ctx.db
+
+  const email = "guest@naver.com"
+  const name = "손님ㅎ"
+
+  //이메일로 회원가입했는지 구분한다.
+  const user = await User.findOne({ email })
+  if (!user) {
+    const newUser = new User({ email, name })
+    await newUser.save()
+
+    //JWT 토큰
+    const token = await generateToken({ id: newUser._id })
+    ctx.body = token
+  } else {
+    //JWT 토큰
+    const token = await generateToken({ id: user._id })
+    ctx.body = token
+  }
+}
+
 module.exports = ctrl

@@ -3,7 +3,6 @@ const router = new Router()
 
 const ctrl = require("./index.ctrl")
 
-
-router.get("/", ctrl.getProfile)
+router.get("/books", ctrl.searchBooks)
 
 module.exports = router
