@@ -71,7 +71,7 @@
 
         <!-- 구글맵 -->
         <meta-data android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAPrAL981aZL-k2wKhefeoi8zHE6TZxhic"/>
+        android:value="AIzaSyCN6eoAt_cDiJu-NBbNXwMU1FqN-h_eENA"/>
 
 
     </application>
