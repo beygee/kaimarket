@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:week_3/home/photo_config.dart';
+import 'package:week_3/home/item_config.dart';
 import 'package:week_3/utils/base_height.dart';
 
 const String _kGalleryAssetsPackage = 'madcamp_week_3/frontend';
@@ -11,69 +11,69 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final List<Photo> _photos = <Photo>[
-    Photo(
-      assetName: 'assets/images/0.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '0.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/1.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '1.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/2.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '2.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/3.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '3.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/4.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '4.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/5.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '5.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/6.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '6.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/7.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '7.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/8.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '8.jpg',
-      caption: 'Test caption'
-    ),
-    Photo(
-      assetName: 'assets/images/9.jpg',
-      assetPackage: _kGalleryAssetsPackage,
-      title: '9.jpg',
-      caption: 'Test caption'
-    ),
+  final List<Item> _items = <Item>[
+    // Item(
+    //   assetName: 'assets/images/0.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '0.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/1.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '1.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/2.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '2.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/3.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '3.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/4.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '4.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/5.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '5.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/6.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '6.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/7.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '7.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/8.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '8.jpg',
+    //   caption: 'Test caption'
+    // ),
+    // Photo(
+    //   assetName: 'assets/images/9.jpg',
+    //   assetPackage: _kGalleryAssetsPackage,
+    //   title: '9.jpg',
+    //   caption: 'Test caption'
+    // ),
   ];
-  final Set<Photo> _saved = Set<Photo>();
+  final Set<Item> _saved = Set<Item>();
   final TextStyle _biggerFont = TextStyle(fontSize:18.0);
 
   @override
@@ -265,10 +265,10 @@ class HomePageState extends State<HomePage> {
         top: false,
         bottom: false,
         child: ListView.separated(
-          itemCount: _photos.length,
+          itemCount: 10,
           
           itemBuilder: (BuildContext _context, int i){
-            return _buildRow(_photos[i]);
+            return _buildRow();//_items[i]);
           },
           separatorBuilder: (BuildContext _context, int i){
             return Divider();
@@ -278,7 +278,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRow(Photo photo){
+  Widget _buildRow(){
     return Container(
       height: 120.0,
       child: Row(
@@ -286,7 +286,7 @@ class HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: Image.asset(
-            photo.assetName,
+            'assets/images/0.jpg',
             width: 120,
             height: 120,
             fit: BoxFit.cover,
@@ -302,7 +302,7 @@ class HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    '제목',
+                    'test',
                     style: _biggerFont,
                   ),
                   Text(
@@ -324,7 +324,12 @@ class HomePageState extends State<HomePage> {
                 children: <Widget>[
                   
                   SizedBox(width: screenAwareSize(10, context),),
-                  Icon(Icons.favorite),
+                  GestureDetector(
+                  onTap: (){
+                    // onHeartTap()
+                  },
+                  child: Icon(Icons.favorite),
+                  ),
                 ],
               ),
             ],
