@@ -16,8 +16,7 @@ showSnackBar(BuildContext context, String text) {
 
 //개발 모드에 따른 hostUrl
 const bool bDebug = true;
-const String hostUrl = bDebug ? "13.209.73.209:3000" : "143.248.36.78:3000";
-// const String hostUrl = bDebug ? "143.248.191.124:3000" : "143.248.36.78:3000";
+const String hostUrl = bDebug ? "13.125.46.0:3005" : "143.248.36.78:3000";
 Uri getUri(String path) => Uri.http(hostUrl, path);
 
 //로거 모듈
