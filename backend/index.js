@@ -10,7 +10,7 @@ consola.wrapConsole()
 
 //서버 생성
 const app = new Koa()
-const port = 3000
+const port = 3005
 
 //소켓서버
 const http = require('http')

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const jwtSecret = "mySecret!kaimarket@@"
-const moment = require("lib/moment")
+// const moment = require("lib/moment")
 
 function generateToken(payload) {
   return new Promise((res, rej) => {
@@ -29,7 +29,7 @@ exports.jwtMiddleware = async (ctx, next) => {
   try {
     const decoded = await decodeToken(token)
 
-    //토큰 만료일이 하루밖에 안남으면 토큰을 재발급한다.
+    //토큰 발급일로부터 하루가 지나면 토큰을 재발급한다.
     if (Date.now() / 1000 - decoded.iat > 60 * 60 * 24) {
       //하루가 지나면 갱신해준다.
       const { id, email } = decoded

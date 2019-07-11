@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_PATH=./ nodemon index.js",
     "start": "cross-env NODE_PATH=./ forever start index.js",
-    "clean": "fuser -k -n tcp 3000"
+    "clean": "fuser -k -n tcp 3005"
   },
   "keywords": [],
   "author": "",
