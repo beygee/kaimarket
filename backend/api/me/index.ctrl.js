@@ -1,11 +1,13 @@
-const Router = require("koa-router")
-const request = require("request-promise")
-const { generateToken } = require("lib/token")
-
 const ctrl = {}
 
 ctrl.getProfile = async ctx => {
-  ctx.body = "OK"
+  const { User } = ctx.db
+  const { user } = ctx
+  if (user) {
+    ctx.body = "OK"
+  } else {
+    ctx.error(401, "NO VALID", { code: 1 })
+  }
 }
 
 module.exports = ctrl
