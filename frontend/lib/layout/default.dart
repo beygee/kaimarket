@@ -43,7 +43,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
         controller: _pageController,
         itemCount: 4,
         itemBuilder: (context, idx) {
-          switch(idx){
+          switch (idx) {
             case 0:
             return HomePage();
             case 1: 
@@ -51,7 +51,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
             case 2: 
             return Container();
             case 3:
-            return MyPage();
+              return MyPage();
           }
         },
       ),
@@ -88,7 +88,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                   child: TabButton(
                     icon: FontAwesomeIcons.commentDots,
                     text: "채팅",
-                    iconSize: 20.0,
+                    iconSize: 16.0,
                     index: 1,
                     controller: _pageController,
                     selectedIndex: _selectedTabIndex,
@@ -101,7 +101,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                   child: TabButton(
                     icon: Icons.favorite_border,
                     text: "찜",
-                    iconSize: 20.0,
+                    iconSize: 16.0,
                     index: 2,
                     controller: _pageController,
                     selectedIndex: _selectedTabIndex,
@@ -111,7 +111,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                   child: TabButton(
                     icon: FontAwesomeIcons.user,
                     text: "내 메뉴",
-                    iconSize: 20.0,
+                    iconSize: 16.0,
                     index: 3,
                     controller: _pageController,
                     selectedIndex: _selectedTabIndex,
@@ -128,11 +128,13 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                   children: <Widget>[
                     Icon(
                       Icons.add,
-                      size: 30.0,
+                      size: screenAwareSize(24.0, context),
                       color: Colors.white,
                     ),
                     Text("판매",
-                        style: TextStyle(color: Colors.white, fontSize: 12.0))
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenAwareSize(10.0, context)))
                   ],
                 ),
                 fillColor: ThemeColor.primary,
@@ -158,7 +160,7 @@ class TabButton extends StatelessWidget {
     Key key,
     this.icon,
     this.text,
-    this.iconSize = 28.0,
+    this.iconSize = 20.0,
     @required this.index,
     @required this.controller,
     this.selectedIndex,
@@ -178,7 +180,7 @@ class TabButton extends StatelessWidget {
         children: <Widget>[
           Icon(
             icon,
-            size: iconSize,
+            size: screenAwareSize(iconSize, context),
             color: bActive ? ThemeColor.primary : Colors.black,
           ),
           Text(

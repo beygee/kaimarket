@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "cross-env NODE_PATH=./ nodemon index.js",
     "start": "cross-env NODE_PATH=./ forever start index.js",
-    "clean": "fuser -k -n tcp 3005"
+    "clean": "fuser -k -n tcp 3005",
+    "crowl": "cross-env NODE_PATH=./ node crowl/index.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +20,8 @@
     "dotenv": "^8.0.0",
     "email-templates": "^6.0.0",
     "express": "^4.17.1",
+    "firebase": "^6.2.4",
+    "firebase-admin": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-body": "^4.1.0",

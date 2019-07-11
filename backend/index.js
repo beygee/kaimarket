@@ -5,6 +5,7 @@ const koaBody = require("koa-body")
 const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 const { jwtMiddleware } = require("lib/token")
+const admin = require("firebase-admin")
 
 consola.wrapConsole()
 
@@ -13,7 +14,7 @@ const app = new Koa()
 const port = 3005
 
 //소켓서버
-const http = require('http')
+const http = require("http")
 const createSocketServer = require("socket/index")
 const server = http.createServer(app.callback())
 
@@ -29,11 +30,22 @@ const start = async () => {
     return next()
   })
 
+  //파이어베이스 연결
+  const serviceAccount = require("data/firebase-admin.json")
+  const fb = admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://kaimarket-1bf8c.firebaseio.com"
+  })
+  app.use((ctx, next) => {
+    ctx.fb = fb
+    return next()
+  })
+
   //바디 파서
   app.use(koaBody())
 
   //JWT 인증
-  app.use(jwtMiddleware)  
+  app.use(jwtMiddleware)
 
   //라우터 연결
   const router = new Router()
