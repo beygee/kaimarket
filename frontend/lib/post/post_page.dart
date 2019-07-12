@@ -8,6 +8,7 @@ import 'package:week_3/post/photo_button.dart';
 import 'package:week_3/post/google_map.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class PostPage extends StatefulWidget {
 
@@ -34,6 +35,8 @@ class PostPageState extends State<PostPage> {
             SizedBox(height: screenAwareSize(10.0, context)),
             Column(
               children: <Widget>[
+                
+                ///// 카테고리 선택
                 Container(
                   alignment: FractionalOffset(0.5,0.5),
                   width: screenAwareSize(300.0, context),
@@ -53,10 +56,14 @@ class PostPageState extends State<PostPage> {
                        _buildCategoryList(context),
                   ],)
                 ),
+
+                //// 사진버튼
                 Padding(
-                  padding: EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(15.0),
                   child:   _buildPhotoList(context),
                 ),
+
+                ///// 상품명
                 Container(
                   alignment: FractionalOffset(0.5,0.5),
                   width: screenAwareSize(300.0, context),
@@ -72,6 +79,8 @@ class PostPageState extends State<PostPage> {
                    _buildTitleInput(context),
                   ],)
                 ),
+
+                ///// 가격
                 Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Container(
@@ -90,6 +99,27 @@ class PostPageState extends State<PostPage> {
                   ],)
                 ),
                 ),
+              
+                ///// 내용
+                Container(
+                  alignment: FractionalOffset(0.5,0.5),
+                  width: screenAwareSize(300.0, context),
+                  height: screenAwareSize(300.0, context),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.grey,
+                    ),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                   _buildContentInput(context),
+                  ],)
+                ),
+
+                SizedBox(height: screenAwareSize(10.0, context)),
+
                 Container(
                   alignment: FractionalOffset(0.5,0.5),
                   width: screenAwareSize(300.0, context),
@@ -98,20 +128,22 @@ class PostPageState extends State<PostPage> {
                     color: Colors.white,
                     border: Border.all(
                       color: Colors.grey,
-                    ), 
+                    ),
                   ),
                   child: Column(
                     children: <Widget>[
-                   _buildContentInput(context),
+                    Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: Text(
+                        '선호 거래지역', style: TextStyle(fontSize:15.0)
+                      ),
+                    ),
+                    
+                    GoogleMapPage(),
                   ],)
                 ),
-                Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Text(
-                    '선호 거래지역', style: TextStyle(fontSize:15.0)
-                  ),
-                ),
-                GoogleMapPage(),
+
+                /////버튼
                 Padding(
                   padding: EdgeInsets.all(50.0),
                   child: MaterialButton(
@@ -152,6 +184,9 @@ class PostPageState extends State<PostPage> {
       child: TextField(
         decoration: InputDecoration(
           hintText: "상품명",
+          hintStyle: TextStyle(
+            fontSize: 14.0,
+          ),
           border: InputBorder.none,
         ),
       ),
@@ -164,6 +199,9 @@ class PostPageState extends State<PostPage> {
       child: TextField(
         decoration: InputDecoration(
           hintText: "가격",
+          hintStyle: TextStyle(
+            fontSize: 14.0,
+          ),
           border: InputBorder.none,
         ),
       ),
@@ -173,10 +211,19 @@ class PostPageState extends State<PostPage> {
   Widget _buildContentInput(context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      // child: AutoSizeText(
+      
+      //   style: TextStyle(fontSize: 20),
+      //   maxLines: 4,
+      // ),
       child: TextField(
         decoration: InputDecoration(
           hintText: "내용",
+          hintStyle: TextStyle(
+            fontSize: 14.0,
+          ),
           border: InputBorder.none,
+          
         ),
       ),
     );
