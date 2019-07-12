@@ -29,8 +29,11 @@ class SellOverlay extends StatelessWidget {
                   alignment: Alignment.bottomCenter,
                   children: <Widget>[
                     Positioned.fill(
-                      child: Container(
-                        color: Colors.black26,
+                      child: GestureDetector(
+                        onTap: onPressCancel,
+                        child: Container(
+                          color: Colors.black26,
+                        ),
                       ),
                     ),
                     Stack(
