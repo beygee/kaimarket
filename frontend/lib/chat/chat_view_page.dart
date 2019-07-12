@@ -50,7 +50,7 @@ class ChatState extends State<Chat> {
           children: <Widget>[
             new Message(
                         from: 'diuni',
-                        text: '언제 시간되시나요?',
+                        text: 'heello 내 이름은 지윤팍팍 아임 지윤 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
                         me: 'diuni' == 'nebula',
             ),
             Container(
@@ -83,8 +83,8 @@ class ChatState extends State<Chat> {
   // final _message = {text:'안녕하세요', time: '오후 3:35',
   //                   text: '언제 시간 되시나요?', time: '오후 3:36'};
 
-  // final _partnerNameFont = TextStyle(fontSize: 16.0, color: Colors.grey[600]);
-  // final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);
+   final _partnerNameFont = TextStyle(fontSize: 20.0, color: Colors.grey[600]);
+ //  final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);
   // final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
   // final _paddingFormat = EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
@@ -131,6 +131,8 @@ class Message extends StatelessWidget {
 
   final bool me;
 
+  final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
+
   const Message({Key key,this.from, this.text, this.me}) : super (key: key);
   @override
   Widget build(BuildContext context) {
@@ -140,12 +142,13 @@ class Message extends StatelessWidget {
        children: <Widget>[
          Material(
            color: me ? Colors.white: Colors.amber[200],
-           borderRadius: BorderRadius.circular(20.0),
+           borderRadius: BorderRadius.circular(30.0),
            elevation: 0.0,
            child: Container(
-             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+             padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 24.0),
              child: Text(
                text,
+               style: _chatFont,
              ),
            ),
          )
