@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:week_3/models/item_config.dart';
+import 'package:week_3/post/detail_view.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'package:week_3/home/category_button.dart';
+import 'package:week_3/utils/utils.dart';
 
 const String _kGalleryAssetsPackage = 'madcamp_week_3/frontend';
 
@@ -56,7 +57,6 @@ class HomePageState extends State<HomePage> {
       '여성의류',
       '남성의류',
       '도서',
-      
       '기타'
     ];
     List<IconData> icons = [
@@ -98,10 +98,10 @@ class HomePageState extends State<HomePage> {
         bottom: false,
         child: ListView.separated(
           itemCount: 10,
-          itemBuilder: (BuildContext _context, int i) {
-            return _buildRow(); //_items[i]);
+          itemBuilder: (BuildContext context, int idx) {
+            return _buildRow(context);
           },
-          separatorBuilder: (BuildContext _context, int i) {
+          separatorBuilder: (BuildContext context, int i) {
             return Divider();
           },
         ),
@@ -109,67 +109,63 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRow() {
-    return Container(
-      height: 120.0,
-      child: Row(
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.all(10.0),
-            child: Image.asset(
-              'assets/images/0.jpg',
-              width: 120,
-              height: 120,
-              fit: BoxFit.cover,
+  Widget _buildRow(context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => DetailView()));
+      },
+      child: Container(
+        height: 120.0,
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Image.asset(
+                'assets/images/0.jpg',
+                width: 120,
+                height: 120,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: screenAwareSize(5, context),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'test',
-                      style: _biggerFont,
-                    ),
-                    Text('날짜')
-                  ],
-                ),
-                Text(
-                  '부제',
-                ),
-                Text(
-                  '부제2',
-                ),
-                Text(
-                  '부제3',
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    SizedBox(
-                      width: screenAwareSize(10, context),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        // onHeartTap()
-                      },
-                      child: Icon(Icons.favorite),
-                    ),
-                  ],
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: screenAwareSize(5, context)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('test', style: _biggerFont),
+                      Text('날짜')
+                    ],
+                  ),
+                  Text('부제'),
+                  Text('부제2'),
+                  Text('부제3'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      SizedBox(
+                        width: screenAwareSize(10, context),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // onHeartTap()
+                        },
+                        child: Icon(Icons.favorite),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-          SizedBox(
-            width: screenAwareSize(10, context),
-          ),
-        ],
+            SizedBox(
+              width: screenAwareSize(10, context),
+            ),
+          ],
+        ),
       ),
     );
   }

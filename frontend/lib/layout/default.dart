@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:week_3/home/home_page.dart';
+import 'package:week_3/layout/sell_overlay.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/chat/chat_page.dart';
@@ -9,19 +10,42 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
 import 'package:week_3/layout/tab_button.dart';
 import 'package:week_3/post/google_map.dart';
+import 'package:week_3/layout/sell_button.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
   _DefaultLayoutState createState() => _DefaultLayoutState();
 }
 
-class _DefaultLayoutState extends State<DefaultLayout> {
+class _DefaultLayoutState extends State<DefaultLayout>
+    with TickerProviderStateMixin {
   PageController _pageController = PageController();
   int _selectedTabIndex = 0;
+
+  AnimationController _sellButtonController;
+  Animation _sellButtonAnimation;
+  Animation<Offset> _leftSmallSellButtonAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _sellButtonController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    _sellButtonAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+            parent: _sellButtonController, curve: Curves.decelerate));
+
+    _leftSmallSellButtonAnimation =
+        Tween<Offset>(begin: Offset(0.0, -15.0), end: Offset(-60.0, -75.0))
+            .animate(CurvedAnimation(
+                parent: _sellButtonController, curve: Curves.decelerate));
+  }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _sellButtonController.dispose();
     super.dispose();
   }
 
@@ -32,6 +56,8 @@ class _DefaultLayoutState extends State<DefaultLayout> {
       children: <Widget>[
         _buildPageView(context),
         _buildBottomTabs(context),
+        _buildSellButton(context),
+        _buildSellOverlay(context),
       ],
     );
   }
@@ -63,21 +89,23 @@ class _DefaultLayoutState extends State<DefaultLayout> {
   }
 
   Widget _buildBottomTabs(context) {
-    return Material(
-      color: Colors.transparent,
-      child: Container(
-        height: screenAwareSize(50.0, context),
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
-          BoxShadow(
-            blurRadius: 10.0,
-            color: Colors.black12,
-          )
-        ]),
-        child: Stack(
-          overflow: Overflow.visible,
-          alignment: Alignment.bottomCenter,
-          children: <Widget>[
-            Row(
+    return Positioned(
+      height: screenAwareSize(50.0, context),
+      left: 0.0,
+      right: 0.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            width: double.infinity,
+            height: screenAwareSize(50.0, context),
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              BoxShadow(
+                blurRadius: 10.0,
+                color: Colors.black12,
+              )
+            ]),
+            child: Row(
               children: <Widget>[
                 Expanded(
                   child: TabButton(
@@ -98,9 +126,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                     selectedIndex: _selectedTabIndex,
                   ),
                 ),
-                SizedBox(
-                  width: screenAwareSize(50, context),
-                ),
+                SizedBox(width: screenAwareSize(50.0, context)),
                 Expanded(
                   child: TabButton(
                     icon: Icons.favorite_border,
@@ -123,9 +149,8 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                 ),
               ],
             ),
-            _buildSellButton(context),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -133,25 +158,30 @@ class _DefaultLayoutState extends State<DefaultLayout> {
   Widget _buildSellButton(context) {
     return Positioned(
       bottom: screenAwareSize(15.0, context),
-      child: RawMaterialButton(
-        padding: EdgeInsets.all(screenAwareSize(10.0, context)),
-        shape: CircleBorder(),
-        child: Column(
-          children: <Widget>[
-            Icon(
-              Icons.add,
-              size: screenAwareSize(24.0, context),
-              color: Colors.white,
-            ),
-            Text("판매",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: screenAwareSize(10.0, context)))
-          ],
-        ),
-        fillColor: ThemeColor.primary,
-        onPressed: () {},
+      child: SellButton(
+        text: "판매",
+        fontSize: 8,
+        icon: Icons.add,
+        iconSize: 20.0,
+        padding: 15.0,
+        onPressed: _onPressedSellButton,
       ),
+    );
+  }
+
+  _onPressedSellButton() {
+    _sellButtonController.forward(from: 0.0);
+  }
+
+  _onPressCancel() {
+    _sellButtonController.reverse();
+  }
+
+  Widget _buildSellOverlay(context) {
+    return SellOverlay(
+      listenable: _sellButtonAnimation,
+      onPressCancel: _onPressCancel,
+      leftAnimation: _leftSmallSellButtonAnimation,
     );
   }
 }
