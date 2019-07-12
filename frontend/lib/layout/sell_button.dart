@@ -28,6 +28,7 @@ class SellButton extends StatelessWidget {
       padding: EdgeInsets.all(screenAwareSize(padding, context)),
       shape: CircleBorder(),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Icon(
@@ -35,6 +36,7 @@ class SellButton extends StatelessWidget {
             size: screenAwareSize(iconSize, context),
             color: color,
           ),
+          SizedBox(height: screenAwareSize(5, context)),
           Text(text,
               style: TextStyle(
                   color: color, fontSize: screenAwareSize(fontSize, context)))

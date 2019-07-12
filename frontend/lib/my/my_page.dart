@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/styles/theme.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_naver_login/flutter_naver_login.dart';
+import 'package:flutter_kakao_login/flutter_kakao_login.dart';
+import 'package:week_3/login/login_page.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -20,7 +24,7 @@ class _MyPageState extends State<MyPage> {
               painter: ProfileHeaderPainter(),
               child: Container(
                 width: size.width,
-                height: screenAwareSize(350.0, context),
+                height: screenAwareSize(370.0, context),
               ),
             ),
           ),
@@ -31,45 +35,8 @@ class _MyPageState extends State<MyPage> {
             child: Column(
               children: <Widget>[
                 ..._buildProfile(context),
-                SizedBox(height: screenAwareSize(20.0, context)),
-                Expanded(
-                  child: Container(
-                      constraints: BoxConstraints.expand(),
-                      margin: EdgeInsets.symmetric(horizontal: 25.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 10.0,
-                            spreadRadius: -8.0,
-                            offset: Offset(0, 5.0),
-                            color: ThemeColor.primary.withOpacity(0.5),
-                          )
-                        ],
-                        borderRadius: BorderRadius.only(
-                          topLeft:
-                              Radius.circular(screenAwareSize(15.0, context)),
-                          topRight:
-                              Radius.circular(screenAwareSize(15.0, context)),
-                        ),
-                      ),
-                      child: DefaultTabController(
-                        length: 2,
-                        child: Column(
-                          children: <Widget>[
-                            TabBar(
-                              tabs: [
-                                Tab(text: "판매 내역"),
-                                Tab(text: "구매 내역"),
-                              ],
-                              labelColor: Colors.black,
-                              unselectedLabelColor: Colors.grey,
-                            ),
-                            _buildTabView(context)
-                          ],
-                        ),
-                      )),
-                ),
+                SizedBox(height: screenAwareSize(10.0, context)),
+                _buildTabView(context),
               ],
             ),
           )
@@ -77,14 +44,6 @@ class _MyPageState extends State<MyPage> {
       ),
     );
   }
-
-  Widget _buildTabView(context) {
-    return Expanded(
-      child: Container(),
-    );
-  }
-
-  Widget _buildHeader(context) {}
 
   List<Widget> _buildProfile(context) {
     return [
@@ -98,7 +57,7 @@ class _MyPageState extends State<MyPage> {
         style: TextStyle(
             color: Colors.grey[600], fontSize: screenAwareSize(16.0, context)),
       ),
-      SizedBox(height: screenAwareSize(20.0, context)),
+      SizedBox(height: screenAwareSize(5.0, context)),
       Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -130,7 +89,7 @@ class _MyPageState extends State<MyPage> {
               elevation: 0.0,
               splashColor: ThemeColor.primary,
               color: Colors.transparent,
-              onPressed: () {},
+              onPressed: _onLogout,
               child: Text(
                 "로그아웃",
                 style: TextStyle(
@@ -144,6 +103,72 @@ class _MyPageState extends State<MyPage> {
         ],
       ),
     ];
+  }
+
+  Widget _buildTabView(context) {
+    return Expanded(
+      child: Container(
+          constraints: BoxConstraints.expand(),
+          margin: EdgeInsets.only(
+              left: 25.0, right: 25.0, bottom: screenAwareSize(80.0, context)),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 10.0,
+                spreadRadius: -8.0,
+                offset: Offset(0, 5.0),
+                color: Colors.black12,
+              )
+            ],
+            borderRadius: BorderRadius.circular(screenAwareSize(15.0, context)),
+          ),
+          child: DefaultTabController(
+            length: 2,
+            child: Column(
+              children: <Widget>[
+                TabBar(
+                  tabs: [
+                    Tab(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: screenAwareSize(10.0, context)),
+                        child: Text("판매 내역",
+                            style: TextStyle(
+                                fontSize: screenAwareSize(12.0, context))),
+                      ),
+                    ),
+                    Tab(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: screenAwareSize(10.0, context)),
+                        child: Text("구매 내역",
+                            style: TextStyle(
+                                fontSize: screenAwareSize(12.0, context))),
+                      ),
+                    ),
+                  ],
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                ),
+                _buildTabPane(context)
+              ],
+            ),
+          )),
+    );
+  }
+
+  Widget _buildTabPane(context) {
+    return Expanded(
+      child: Container(),
+    );
+  }
+
+  _onLogout() async {
+    await FacebookLogin().logOut();
+
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
   }
 }
 

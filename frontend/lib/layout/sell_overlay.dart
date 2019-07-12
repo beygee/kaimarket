@@ -3,6 +3,8 @@ import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/layout/sell_button.dart';
 import 'dart:math' as math;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:week_3/post/post_page.dart';
 
 class SellOverlay extends StatelessWidget {
   final Animation listenable;
@@ -51,10 +53,10 @@ class SellOverlay extends StatelessWidget {
                                   math.sin(math.pi / 3.2),
                             ),
                             child: SellButton(
-                              text: "판매",
+                              text: "도서",
                               fontSize: 8,
-                              icon: Icons.add,
-                              iconSize: 20.0,
+                              icon: FontAwesomeIcons.book,
+                              iconSize: 14.0,
                               padding: 8.0,
                               onPressed: onPressCancel,
                             ),
@@ -72,12 +74,14 @@ class SellOverlay extends StatelessWidget {
                                   math.sin(math.pi / 3.2),
                             ),
                             child: SellButton(
-                              text: "판매",
+                              text: "다른 물품",
                               fontSize: 8,
-                              icon: Icons.add,
-                              iconSize: 20.0,
+                              icon: FontAwesomeIcons.thLarge,
+                              iconSize: 14.0,
                               padding: 8.0,
-                              onPressed: onPressCancel,
+                              onPressed: () {
+                                onSellOther(context);
+                              },
                             ),
                           ),
                         ),
@@ -88,7 +92,7 @@ class SellOverlay extends StatelessWidget {
                             fontSize: 8,
                             icon: Icons.remove,
                             iconSize: 20.0,
-                            padding: 15.0,
+                            padding: 10.0,
                             onPressed: onPressCancel,
                             bgColor: Colors.white,
                             color: ThemeColor.primary,
@@ -101,6 +105,14 @@ class SellOverlay extends StatelessWidget {
               )
             : Container();
       },
+    );
+  }
+
+  void onSellOther(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PostPage(),
+      ),
     );
   }
 }

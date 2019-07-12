@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -65,9 +67,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      body: Center(
-        child: Container(
+    return Container(
           height: 300.0,
           width: MediaQuery.of(context).size.width,
           child: Stack(
@@ -77,15 +77,21 @@ class _GoogleMapState extends State<GoogleMapPage> {
           mapType: MapType.normal,
           markers: _markers,
           onCameraMove: _onCameraMove,
+          gestureRecognizers: Set()
+          ..add(Factory<PanGestureRecognizer>(()=>PanGestureRecognizer()))
+          ..add(Factory<VerticalDragGestureRecognizer>(()=>VerticalDragGestureRecognizer()))
+          ..add(Factory<ScaleGestureRecognizer>(()=>ScaleGestureRecognizer()))
+          ..add(Factory<TapGestureRecognizer>(()=>TapGestureRecognizer())),
           zoomGesturesEnabled: true,
           scrollGesturesEnabled: true,
+          tiltGesturesEnabled: true,
           onTap: (latlang){
             if(_markers.length>=1){
               _markers.clear();
             }
             _selectMapPosition = latlang;
           },
-          initialCameraPosition: kaist
+          initialCameraPosition: kaist,
          ),
          Padding(
           padding:  const EdgeInsets.all(16.0),
@@ -96,14 +102,14 @@ class _GoogleMapState extends State<GoogleMapPage> {
                 FloatingActionButton(
                   onPressed: moveToKaist,
                   materialTapTargetSize: MaterialTapTargetSize.padded,
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.amber[200],
                   child: const Icon(Icons.refresh, size: 36.0),
                 ),
                 SizedBox(height: 16.0),
                 FloatingActionButton(
-                  onPressed: ()=>_onAddMarkerButtonPressed(_selectMapPosition),
+                  onPressed: ()=> _onAddMarkerButtonPressed(_selectMapPosition),
                   materialTapTargetSize: MaterialTapTargetSize.padded,
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.amber[200],
                   child: const Icon(Icons.add_location, size: 36.0),
                 )
               ],
@@ -112,8 +118,6 @@ class _GoogleMapState extends State<GoogleMapPage> {
          )
         ]
       ),
-        ),
-      )
     );
 
   }

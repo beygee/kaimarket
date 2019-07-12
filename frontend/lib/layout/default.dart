@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/utils/utils.dart';
-import 'package:week_3/styles/theme.dart';
 import 'package:week_3/chat/chat_page.dart';
-import 'package:week_3/post/post_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
 
@@ -24,18 +22,35 @@ class _DefaultLayoutState extends State<DefaultLayout> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return Stack(
       alignment: Alignment.bottomCenter,
       children: <Widget>[
         _buildPageView(context),
         _buildBottomTabs(context),
       ],
+=======
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          _buildPageView(context),
+          _buildBottomTabs(context),
+          _buildSellButton(context),
+          _buildSellOverlay(context),
+        ],
+      ),
+>>>>>>> 4c7702b0c727d83912c95b05d20231f6ae6ad2cd
     );
   }
 
   Widget _buildPageView(context) {
     return Positioned.fill(
       child: PageView.builder(
+        physics: NeverScrollableScrollPhysics(),
         onPageChanged: (idx) {
           setState(() {
             _selectedTabIndex = idx;
@@ -46,11 +61,19 @@ class _DefaultLayoutState extends State<DefaultLayout> {
         itemBuilder: (context, idx) {
           switch (idx) {
             case 0:
+<<<<<<< HEAD
             return HomePage();
             case 1: 
             return PostPage();
             case 2: 
             return ChatPage();
+=======
+              return HomePage();
+            case 1:
+              return Container();
+            case 2:
+              return DetailView();
+>>>>>>> 4c7702b0c727d83912c95b05d20231f6ae6ad2cd
             case 3:
               return MyPage();
           }
@@ -149,6 +172,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
   }
 }
 
+<<<<<<< HEAD
 class TabButton extends StatelessWidget {
   final IconData icon;
   final String text;
@@ -156,6 +180,21 @@ class TabButton extends StatelessWidget {
   final int index;
   final PageController controller;
   final int selectedIndex;
+=======
+  Widget _buildSellButton(context) {
+    return Positioned(
+      bottom: screenAwareSize(15.0, context),
+      child: SellButton(
+        text: "판매",
+        fontSize: 8,
+        icon: Icons.add,
+        iconSize: 20.0,
+        padding: 10.0,
+        onPressed: _onPressedSellButton,
+      ),
+    );
+  }
+>>>>>>> 4c7702b0c727d83912c95b05d20231f6ae6ad2cd
 
   TabButton({
     Key key,
