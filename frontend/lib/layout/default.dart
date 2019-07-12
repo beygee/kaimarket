@@ -8,6 +8,7 @@ import 'package:week_3/post/post_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
 import 'package:week_3/layout/tab_button.dart';
+import 'package:week_3/post/google_map.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
