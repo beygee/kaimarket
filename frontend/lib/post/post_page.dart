@@ -19,6 +19,9 @@ class PostPage extends StatefulWidget {
 class PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
+    
+      double c_width = MediaQuery.of(context).size.width*0.95;
+
     // TODO: implement build
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +42,7 @@ class PostPageState extends State<PostPage> {
                 ///// 카테고리 선택
                 Container(
                   alignment: FractionalOffset(0.5,0.5),
-                  width: screenAwareSize(300.0, context),
+                  width: c_width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
                     color: Colors.white,
@@ -59,14 +62,14 @@ class PostPageState extends State<PostPage> {
 
                 //// 사진버튼
                 Padding(
-                  padding: EdgeInsets.all(15.0),
+                  padding: EdgeInsets.all(13.0),
                   child:   _buildPhotoList(context),
                 ),
 
                 ///// 상품명
                 Container(
                   alignment: FractionalOffset(0.5,0.5),
-                  width: screenAwareSize(300.0, context),
+                  width: c_width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
                     color: Colors.white,
@@ -82,10 +85,10 @@ class PostPageState extends State<PostPage> {
 
                 ///// 가격
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.all(10.0),
                   child: Container(
                   alignment: FractionalOffset(0.5,0.5),
-                  width: screenAwareSize(300.0, context),
+                  width: c_width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
                     color: Colors.white,
@@ -103,8 +106,8 @@ class PostPageState extends State<PostPage> {
                 ///// 내용
                 Container(
                   alignment: FractionalOffset(0.5,0.5),
-                  width: screenAwareSize(300.0, context),
-                  height: screenAwareSize(300.0, context),
+                  width: c_width,
+                  height: c_width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
                     color: Colors.white,
@@ -124,7 +127,10 @@ class PostPageState extends State<PostPage> {
                   alignment: FractionalOffset(0.5,0.5),
                   width: screenAwareSize(300.0, context),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(screenAwareSize(10.0, context)),
+                      topRight: Radius.circular(screenAwareSize(10.0, context))
+                    ),
                     color: Colors.white,
                     border: Border.all(
                       color: Colors.grey,
@@ -197,6 +203,7 @@ class PostPageState extends State<PostPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: TextField(
+        maxLines: 10,
         decoration: InputDecoration(
           hintText: "가격",
           hintStyle: TextStyle(
