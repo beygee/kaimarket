@@ -97,27 +97,38 @@ class _GoogleMapState extends State<GoogleMapPage> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Align(
-              alignment: Alignment.topRight,
-              child: Column(
-                children: <Widget>[
-                  FloatingActionButton(
-                    onPressed: moveToKaist,
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    backgroundColor: Colors.amber[200],
-                    child: const Icon(Icons.refresh, size: 36.0),
-                  ),
-                  SizedBox(height: 16.0),
-                  FloatingActionButton(
-                    onPressed: () =>
-                        _onAddMarkerButtonPressed(_selectMapPosition),
-                    materialTapTargetSize: MaterialTapTargetSize.padded,
-                    backgroundColor: Colors.amber[200],
-                    child: const Icon(Icons.add_location, size: 36.0),
-                  )
-                ],
-              )),
-        )
-      ]),
+            alignment: Alignment.topRight,
+            child: Column(
+              children: <Widget>[
+                IconButton(
+                  onPressed: ()=> moveToKaist(),
+                  icon: Icon(Icons.refresh, size:36.0),
+                  color: Colors.black,
+                  
+                ),
+                IconButton(
+                  onPressed: ()=> _onAddMarkerButtonPressed(_selectMapPosition),
+                  icon: Icon(Icons.add_location, size:36.0),
+                  color: Colors.black,
+                )
+                // FloatingActionButton(
+                //   onPressed: moveToKaist,
+                //   materialTapTargetSize: MaterialTapTargetSize.padded,
+                //   backgroundColor: Colors.amber[200],
+                //   child: const Icon(Icons.refresh, size: 36.0),
+                // ),
+                // FloatingActionButton(
+                //   onPressed: ()=> _onAddMarkerButtonPressed(_selectMapPosition),
+                //   materialTapTargetSize: MaterialTapTargetSize.padded,
+                //   backgroundColor: Colors.amber[200],
+                //   child: const Icon(Icons.add_location, size: 36.0),
+                // )
+              ],
+            )
+          ),
+         )
+        ]
+      ),
     );
   }
 }

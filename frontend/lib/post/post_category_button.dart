@@ -9,7 +9,9 @@ class PostCategoryButton extends StatelessWidget {
   PostCategoryButton({this.icon, this.text, this.onPressed});
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return GestureDetector(
+      onTap: onPressed,
+      child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
@@ -44,6 +46,7 @@ class PostCategoryButton extends StatelessWidget {
           ),
         )
       ],
+     ),
     );
   }
 }

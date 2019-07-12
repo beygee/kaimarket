@@ -95,7 +95,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
             case 1:
               return Container();
             case 2:
-              return DetailView();
+              return ChatPage();
             case 3:
               return MyPage();
           }
