@@ -4,6 +4,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/utils.dart';
+import 'dart:math' as math;
 
 class PostViewPage extends StatefulWidget {
   @override
@@ -21,9 +22,6 @@ class _PostViewPageState extends State<PostViewPage> {
   void initState() {
     super.initState();
     scrollController = ScrollController();
-    scrollController.addListener(() {
-      log.i("ASd");
-    });
   }
 
   @override
@@ -54,9 +52,35 @@ class _PostViewPageState extends State<PostViewPage> {
               ],
             ),
           ),
+          _buildAppBar(),
           _buildBottomTab(),
         ],
       ),
+    );
+  }
+
+  Widget _buildAppBar() {
+    return AnimatedBuilder(
+      animation: scrollController,
+      builder: (context, child) {
+        final double opacityTween = math.min(
+            scrollController.offset / screenAwareSize(350.0, context), 1);
+        return Container(
+          height: screenAwareSize(50.0, context) +
+              MediaQuery.of(context).padding.top,
+          child: AppBar(
+            title: Opacity(
+                opacity: opacityTween,
+                child: Text(
+                  "통기타",
+                  style: TextStyle(fontSize: 16.0),
+                )),
+            backgroundColor: Colors.white.withOpacity(opacityTween),
+            bottomOpacity: 0.0,
+            elevation: opacityTween >= 1.0 ? 2.0 : 0.0,
+          ),
+        );
+      },
     );
   }
 

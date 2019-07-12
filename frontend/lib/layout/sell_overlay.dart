@@ -5,6 +5,7 @@ import 'package:week_3/layout/sell_button.dart';
 import 'dart:math' as math;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/post/post_page.dart';
+import 'package:week_3/post/post_book_select_page.dart';
 
 class SellOverlay extends StatelessWidget {
   final Animation listenable;
@@ -58,7 +59,9 @@ class SellOverlay extends StatelessWidget {
                               icon: FontAwesomeIcons.book,
                               iconSize: 14.0,
                               padding: 8.0,
-                              onPressed: onPressCancel,
+                              onPressed: () {
+                                onsellBook(context);
+                              },
                             ),
                           ),
                         ),
@@ -106,6 +109,16 @@ class SellOverlay extends StatelessWidget {
             : Container();
       },
     );
+  }
+
+  void onsellBook(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PostBookSelectPage(),
+      ),
+    );
+
+    onPressCancel();
   }
 
   void onSellOther(context) {
