@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:week_3/post/detail_view.dart';
+import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'package:week_3/home/category_button.dart';
@@ -123,7 +123,7 @@ class HomePageState extends State<HomePage> {
       behavior: HitTestBehavior.translucent,
       onTap: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => DetailView()));
+            .push(MaterialPageRoute(builder: (context) => PostViewPage()));
       },
       child: Container(
         height: screenAwareSize(100.0, context),

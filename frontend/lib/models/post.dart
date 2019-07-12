@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Item{
-  Item({
+class Post {
+  Post({
     this.title,
     this.content,
     this.price,
@@ -9,7 +9,7 @@ class Item{
     this.wishCount,
     this.chatCount,
     this.created,
-    this.uri,
+    this.urls,
     this.user,
     this.location,
     this.category,
@@ -22,7 +22,7 @@ class Item{
   int wishCount;
   int chatCount;
   DateTime created;
-  List<String> uri;
+  List<String> urls;
   var user;
   var location;
   var category;

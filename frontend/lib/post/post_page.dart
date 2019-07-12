@@ -139,7 +139,7 @@ class PostPageState extends State<PostPage> {
                       ),
                     ),
                     
-                    // GoogleMapPage(),
+                    GoogleMapPage(),
                   ],)
                 ),
 
