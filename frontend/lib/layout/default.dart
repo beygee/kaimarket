@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/post/post_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
+import 'package:week_3/post/google_map.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
@@ -47,7 +49,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
             case 0:
             return HomePage();
             case 1: 
-            return PostPage();
+            return GoogleMapPage();
             case 2: 
             return Container();
             case 3:

@@ -21,7 +21,13 @@ class PostPageState extends State<PostPage> {
               ),
             ),
             Divider(),
-            
+            _buildGrid(),
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text(
+                '선호지역', style: TextStyle(fontSize:18.0)
+              ),
+            ),
           ],
         ),
       ),
@@ -40,6 +46,162 @@ class PostPageState extends State<PostPage> {
           crossAxisSpacing: 4,
           childAspectRatio: 1.0,
           children: <Widget>[
+                GestureDetector(
+                  onTap: (){
+                    final snackBar = SnackBar(content: Text("Tap"));
+                    Scaffold.of(context).showSnackBar(snackBar);
+                  },
+                  child: Container(
+                    width: 80.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.movie, color: Colors.red),
+                        Container(margin: const EdgeInsets.only(top: 8),
+                          child: Text(
+                          "카테고리1",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.red,
+                            ), 
+                          
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    final snackBar = SnackBar(content: Text("Tap"));
+                    Scaffold.of(context).showSnackBar(snackBar);
+                  },
+                  child: Container(
+                    width: 80.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.movie, color: Colors.red),
+                        Container(margin: const EdgeInsets.only(top: 8),
+                          child: Text(
+                          "카테고리1",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.red,
+                            ), 
+                          
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    final snackBar = SnackBar(content: Text("Tap"));
+                    Scaffold.of(context).showSnackBar(snackBar);
+                  },
+                  child: Container(
+                    width: 80.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.movie, color: Colors.red),
+                        Container(margin: const EdgeInsets.only(top: 8),
+                          child: Text(
+                          "카테고리1",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.red,
+                            ), 
+                          
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    final snackBar = SnackBar(content: Text("Tap"));
+                    Scaffold.of(context).showSnackBar(snackBar);
+                  },
+                  child: Container(
+                    width: 80.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.movie, color: Colors.red),
+                        Container(margin: const EdgeInsets.only(top: 8),
+                          child: Text(
+                          "카테고리1",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.red,
+                            ), 
+                          
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    final snackBar = SnackBar(content: Text("Tap"));
+                    Scaffold.of(context).showSnackBar(snackBar);
+                  },
+                  child: Container(
+                    width: 80.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.movie, color: Colors.red),
+                        Container(margin: const EdgeInsets.only(top: 8),
+                          child: Text(
+                          "카테고리1",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.red,
+                            ), 
+                          
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    final snackBar = SnackBar(content: Text("Tap"));
+                    Scaffold.of(context).showSnackBar(snackBar);
+                  },
+                  child: Container(
+                    width: 80.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(Icons.movie, color: Colors.red),
+                        Container(margin: const EdgeInsets.only(top: 8),
+                          child: Text(
+                          "카테고리1",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.red,
+                            ), 
+                          
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 GestureDetector(
                   onTap: (){
                     final snackBar = SnackBar(content: Text("Tap"));
