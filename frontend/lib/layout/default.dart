@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/styles/theme.dart';
+<<<<<<< HEAD
 import 'package:week_3/chat/chat_page.dart';
+=======
+import 'package:week_3/post/post_page.dart';
+>>>>>>> 3f4645512d78c699645c123fd0b26b4eaed912f1
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
 
@@ -43,15 +47,15 @@ class _DefaultLayoutState extends State<DefaultLayout> {
         controller: _pageController,
         itemCount: 4,
         itemBuilder: (context, idx) {
-          switch(idx){
+          switch (idx) {
             case 0:
             return HomePage();
             case 1: 
-            return Container();
+            return PostPage();
             case 2: 
             return DetailView();
             case 3:
-            return MyPage();
+              return MyPage();
           }
         },
       ),
@@ -88,7 +92,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                   child: TabButton(
                     icon: FontAwesomeIcons.commentDots,
                     text: "채팅",
-                    iconSize: 20.0,
+                    iconSize: 16.0,
                     index: 1,
                     controller: _pageController,
                     selectedIndex: _selectedTabIndex,
@@ -101,7 +105,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                   child: TabButton(
                     icon: Icons.favorite_border,
                     text: "찜",
-                    iconSize: 20.0,
+                    iconSize: 16.0,
                     index: 2,
                     controller: _pageController,
                     selectedIndex: _selectedTabIndex,
@@ -111,7 +115,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                   child: TabButton(
                     icon: FontAwesomeIcons.user,
                     text: "내 메뉴",
-                    iconSize: 20.0,
+                    iconSize: 16.0,
                     index: 3,
                     controller: _pageController,
                     selectedIndex: _selectedTabIndex,
@@ -128,11 +132,13 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                   children: <Widget>[
                     Icon(
                       Icons.add,
-                      size: 30.0,
+                      size: screenAwareSize(24.0, context),
                       color: Colors.white,
                     ),
                     Text("판매",
-                        style: TextStyle(color: Colors.white, fontSize: 12.0))
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenAwareSize(10.0, context)))
                   ],
                 ),
                 fillColor: ThemeColor.primary,
@@ -158,7 +164,7 @@ class TabButton extends StatelessWidget {
     Key key,
     this.icon,
     this.text,
-    this.iconSize = 28.0,
+    this.iconSize = 20.0,
     @required this.index,
     @required this.controller,
     this.selectedIndex,
@@ -178,7 +184,7 @@ class TabButton extends StatelessWidget {
         children: <Widget>[
           Icon(
             icon,
-            size: iconSize,
+            size: screenAwareSize(iconSize, context),
             color: bActive ? ThemeColor.primary : Colors.black,
           ),
           Text(
