@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 //유니크 로딩 래퍼
 typedef AsyncFunction = Future<dynamic> Function();
@@ -38,6 +39,9 @@ class LoadingWrapperState extends State<LoadingWrapper> {
     } catch (e) {
       if (onError != null) {
         onError(e);
+      } else {
+        var log = Logger();
+        log.e(e);
       }
     } finally {
       setState(() {

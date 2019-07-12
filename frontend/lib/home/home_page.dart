@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
               _buildSuggestions(),
-              SizedBox(height: screenAwareSize(50.0, context)),
+              SizedBox(height: screenAwareSize(10.0, context)),
             ],
           );
         },
@@ -106,6 +106,7 @@ class HomePageState extends State<HomePage> {
   Widget _buildSuggestions() {
     return Expanded(
       child: ListView.separated(
+        padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
         physics: BouncingScrollPhysics(),
         itemCount: 10,
         itemBuilder: (BuildContext context, int idx) {
