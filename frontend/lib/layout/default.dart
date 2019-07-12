@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/styles/theme.dart';
+import 'package:week_3/chat/chat_page.dart';
 import 'package:week_3/post/post_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
@@ -50,7 +51,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
             case 1:
               return PostPage();
             case 2:
-              return Container();
+              return DetailView();
             case 3:
               return MyPage();
           }
