@@ -69,7 +69,12 @@ class _PostViewPageState extends State<PostViewPage> {
           height: screenAwareSize(50.0, context) +
               MediaQuery.of(context).padding.top,
           child: AppBar(
-            title: Opacity(opacity: opacityTween, child: Text("통기타")),
+            title: Opacity(
+                opacity: opacityTween,
+                child: Text(
+                  "통기타",
+                  style: TextStyle(fontSize: 16.0),
+                )),
             backgroundColor: Colors.white.withOpacity(opacityTween),
             bottomOpacity: 0.0,
             elevation: opacityTween >= 1.0 ? 2.0 : 0.0,

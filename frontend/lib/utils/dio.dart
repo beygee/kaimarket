@@ -40,6 +40,7 @@ class MyDio {
 Dio dio = MyDio().dio;
 
 //현재 서버 경로 Uri
-Uri getUri(String path) => Uri.http(hostUrl, path);
+Uri getUri(String path, [Map<String, String> queryParameters]) =>
+    Uri.http(hostUrl, path, queryParameters);
 
 //모든 요청에 로그인 된 토큰을 Header bearer에 집어넣는다.
