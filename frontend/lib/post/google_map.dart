@@ -65,9 +65,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      body: Center(
-        child: Container(
+    return Container(
           height: 300.0,
           width: MediaQuery.of(context).size.width,
           child: Stack(
@@ -85,7 +83,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
             }
             _selectMapPosition = latlang;
           },
-          initialCameraPosition: kaist
+          initialCameraPosition: kaist,
          ),
          Padding(
           padding:  const EdgeInsets.all(16.0),
@@ -101,7 +99,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
                 ),
                 SizedBox(height: 16.0),
                 FloatingActionButton(
-                  onPressed: ()=>_onAddMarkerButtonPressed(_selectMapPosition),
+                  onPressed: ()=> _onAddMarkerButtonPressed(_selectMapPosition),
                   materialTapTargetSize: MaterialTapTargetSize.padded,
                   backgroundColor: Colors.green,
                   child: const Icon(Icons.add_location, size: 36.0),
@@ -112,8 +110,6 @@ class _GoogleMapState extends State<GoogleMapPage> {
          )
         ]
       ),
-        ),
-      )
     );
 
   }
