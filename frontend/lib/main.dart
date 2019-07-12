@@ -12,7 +12,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      // home: SplashPage(),
       theme: ThemeData(
         primarySwatch: ThemeColor.primary,
       ),
@@ -20,7 +19,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => DefaultLayout(),
         '/splash': (context) => SplashPage(),
-        // '/login': (context) => LoginPage(),
+        '/login': (context) => LoginPage(),
       },
     );
   }
