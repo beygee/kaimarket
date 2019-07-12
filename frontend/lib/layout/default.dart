@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
 import 'package:week_3/layout/tab_button.dart';
 import 'package:week_3/layout/sell_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
@@ -21,6 +22,9 @@ class _DefaultLayoutState extends State<DefaultLayout>
   AnimationController _sellButtonController;
   Animation _sellButtonAnimation;
   Animation<Offset> _leftSmallSellButtonAnimation;
+
+  //두번 백 버튼 누를시 꺼지게
+  DateTime currentBackPressTime = DateTime.now();
 
   @override
   void initState() {
@@ -49,6 +53,16 @@ class _DefaultLayoutState extends State<DefaultLayout>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        DateTime now = DateTime.now();
+        if (now.difference(currentBackPressTime) > Duration(seconds: 1)) {
+          currentBackPressTime = now;
+          Fluttertoast.showToast(
+            msg: "뒤로 가기 버튼을 한 번 더 누르면 종료됩니다.",
+            toastLength: Toast.LENGTH_SHORT,
+            fontSize: screenAwareSize(10.0, context),
+          );
+          return false;
+        }
         return true;
       },
       child: Stack(
@@ -81,7 +95,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
             case 1:
               return Container();
             case 2:
-              return DetailView();
+              return ChatPage();
             case 3:
               return MyPage();
           }
