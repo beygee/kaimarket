@@ -16,6 +16,7 @@ class MyDio {
   }
 
   MyDio._internal() {
+    dio.options.connectTimeout = 5000;
     dio.interceptors.add(
       InterceptorsWrapper(onRequest: (Options options) async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
