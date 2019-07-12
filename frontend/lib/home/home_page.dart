@@ -1,276 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/models/item_config.dart';
 import 'package:week_3/utils/base_height.dart';
+import 'package:week_3/home/category_button.dart';
 
 const String _kGalleryAssetsPackage = 'madcamp_week_3/frontend';
 
 class HomePage extends StatefulWidget {
-
   @override
   State<StatefulWidget> createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
-  final List<Item> _items = <Item>[
-    // Item(
-    //   assetName: 'assets/images/0.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '0.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/1.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '1.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/2.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '2.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/3.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '3.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/4.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '4.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/5.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '5.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/6.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '6.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/7.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '7.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/8.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '8.jpg',
-    //   caption: 'Test caption'
-    // ),
-    // Photo(
-    //   assetName: 'assets/images/9.jpg',
-    //   assetPackage: _kGalleryAssetsPackage,
-    //   title: '9.jpg',
-    //   caption: 'Test caption'
-    // ),
-  ];
-  final Set<Item> _saved = Set<Item>();
-  final TextStyle _biggerFont = TextStyle(fontSize:18.0);
+  final TextStyle _biggerFont = TextStyle(fontSize: 18.0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          children: <Widget>[
-          _categoryList(),
-          _buildSuggestions(),
-          ],
-        ),
-      );
-    }
-  
-  Widget _categoryList() => Container(
-            // 위에 탭바에서 띄우는간격
-            margin: EdgeInsets.symmetric(vertical: 5),
-            // 높이
-            height: screenAwareSize(70, context),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: (){
-                    final snackBar = SnackBar(content: Text("Tap"));
-                    Scaffold.of(context).showSnackBar(snackBar);
-                  },
-                  child: Container(
-                    width: 80.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Icon(Icons.movie, color: Colors.red),
-                        Container(margin: const EdgeInsets.only(top: 8),
-                          child: Text(
-                          "카테고리1",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.red,
-                            ), 
-                          
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                  width: 80.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.music_note, color: Colors.green),
-                      Container(margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "카테고리2",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.green,
-                        ) 
-                      ))
-
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 80.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.photo, color: Colors.blue),
-                      Container(margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "카테고리3",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blue,
-                        ) 
-                      ))
-
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 80.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.camera, color: Colors.orange),
-                      Container(margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "카테고리4",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.orange,
-                        ) 
-                      ))
-
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 80.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.chat, color: Colors.purple),
-                      Container(margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "카테고리5",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.purple,
-                        ) 
-                      ))
-
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 80.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.photo, color: Colors.blue),
-                      Container(margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "카테고리3",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blue,
-                        ) 
-                      ))
-
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 80.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.photo, color: Colors.blue),
-                      Container(margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "카테고리3",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blue,
-                        ) 
-                      ))
-
-                    ],
-                  ),
-                ),
-                Container(
-                  width: 80.0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(Icons.photo, color: Colors.blue),
-                      Container(margin: const EdgeInsets.only(top: 8),
-                      child: Text(
-                        "카테고리3",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.blue,
-                        ) 
-                      ))
-
-                    ],
-                  ),
-                ),
-              ],
-              )
+      body: Builder(
+        builder: (context) {
+          return Column(
+            children: <Widget>[
+              SizedBox(
+                  height: MediaQuery.of(context).padding.top), //상단 상태바 높이 띄우기
+              _buildSearchInput(context),
+              SizedBox(height: screenAwareSize(10.0, context)),
+              _buildCategoryList(context),
+              _buildSuggestions(),
+            ],
           );
+        },
+      ),
+    );
+  }
 
-  Widget _buildSuggestions(){
+  Widget _buildSearchInput(context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      child: TextField(
+        decoration: InputDecoration(
+          suffixIcon: Icon(Icons.search),
+          hintText: "상품을 검색해보세요",
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryList(context) {
+    List<String> names = [
+      "전체",
+      "디지털/가전",
+      '생활/가구',
+      '탈것',
+      '뷰티/미용',
+      '여성의류',
+      '남성의류',
+      '도서',
+      
+      '기타'
+    ];
+    List<IconData> icons = [
+      FontAwesomeIcons.thLarge,
+      FontAwesomeIcons.desktop,
+      FontAwesomeIcons.couch,
+      FontAwesomeIcons.bicycle,
+      Icons.movie,
+      Icons.movie,
+      Icons.movie,
+      FontAwesomeIcons.bookOpen,
+      Icons.movie
+    ];
+    return Container(
+      height: screenAwareSize(70, context),
+      child: ListView.separated(
+        padding: EdgeInsets.symmetric(horizontal: 10.0),
+        itemBuilder: (context, idx) {
+          return HomeCategoryButton(
+            icon: icons[idx],
+            text: names[idx],
+          );
+        },
+        separatorBuilder: (context, idx) {
+          return SizedBox(
+            width: 10.0,
+          );
+        },
+        itemCount: 9,
+        scrollDirection: Axis.horizontal,
+      ),
+    );
+  }
+
+  Widget _buildSuggestions() {
     return Expanded(
       child: SafeArea(
         top: false,
         bottom: false,
         child: ListView.separated(
           itemCount: 10,
-          
-          itemBuilder: (BuildContext _context, int i){
-            return _buildRow();//_items[i]);
+          itemBuilder: (BuildContext _context, int i) {
+            return _buildRow(); //_items[i]);
           },
-          separatorBuilder: (BuildContext _context, int i){
+          separatorBuilder: (BuildContext _context, int i) {
             return Divider();
           },
         ),
@@ -278,7 +109,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRow(){
+  Widget _buildRow() {
     return Container(
       height: 120.0,
       child: Row(
@@ -286,58 +117,59 @@ class HomePageState extends State<HomePage> {
           Padding(
             padding: EdgeInsets.all(10.0),
             child: Image.asset(
-            'assets/images/0.jpg',
-            width: 120,
-            height: 120,
-            fit: BoxFit.cover,
+              'assets/images/0.jpg',
+              width: 120,
+              height: 120,
+              fit: BoxFit.cover,
             ),
           ),
           Expanded(
-            child:
-            Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(height: screenAwareSize(5, context),),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    'test',
-                    style: _biggerFont,
-                  ),
-                  Text(
-                    '날짜'
-                  )
-                ],
-              ),
-              Text(
-                '부제',
-              ),
-              Text(
-                '부제2',
-              ),
-              Text(
-                '부제3',
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  
-                  SizedBox(width: screenAwareSize(10, context),),
-                  GestureDetector(
-                  onTap: (){
-                    // onHeartTap()
-                  },
-                  child: Icon(Icons.favorite),
-                  ),
-                ],
-              ),
-            ],
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(
+                  height: screenAwareSize(5, context),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      'test',
+                      style: _biggerFont,
+                    ),
+                    Text('날짜')
+                  ],
+                ),
+                Text(
+                  '부제',
+                ),
+                Text(
+                  '부제2',
+                ),
+                Text(
+                  '부제3',
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    SizedBox(
+                      width: screenAwareSize(10, context),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        // onHeartTap()
+                      },
+                      child: Icon(Icons.favorite),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
+          SizedBox(
+            width: screenAwareSize(10, context),
           ),
-           SizedBox(width: screenAwareSize(10, context),),
-          ],
-          
+        ],
       ),
     );
   }

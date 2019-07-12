@@ -3,10 +3,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/styles/theme.dart';
+import 'package:week_3/chat/chat_page.dart';
 import 'package:week_3/post/post_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
-import 'package:week_3/post/google_map.dart';
+import 'package:week_3/layout/tab_button.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
@@ -47,11 +48,11 @@ class _DefaultLayoutState extends State<DefaultLayout> {
         itemBuilder: (context, idx) {
           switch (idx) {
             case 0:
-            return HomePage();
-            case 1: 
-            return GoogleMapPage();
-            case 2: 
-            return Container();
+              return HomePage();
+            case 1:
+              return PostPage();
+            case 2:
+              return DetailView();
             case 3:
               return MyPage();
           }
@@ -121,78 +122,34 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                 ),
               ],
             ),
-            Positioned(
-              bottom: screenAwareSize(15.0, context),
-              child: RawMaterialButton(
-                padding: EdgeInsets.all(screenAwareSize(10.0, context)),
-                shape: CircleBorder(),
-                child: Column(
-                  children: <Widget>[
-                    Icon(
-                      Icons.add,
-                      size: screenAwareSize(24.0, context),
-                      color: Colors.white,
-                    ),
-                    Text("판매",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenAwareSize(10.0, context)))
-                  ],
-                ),
-                fillColor: ThemeColor.primary,
-                onPressed: () {},
-              ),
-            ),
+            _buildSellButton(context),
           ],
         ),
       ),
     );
   }
-}
 
-class TabButton extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final double iconSize;
-  final int index;
-  final PageController controller;
-  final int selectedIndex;
-
-  TabButton({
-    Key key,
-    this.icon,
-    this.text,
-    this.iconSize = 20.0,
-    @required this.index,
-    @required this.controller,
-    this.selectedIndex,
-  }) : super(key: key);
-
-  bool get bActive => selectedIndex == index;
-
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: () {
-        controller.jumpToPage(index);
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Icon(
-            icon,
-            size: screenAwareSize(iconSize, context),
-            color: bActive ? ThemeColor.primary : Colors.black,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-                fontSize: 12.0,
-                color: bActive ? ThemeColor.primary : Colors.black,
-                fontWeight: FontWeight.w300),
-          ),
-        ],
+  Widget _buildSellButton(context) {
+    return Positioned(
+      bottom: screenAwareSize(15.0, context),
+      child: RawMaterialButton(
+        padding: EdgeInsets.all(screenAwareSize(10.0, context)),
+        shape: CircleBorder(),
+        child: Column(
+          children: <Widget>[
+            Icon(
+              Icons.add,
+              size: screenAwareSize(24.0, context),
+              color: Colors.white,
+            ),
+            Text("판매",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: screenAwareSize(10.0, context)))
+          ],
+        ),
+        fillColor: ThemeColor.primary,
+        onPressed: () {},
       ),
     );
   }
