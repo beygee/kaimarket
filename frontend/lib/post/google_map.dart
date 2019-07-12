@@ -68,7 +68,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      height: 300.0,
+      height: 500.0,
       width: MediaQuery.of(context).size.width,
       child: Stack(children: <Widget>[
         GoogleMap(
