@@ -26,6 +26,7 @@ class HomePageState extends State<HomePage> {
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
               _buildSuggestions(),
+              SizedBox(height: screenAwareSize(50.0, context)),
             ],
           );
         },

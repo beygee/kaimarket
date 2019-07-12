@@ -4,6 +4,7 @@ import 'package:week_3/utils/utils.dart';
 import 'package:week_3/layout/sell_button.dart';
 import 'dart:math' as math;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:week_3/post/post_page.dart';
 
 class SellOverlay extends StatelessWidget {
   final Animation listenable;
@@ -78,7 +79,9 @@ class SellOverlay extends StatelessWidget {
                               icon: FontAwesomeIcons.thLarge,
                               iconSize: 14.0,
                               padding: 8.0,
-                              onPressed: onPressCancel,
+                              onPressed: () {
+                                onSellOther(context);
+                              },
                             ),
                           ),
                         ),
@@ -89,7 +92,7 @@ class SellOverlay extends StatelessWidget {
                             fontSize: 8,
                             icon: Icons.remove,
                             iconSize: 20.0,
-                            padding: 15.0,
+                            padding: 10.0,
                             onPressed: onPressCancel,
                             bgColor: Colors.white,
                             color: ThemeColor.primary,
@@ -102,6 +105,14 @@ class SellOverlay extends StatelessWidget {
               )
             : Container();
       },
+    );
+  }
+
+  void onSellOther(context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => PostPage(),
+      ),
     );
   }
 }

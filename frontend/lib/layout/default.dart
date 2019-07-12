@@ -65,6 +65,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
   Widget _buildPageView(context) {
     return Positioned.fill(
       child: PageView.builder(
+        physics: NeverScrollableScrollPhysics(),
         onPageChanged: (idx) {
           setState(() {
             _selectedTabIndex = idx;
@@ -163,7 +164,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
         fontSize: 8,
         icon: Icons.add,
         iconSize: 20.0,
-        padding: 15.0,
+        padding: 10.0,
         onPressed: _onPressedSellButton,
       ),
     );
