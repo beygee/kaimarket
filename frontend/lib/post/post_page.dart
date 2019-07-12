@@ -179,7 +179,6 @@ class PostPageState extends State<PostPage> {
                     //     style: TextStyle(
                     //       fontSize: 15.0,
                     //     )
-                    //   ),
                     // )
                   ),
                   SizedBox(height: screenAwareSize(80, context))
