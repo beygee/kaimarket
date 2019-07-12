@@ -99,19 +99,29 @@ class _GoogleMapState extends State<GoogleMapPage> {
             alignment: Alignment.topRight,
             child: Column(
               children: <Widget>[
-                FloatingActionButton(
-                  onPressed: moveToKaist,
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
-                  backgroundColor: Colors.amber[200],
-                  child: const Icon(Icons.refresh, size: 36.0),
+                IconButton(
+                  onPressed: ()=> moveToKaist(),
+                  icon: Icon(Icons.refresh, size:36.0),
+                  color: Colors.black,
+                  
                 ),
-                SizedBox(height: 16.0),
-                FloatingActionButton(
+                IconButton(
                   onPressed: ()=> _onAddMarkerButtonPressed(_selectMapPosition),
-                  materialTapTargetSize: MaterialTapTargetSize.padded,
-                  backgroundColor: Colors.amber[200],
-                  child: const Icon(Icons.add_location, size: 36.0),
+                  icon: Icon(Icons.add_location, size:36.0),
+                  color: Colors.black,
                 )
+                // FloatingActionButton(
+                //   onPressed: moveToKaist,
+                //   materialTapTargetSize: MaterialTapTargetSize.padded,
+                //   backgroundColor: Colors.amber[200],
+                //   child: const Icon(Icons.refresh, size: 36.0),
+                // ),
+                // FloatingActionButton(
+                //   onPressed: ()=> _onAddMarkerButtonPressed(_selectMapPosition),
+                //   materialTapTargetSize: MaterialTapTargetSize.padded,
+                //   backgroundColor: Colors.amber[200],
+                //   child: const Icon(Icons.add_location, size: 36.0),
+                // )
               ],
             )
           ),

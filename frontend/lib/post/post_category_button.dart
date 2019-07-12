@@ -15,7 +15,7 @@ class PostCategoryButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Container(
-          width: screenAwareSize(4.0, context),
+          width: screenAwareSize(45.0, context),
           height: screenAwareSize(45.0, context),
           decoration: BoxDecoration(
             boxShadow: [

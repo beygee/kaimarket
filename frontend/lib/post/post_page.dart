@@ -62,7 +62,7 @@ class PostPageState extends State<PostPage> {
 
                 //// 사진버튼
                 Padding(
-                  padding: EdgeInsets.all(13.0),
+                  padding: EdgeInsets.all(10.0),
                   child:   _buildPhotoList(context),
                 ),
 
@@ -144,7 +144,6 @@ class PostPageState extends State<PostPage> {
                         '선호 거래지역', style: TextStyle(fontSize:15.0)
                       ),
                     ),
-                    
                     GoogleMapPage(),
                   ],)
                 ),
@@ -225,7 +224,7 @@ class PostPageState extends State<PostPage> {
       //   maxLines: 4,
       // ),
       child: TextField(
-        maxLines: 10,
+        maxLines: 15,
         decoration: InputDecoration(
           hintText: "내용",
           hintStyle: TextStyle(
@@ -256,7 +255,7 @@ class PostPageState extends State<PostPage> {
       height: screenAwareSize(65, context),
       child: GridView.count(
         crossAxisCount: 5,
-        padding: EdgeInsets.all(6),
+        padding: EdgeInsets.all(screenAwareSize(1, context)),
         mainAxisSpacing: 4,
         // crossAxisSpacing: 4,
         children: _buildGridCategoryList(5),
