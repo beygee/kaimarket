@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/layout/sell_overlay.dart';
 import 'package:week_3/utils/utils.dart';
-import 'package:week_3/styles/theme.dart';
 import 'package:week_3/chat/chat_page.dart';
-import 'package:week_3/post/post_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
 import 'package:week_3/layout/tab_button.dart';
-import 'package:week_3/post/google_map.dart';
 import 'package:week_3/layout/sell_button.dart';
 
 class DefaultLayout extends StatefulWidget {
@@ -51,14 +47,19 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: <Widget>[
-        _buildPageView(context),
-        _buildBottomTabs(context),
-        _buildSellButton(context),
-        _buildSellOverlay(context),
-      ],
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          _buildPageView(context),
+          _buildBottomTabs(context),
+          _buildSellButton(context),
+          _buildSellOverlay(context),
+        ],
+      ),
     );
   }
 
@@ -78,7 +79,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
             case 0:
               return HomePage();
             case 1:
-              return PostPage();
+              return Container();
             case 2:
               return DetailView();
             case 3:
