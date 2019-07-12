@@ -5,6 +5,7 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:week_3/login/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -166,6 +167,10 @@ class _MyPageState extends State<MyPage> {
 
   _onLogout() async {
     await FacebookLogin().logOut();
+
+    //토큰 지운다.
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('access_token', '');
 
     Navigator.of(context)
         .pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));

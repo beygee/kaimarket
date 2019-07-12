@@ -1,37 +1,68 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/home/home_page.dart';
+import 'package:week_3/layout/sell_overlay.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/chat/chat_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/my/my_page.dart';
+import 'package:week_3/layout/tab_button.dart';
+import 'package:week_3/layout/sell_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
   _DefaultLayoutState createState() => _DefaultLayoutState();
 }
 
-class _DefaultLayoutState extends State<DefaultLayout> {
+class _DefaultLayoutState extends State<DefaultLayout>
+    with TickerProviderStateMixin {
   PageController _pageController = PageController();
   int _selectedTabIndex = 0;
+
+  AnimationController _sellButtonController;
+  Animation _sellButtonAnimation;
+  Animation<Offset> _leftSmallSellButtonAnimation;
+
+  //두번 백 버튼 누를시 꺼지게
+  DateTime currentBackPressTime = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _sellButtonController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    _sellButtonAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+        CurvedAnimation(
+            parent: _sellButtonController, curve: Curves.decelerate));
+
+    _leftSmallSellButtonAnimation =
+        Tween<Offset>(begin: Offset(0.0, -15.0), end: Offset(-60.0, -75.0))
+            .animate(CurvedAnimation(
+                parent: _sellButtonController, curve: Curves.decelerate));
+  }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _sellButtonController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: <Widget>[
-        _buildPageView(context),
-        _buildBottomTabs(context),
-      ],
-=======
     return WillPopScope(
       onWillPop: () async {
+        DateTime now = DateTime.now();
+        if (now.difference(currentBackPressTime) > Duration(seconds: 1)) {
+          currentBackPressTime = now;
+          Fluttertoast.showToast(
+            msg: "뒤로 가기 버튼을 한 번 더 누르면 종료됩니다.",
+            toastLength: Toast.LENGTH_SHORT,
+            fontSize: screenAwareSize(10.0, context),
+          );
+          return false;
+        }
         return true;
       },
       child: Stack(
@@ -43,7 +74,6 @@ class _DefaultLayoutState extends State<DefaultLayout> {
           _buildSellOverlay(context),
         ],
       ),
->>>>>>> 4c7702b0c727d83912c95b05d20231f6ae6ad2cd
     );
   }
 
@@ -61,19 +91,11 @@ class _DefaultLayoutState extends State<DefaultLayout> {
         itemBuilder: (context, idx) {
           switch (idx) {
             case 0:
-<<<<<<< HEAD
-            return HomePage();
-            case 1: 
-            return PostPage();
-            case 2: 
-            return ChatPage();
-=======
               return HomePage();
             case 1:
               return Container();
             case 2:
-              return DetailView();
->>>>>>> 4c7702b0c727d83912c95b05d20231f6ae6ad2cd
+              return ChatPage();
             case 3:
               return MyPage();
           }
@@ -83,21 +105,23 @@ class _DefaultLayoutState extends State<DefaultLayout> {
   }
 
   Widget _buildBottomTabs(context) {
-    return Material(
-      color: Colors.transparent,
-      child: Container(
-        height: screenAwareSize(50.0, context),
-        decoration: BoxDecoration(color: Colors.white, boxShadow: [
-          BoxShadow(
-            blurRadius: 10.0,
-            color: Colors.black12,
-          )
-        ]),
-        child: Stack(
-          overflow: Overflow.visible,
-          alignment: Alignment.bottomCenter,
-          children: <Widget>[
-            Row(
+    return Positioned(
+      height: screenAwareSize(50.0, context),
+      left: 0.0,
+      right: 0.0,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            width: double.infinity,
+            height: screenAwareSize(50.0, context),
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              BoxShadow(
+                blurRadius: 10.0,
+                color: Colors.black12,
+              )
+            ]),
+            child: Row(
               children: <Widget>[
                 Expanded(
                   child: TabButton(
@@ -118,9 +142,7 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                     selectedIndex: _selectedTabIndex,
                   ),
                 ),
-                SizedBox(
-                  width: screenAwareSize(50, context),
-                ),
+                SizedBox(width: screenAwareSize(50.0, context)),
                 Expanded(
                   child: TabButton(
                     icon: Icons.favorite_border,
@@ -143,44 +165,12 @@ class _DefaultLayoutState extends State<DefaultLayout> {
                 ),
               ],
             ),
-            Positioned(
-              bottom: screenAwareSize(15.0, context),
-              child: RawMaterialButton(
-                padding: EdgeInsets.all(screenAwareSize(10.0, context)),
-                shape: CircleBorder(),
-                child: Column(
-                  children: <Widget>[
-                    Icon(
-                      Icons.add,
-                      size: screenAwareSize(24.0, context),
-                      color: Colors.white,
-                    ),
-                    Text("판매",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: screenAwareSize(10.0, context)))
-                  ],
-                ),
-                fillColor: ThemeColor.primary,
-                onPressed: () {},
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-}
 
-<<<<<<< HEAD
-class TabButton extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final double iconSize;
-  final int index;
-  final PageController controller;
-  final int selectedIndex;
-=======
   Widget _buildSellButton(context) {
     return Positioned(
       bottom: screenAwareSize(15.0, context),
@@ -194,44 +184,20 @@ class TabButton extends StatelessWidget {
       ),
     );
   }
->>>>>>> 4c7702b0c727d83912c95b05d20231f6ae6ad2cd
 
-  TabButton({
-    Key key,
-    this.icon,
-    this.text,
-    this.iconSize = 20.0,
-    @required this.index,
-    @required this.controller,
-    this.selectedIndex,
-  }) : super(key: key);
+  _onPressedSellButton() {
+    _sellButtonController.forward(from: 0.0);
+  }
 
-  bool get bActive => selectedIndex == index;
+  _onPressCancel() {
+    _sellButtonController.reverse();
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: () {
-        controller.jumpToPage(index);
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Icon(
-            icon,
-            size: screenAwareSize(iconSize, context),
-            color: bActive ? ThemeColor.primary : Colors.black,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-                fontSize: 12.0,
-                color: bActive ? ThemeColor.primary : Colors.black,
-                fontWeight: FontWeight.w300),
-          ),
-        ],
-      ),
+  Widget _buildSellOverlay(context) {
+    return SellOverlay(
+      listenable: _sellButtonAnimation,
+      onPressCancel: _onPressCancel,
+      leftAnimation: _leftSmallSellButtonAnimation,
     );
   }
 }
