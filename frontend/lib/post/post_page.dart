@@ -187,7 +187,8 @@ class PostPageState extends State<PostPage> {
  Widget _buildTitleInput(context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: TextField(
+      child: TextField(  
+        maxLines: 1,
         decoration: InputDecoration(
           hintText: "상품명",
           hintStyle: TextStyle(
@@ -203,7 +204,7 @@ class PostPageState extends State<PostPage> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: TextField(
-        maxLines: 10,
+        maxLines: 1,
         decoration: InputDecoration(
           hintText: "가격",
           hintStyle: TextStyle(
@@ -224,6 +225,7 @@ class PostPageState extends State<PostPage> {
       //   maxLines: 4,
       // ),
       child: TextField(
+        maxLines: 10,
         decoration: InputDecoration(
           hintText: "내용",
           hintStyle: TextStyle(
@@ -238,7 +240,17 @@ class PostPageState extends State<PostPage> {
 
  Widget _buildPhotoList(context){
     List<PhotoButton> _buildGridCategoryList(int count) => List.generate(
-    count, (i) => PhotoButton(icon: Icons.camera, ));
+    count, (i) => PhotoButton(icon: Icons.camera, onPressed: () async {
+    var galleryFile = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+      maxHeight: 45.0,
+      maxWidth: 45.0,
+    );
+    setState(() {
+      
+    }
+  );
+  },));
     
     return Container(
       height: screenAwareSize(65, context),
@@ -289,17 +301,5 @@ class PostPageState extends State<PostPage> {
         children: _buildGridCategoryList(names.length),
       ),
     );
-  }
-
-  void imageSelectorGallery() async {
-    var galleryFile = await ImagePicker.pickImage(
-      source: ImageSource.gallery,
-      maxHeight: 45.0,
-      maxWidth: 45.0,
-    );
-    setState(() {
-      
-    }
-  );
   }
 }
