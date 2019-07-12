@@ -12,7 +12,25 @@ class PostViewPage extends StatefulWidget {
 
 class _PostViewPageState extends State<PostViewPage> {
   static const double horizontalPadding = 16.0;
+
   final _explanation = '상태 좋고 흥정 가능해요 \n1년정도 사용했어요';
+
+  ScrollController scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    scrollController = ScrollController();
+    scrollController.addListener(() {
+      log.i("ASd");
+    });
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +38,7 @@ class _PostViewPageState extends State<PostViewPage> {
       body: Stack(
         children: <Widget>[
           SingleChildScrollView(
+            controller: scrollController,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[

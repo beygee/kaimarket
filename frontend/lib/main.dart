@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:week_3/login/login_page.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/splash.dart';
+import 'layout/default.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,10 +12,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Material App',
-      home: SplashPage(),
       theme: ThemeData(
         primarySwatch: ThemeColor.primary,
       ),
+      initialRoute: '/splash',
+      routes: {
+        '/': (context) => DefaultLayout(),
+        '/splash': (context) => SplashPage(),
+        '/login': (context) => LoginPage(),
+      },
     );
   }
 

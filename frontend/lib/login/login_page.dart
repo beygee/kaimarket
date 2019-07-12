@@ -101,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(height: 10.0),
         LoginButton(
           text: "네이버와 연결하기",
-         // color: Color(0xff00cf63),
+          // color: Color(0xff00cf63),
           color: Color(0xff1ec800),
           onPressed: () => _loginWithNaver(context),
         ),
@@ -258,7 +258,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _goToHomePage(context) {
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => DefaultLayout()));
+    Navigator.of(context).pushReplacementNamed('/');
   }
 }

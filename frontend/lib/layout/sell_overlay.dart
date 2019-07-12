@@ -114,5 +114,7 @@ class SellOverlay extends StatelessWidget {
         builder: (context) => PostPage(),
       ),
     );
+
+    onPressCancel();
   }
 }
