@@ -6,6 +6,7 @@ import 'dart:math' as math;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/post/post_page.dart';
 import 'package:week_3/post/post_book_select_page.dart';
+import 'package:week_3/post/post_book_page.dart';
 
 class SellOverlay extends StatelessWidget {
   final Animation listenable;
@@ -124,7 +125,7 @@ class SellOverlay extends StatelessWidget {
   void onSellOther(context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => PostPage(),
+        builder: (context) => PostBookPage(),
       ),
     );
 
