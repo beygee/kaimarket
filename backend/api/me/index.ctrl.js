@@ -1,10 +1,13 @@
 const ctrl = {}
+const mongoose = require("mongoose")
 
 ctrl.getProfile = async ctx => {
   const { User } = ctx.db
   const { user } = ctx
   if (user) {
-    ctx.body = "OK"
+    //인증 검사
+    const fetchedUser = await User.findById(mongoose.Types.ObjectId(user.id))
+    ctx.body = fetchedUser
   } else {
     ctx.error(401, "NO VALID", { code: 1 })
   }
