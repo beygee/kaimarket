@@ -96,7 +96,7 @@ class _PostBookSelectPageState extends State<PostBookSelectPage> {
               book: book,
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => PostBookPage()));
+                    MaterialPageRoute(builder: (context) => PostBookPage(book: book)));
               },
             ),
             Container(
