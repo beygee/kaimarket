@@ -35,15 +35,15 @@ class _SplashPageState extends State<SplashPage> {
       var res = await dio.getUri(getUri('/api/me'));
 
       if (res.statusCode == 200) {
-        //바로 탭 화면 보내기
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => DefaultLayout()));
+        if (res.data['valid']) {
+          Navigator.of(context).pushReplacementNamed('/');
+        } else {
+          Navigator.of(context).pushReplacementNamed('/valid');
+        }
       }
     } catch (e) {
       //로그인 페이지 보내기
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => LoginPage()));
-      log.e(e);
+      Navigator.of(context).pushReplacementNamed('/login');
     }
   }
 }

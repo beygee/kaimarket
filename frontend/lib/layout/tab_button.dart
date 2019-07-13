@@ -24,27 +24,33 @@ class TabButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RawMaterialButton(
-      onPressed: () {
-        controller.jumpToPage(index);
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Icon(
-            icon,
-            size: screenAwareSize(iconSize, context),
-            color: bActive ? ThemeColor.primary : Colors.black,
-          ),
-          Text(
-            text,
-            style: TextStyle(
-                fontSize: 12.0,
-                color: bActive ? ThemeColor.primary : Colors.black,
-                fontWeight: FontWeight.w300),
-          ),
-        ],
+    return Material(
+      color: Colors.white,
+      child: InkResponse(
+        onTap: () {
+          controller.jumpToPage(index);
+        },
+        splashFactory: InkRipple.splashFactory,
+        radius: screenAwareSize(30.0, context),
+        containedInkWell: true,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Icon(
+              icon,
+              size: screenAwareSize(iconSize, context),
+              color: bActive ? ThemeColor.primary : Colors.black,
+            ),
+            Text(
+              text,
+              style: TextStyle(
+                  fontSize: 12.0,
+                  color: bActive ? ThemeColor.primary : Colors.black,
+                  fontWeight: FontWeight.w300),
+            ),
+          ],
+        ),
       ),
     );
   }

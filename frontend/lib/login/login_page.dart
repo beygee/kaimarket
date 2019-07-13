@@ -10,6 +10,7 @@ import 'package:week_3/utils/utils.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:week_3/layout/default.dart';
+import 'package:week_3/login/valid/valid_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -158,11 +159,7 @@ class _LoginPageState extends State<LoginPage> {
           var tokenResult = await FlutterNaverLogin.currentAccessToken;
           final res = await dio.postUri(getUri('/api/auth/naver'),
               data: {'access_token': tokenResult.accessToken});
-          if (res.statusCode == 200) {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('access_token', res.data);
-            _goToHomePage(context);
-          }
+          _authUserWithValid(context, res);
           break;
         case NaverLoginStatus.cancelledByUser:
           break;
@@ -186,11 +183,7 @@ class _LoginPageState extends State<LoginPage> {
           var token = await kakaoSignIn.currentAccessToken;
           final res = await dio.postUri(getUri('/api/auth/kakao'),
               data: {'access_token': token.token});
-          if (res.statusCode == 200) {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('access_token', res.data);
-            _goToHomePage(context);
-          }
+          _authUserWithValid(context, res);
           break;
         case KakaoLoginStatus.loggedOut:
           log.i("로그 아웃");
@@ -225,13 +218,7 @@ class _LoginPageState extends State<LoginPage> {
           var res = await dio.postUri(getUri('/api/auth/facebook'),
               data: {'access_token': token});
 
-          if (res.statusCode == 200) {
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            await prefs.setString('access_token', res.data);
-            _goToHomePage(context);
-          } else {
-            showSnackBar(context, "로그인 실패");
-          }
+          _authUserWithValid(context, res);
           break;
       }
     }, onError: (e) {
@@ -244,13 +231,7 @@ class _LoginPageState extends State<LoginPage> {
     _loadingWrapperKey.currentState.loadFuture(() async {
       var res = await dio.postUri(getUri('/api/auth/guest'));
 
-      if (res.statusCode == 200) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('access_token', res.data);
-        _goToHomePage(context);
-      } else {
-        showSnackBar(context, "로그인 실패");
-      }
+      _authUserWithValid(context, res);
     }, onError: (e) {
       log.e(e);
       showSnackBar(context, "로그인 실패");
@@ -259,5 +240,17 @@ class _LoginPageState extends State<LoginPage> {
 
   void _goToHomePage(context) {
     Navigator.of(context).pushReplacementNamed('/');
+  }
+
+  _authUserWithValid(context, res) {
+    if (res.statusCode == 200) {
+      if (res.data['valid']) {
+        _goToHomePage(context);
+      } else {
+        Navigator.of(context).pushReplacementNamed('/valid');
+      }
+    } else {
+      showSnackBar(context, '로그인 실패');
+    }
   }
 }
