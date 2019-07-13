@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/models/category.dart';
 import 'package:week_3/models/book.dart';
+import 'package:week_3/models/user.dart';
 
 class Post {
   String id;
@@ -12,8 +13,9 @@ class Post {
   int chat;
   String created;
   String updated;
-  List<String> images;
-  var user;
+
+  List<String> images = [];
+  User user;
   double locationLat;
   double locationLng;
   Category category;
@@ -79,7 +81,9 @@ class Post {
         bookAuthor = book.author,
         bookPublisher = book.publisher,
         bookPubDate = book.pubdate,
-        bookPrice = book.price;
+        bookPrice = book.price,
+        isBook = true,
+        category = CategoryList[7];
 
   Map<String, dynamic> toJson() {
     return {
@@ -92,14 +96,17 @@ class Post {
       'chat': chat,
       'locationLat': locationLat,
       'locationLng': locationLng,
-      'created': created.toString(),
-      'updated': updated.toString(),
+      'created': created,
+      'updated': updated,
       'isBook': isBook,
       'bookMajor': bookMajor,
       'bookAuther': bookAuthor,
       'bookPublisher': bookPublisher,
-      'bookPubDate': bookPubDate.toString(),
+      'bookPubDate': bookPubDate,
       'bookPrice': bookPrice,
+      'category': category.toJson(),
+      'images': images,
+      // 'user': user.toJson(),
     };
   }
 }

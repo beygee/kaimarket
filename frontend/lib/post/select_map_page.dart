@@ -40,15 +40,17 @@ class SelectMapPageState extends State<SelectMapPage> {
         ]));
   }
 
+  //지도에서 마커를 선택했을 시 좌표 값을 받아온다.
   _onTapLagLng(double lat, double lng) {
     widget.post.locationLat = lat;
     widget.post.locationLng = lng;
   }
 
+  //데이터 작성 완료
   _onTapComplete() async {
     log.i(widget.post.toJson());
     await dio
-        .postUri(getUri('/api/post'), data: {'data': widget.post.toJson()});
+        .postUri(getUri('/api/posts'), data: {'data': widget.post.toJson()});
     // Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }
