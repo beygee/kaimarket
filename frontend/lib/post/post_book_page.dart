@@ -13,7 +13,9 @@ import 'package:intl/intl.dart';
 
 class PostBookPage extends StatefulWidget {
   final Book book;
+
   PostBookPage({@required this.book});
+
   @override
   State<StatefulWidget> createState() => PostBookPageState();
 }
@@ -24,14 +26,7 @@ class PostBookPageState extends State<PostBookPage> {
 
   @override
   Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width * 0.97;
-    // 키보드 떴을때 위로 끌어올리기.
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
-
-    // TODO: implement build
     return Scaffold(
-        resizeToAvoidBottomPadding: true,
-        resizeToAvoidBottomInset: true,
         appBar: _buildAppBar(context),
         body: Stack(
           children: <Widget>[
@@ -45,10 +40,10 @@ class PostBookPageState extends State<PostBookPage> {
 
   Widget _buildAppBar(context) {
     return AppBar(
-      backgroundColor: Colors.amber[100],
+      backgroundColor: Colors.white,
       title: Text(
-        "책 판매하기",
-        style: TextStyle(fontSize: 15.0),
+        "도서 판매하기",
+        style: TextStyle(fontSize: 16.0),
       ),
       actions: <Widget>[
         GestureDetector(
@@ -73,7 +68,6 @@ class PostBookPageState extends State<PostBookPage> {
       child: Column(
         children: <Widget>[
           SizedBox(height: screenAwareSize(5.0, context)),
-
           _buildBookInfo(context),
           _buildTextInput(context, c_width, "희망가격"),
           _buildTextInput(context, c_width, "사용한 수업명"),
@@ -161,7 +155,7 @@ class PostBookPageState extends State<PostBookPage> {
         maxLines: 8,
         decoration: InputDecoration(
           hintText:
-              "책 상태를 자세하게 입력해주세요.             예시)                                                      구입날짜: 2019년 01월 01일                 상태:필기흔적없음, 깨끗함",
+              "책 상태를 자세하게 입력해주세요.\n예시)\n구입날짜: 2019년 01월 01일\n상태:필기흔적없음, 깨끗함",
           hintStyle: TextStyle(
             fontSize: 20.0,
           ),
