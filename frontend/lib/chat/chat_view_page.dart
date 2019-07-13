@@ -23,8 +23,6 @@ class ChatState extends State<Chat> {
   final _paddingFormat = EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
 
   final _dialPartnerName = 'diuni';
-  // final _message = {text:'안녕하세요', time: '오후 3:35',
-  //                   text: '언제 시간 되시나요?', time: '오후 3:36'};
 
   final _partnerNameFont = TextStyle(fontSize: 20.0, color: Colors.grey[600]);
   final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);
