@@ -3,6 +3,7 @@ import 'package:week_3/login/login_page.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/splash.dart';
 import 'layout/default.dart';
+import 'package:week_3/login/valid/valid_page.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => DefaultLayout(),
         '/splash': (context) => SplashPage(),
         '/login': (context) => LoginPage(),
+        '/valid': (context) => ValidPage(),
       },
     );
   }

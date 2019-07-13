@@ -39,6 +39,9 @@ dependencies:
   fluttertoast: ^3.1.0
   html: ^0.14.0+2
   intl: ^0.15.8
+  equatable: ^0.2.6
+  bloc: ^0.14.4
+  flutter_bloc: ^0.19.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

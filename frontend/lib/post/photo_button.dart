@@ -1,40 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/utils.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class PhotoButton extends StatelessWidget {
-  final IconData icon;
-  final String text;
+  // 사진소스파일.
+  final Asset asset;
+  // 삭제누를때 활성화함수
   final VoidCallback onPressed;
 
-  PhotoButton({this.icon, this.text, this.onPressed});
+  PhotoButton({this.asset, this.onPressed});
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: screenAwareSize(45.0, context),
-        height: screenAwareSize(45.0, context),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              blurRadius: 10,
-              spreadRadius: -5.0,
-              offset: Offset(0, 5.0),
-              color: Colors.black26,
+    return Stack(
+      children: <Widget>[
+        AssetThumb(
+          asset: asset,
+          width: screenAwareSize(55.0, context).toInt(),
+          height: screenAwareSize(55.0, context).toInt(),
+        ),
+        GestureDetector(
+          onTap: onPressed,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              top: 20,
             ),
-          ],
-          borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
-          color: Colors.white,
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(screenAwareSize(10.0, context)),
-          child: Icon(
-            icon,
-            size: screenAwareSize(16.0, context),
-            color: Colors.black.withOpacity(0.7),
+            child: Container(
+                width: screenAwareSize(35.0, context),
+                height: screenAwareSize(35.0, context),
+                child: Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 15,
+                        left: 20,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.remove_circle, size: 22.0),
+                        color: Colors.black,
+                      ),
+                    ))),
           ),
-        ),
-      ),
+        )
+      ],
     );
   }
 }
