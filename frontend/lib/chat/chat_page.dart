@@ -6,9 +6,7 @@ import 'package:week_3/chat/chat_view_page.dart';
 class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ChatLists(),
-    );
+    return ChatLists();
   }
 }
 
