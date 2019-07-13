@@ -12,6 +12,8 @@ import 'package:week_3/post/post_book_card.dart';
 import 'package:intl/intl.dart';
 
 class PostBookPage extends StatefulWidget {
+  final Book book;
+  PostBookPage({@required this.book});
   @override
   State<StatefulWidget> createState() => PostBookPageState();
 }
@@ -19,17 +21,6 @@ class PostBookPage extends StatefulWidget {
 class PostBookPageState extends State<PostBookPage> {
   static var selectedCategory;
   List<Asset> selectedPhotos = new List<Asset>();
-  Book selectedBook = new Book(
-      title: "제목",
-      link: "링크",
-      author: "저자",
-      price: 10000,
-      discount: 5000,
-      publisher: "출판사",
-      pubdate: "출판일",
-      isbn: "ISBN",
-      image: 'http://shop1.phinf.naver.net/20180731_187/kpdipgo1_1533026108545ghD2H_JPEG/9788931458107.jpg',
-      description: "디스크립션");
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +74,7 @@ class PostBookPageState extends State<PostBookPage> {
         children: <Widget>[
           SizedBox(height: screenAwareSize(5.0, context)),
 
-          _buildBookInfo(context, selectedBook),
+          _buildBookInfo(context),
           _buildTextInput(context, c_width, "희망가격"),
           _buildTextInput(context, c_width, "사용한 수업명"),
 
@@ -113,22 +104,11 @@ class PostBookPageState extends State<PostBookPage> {
     ));
   }
 
-  Widget _buildBookInfo(context, book) {
-    final TextStyle titleColumn = TextStyle(
-      fontSize: screenAwareSize(10.0, context),
-      color: Colors.grey[400],
-      height: 1.5,
-    );
-    final TextStyle contentColumn = TextStyle(
-      fontSize: screenAwareSize(10.0, context),
-      height: 1.5,
-    );
-
-    final numberFormat = new NumberFormat("#,##0", "en_US");
+  Widget _buildBookInfo(context) {
     return Column(
       children: <Widget>[
         PostBookCard(
-          book: selectedBook,
+          book: widget.book,
         ),
         Container(
           width: double.infinity,
