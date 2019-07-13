@@ -14,7 +14,7 @@ class Post {
   String created;
   String updated;
 
-  List<String> images = [];
+  List<Map<String, String>> images = [];
   User user;
   double locationLat;
   double locationLng;

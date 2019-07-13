@@ -229,13 +229,13 @@ class PostPageState extends State<PostPage> {
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.all(10.0),
         itemBuilder: (context, idx) {
-          return PhotoButton(asset: selectedPhotos[idx],
-            onPressed: () {
-              setState(() {
-              selectedPhotos.removeAt(idx);
-              });
-            },
-          );
+          // return PhotoButton(asset: selectedPhotos[idx],
+          //   onPressed: () {
+          //     setState(() {
+          //     selectedPhotos.removeAt(idx);
+          //     });
+          //   },
+          // );
         },
         separatorBuilder: (context, idx) {
           return SizedBox(

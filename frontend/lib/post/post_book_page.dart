@@ -9,6 +9,7 @@ import 'package:week_3/models/book.dart';
 import 'package:week_3/post/post_book_card.dart';
 import 'package:week_3/post/select_map_page.dart';
 import 'package:week_3/models/post.dart';
+import 'package:dio/dio.dart';
 
 class PostBookPage extends StatefulWidget {
   final Book book;
@@ -25,7 +26,7 @@ class PostBookPageState extends State<PostBookPage> {
   TextEditingController contentController = TextEditingController();
 
   static var selectedCategory;
-  List<Asset> selectedPhotos = new List<Asset>();
+  List<Map<String, String>> imageUrls = [];
 
   @override
   void dispose() {
@@ -60,18 +61,7 @@ class PostBookPageState extends State<PostBookPage> {
         Material(
           color: Colors.transparent,
           child: InkResponse(
-            onTap: () {
-              //포스트를 만들어 전달한다.
-              Post post = Post.fromBook(widget.book);
-              post.price = int.parse(priceController.text);
-              post.bookMajor = majorController.text;
-              post.content = contentController.text;
-
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => SelectMapPage(post: post)));
-            },
+            onTap: _onTapNextPage,
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Text("다음"),
@@ -80,6 +70,18 @@ class PostBookPageState extends State<PostBookPage> {
         ),
       ],
     );
+  }
+
+  void _onTapNextPage() {
+    //포스트를 만들어 전달한다.
+    Post post = Post.fromBook(widget.book);
+    post.price = int.parse(priceController.text);
+    post.bookMajor = majorController.text;
+    post.content = contentController.text;
+    post.images = imageUrls;
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => SelectMapPage(post: post)));
   }
 
   Widget _buildTotal(context) {
@@ -96,9 +98,7 @@ class PostBookPageState extends State<PostBookPage> {
           Container(
             child: Column(
               children: <Widget>[
-                selectedPhotos.length > 0
-                    ? _buildPhotoList(context)
-                    : Container(),
+                imageUrls.length > 0 ? _buildPhotoList(context) : Container(),
                 _buildContentInput(context),
               ],
             ),
@@ -192,16 +192,16 @@ class PostBookPageState extends State<PostBookPage> {
 
   Widget _buildPhotoList(context) {
     return Container(
-      height: screenAwareSize(75, context),
+      height: screenAwareSize(70, context),
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(screenAwareSize(10.0, context)),
         itemBuilder: (context, idx) {
           return PhotoButton(
-            asset: selectedPhotos[idx],
+            url: imageUrls[idx]['thumb'],
             onPressed: () {
               setState(() {
-                selectedPhotos.removeAt(idx);
+                imageUrls.removeAt(idx);
               });
             },
           );
@@ -211,7 +211,7 @@ class PostBookPageState extends State<PostBookPage> {
             width: 10.0,
           );
         },
-        itemCount: selectedPhotos.length,
+        itemCount: imageUrls.length,
         scrollDirection: Axis.horizontal,
       ),
     );
@@ -237,15 +237,7 @@ class PostBookPageState extends State<PostBookPage> {
               color: Colors.transparent,
               child: InkResponse(
                 containedInkWell: true,
-                onTap: () async {
-                  var galleryFiles = await MultiImagePicker.pickImages(
-                    maxImages: 10,
-                    enableCamera: true,
-                  );
-                  setState(() {
-                    selectedPhotos = galleryFiles;
-                  });
-                },
+                onTap: _uploadImages,
                 radius: 10.0,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -260,5 +252,38 @@ class PostBookPageState extends State<PostBookPage> {
         ),
       ),
     );
+  }
+
+  //이미지를 서버에 업로드하고 url과 썸네일을 받아온다.
+  _uploadImages() async {
+    List<Asset> images = await MultiImagePicker.pickImages(
+      maxImages: 10,
+      enableCamera: true,
+    );
+
+    //서버 업로드
+    try {
+      var imageData = await Future.wait(images.map((image) async {
+        var bytes = await image.requestOriginal();
+        FormData formData = FormData.from({
+          'image':
+              UploadFileInfo.fromBytes(bytes.buffer.asUint8List(), image.name)
+        });
+
+        var res = await dio.postUri(getUri('/api/upload'), data: formData);
+        return res.data;
+      }).toList());
+
+      setState(() {
+        imageUrls = imageData.map((json) {
+          return {
+            'thumb': json['thumb'].toString(),
+            'url': json['url'].toString(),
+          };
+        }).toList();
+      });
+    } catch (e) {
+      log.e(e);
+    }
   }
 }
