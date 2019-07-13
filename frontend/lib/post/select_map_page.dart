@@ -33,11 +33,14 @@ class SelectMapPageState extends State<SelectMapPage> {
                 ),
               ),
             ]),
-        body: Column(children: <Widget>[
+        body: SingleChildScrollView(
+          child: Column(children: <Widget>[
           GoogleMapPage(
             onTap: _onTapLagLng,
           ),
-        ]));
+        ]),
+        )
+        );
   }
 
   _onTapLagLng(double lat, double lng) {
