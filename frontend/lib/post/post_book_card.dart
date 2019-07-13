@@ -3,7 +3,6 @@ import 'package:week_3/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:week_3/models/book.dart';
 
-
 class PostBookCard extends StatelessWidget {
   final Book book;
   final VoidCallback onTap;
@@ -94,7 +93,10 @@ class PostBookCard extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10.0),
-                Image.network(book.image),
+                Image.network(
+                  book.image,
+                  height: screenAwareSize(100.0, context),
+                ),
               ],
             ),
           ),
