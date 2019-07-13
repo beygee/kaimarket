@@ -125,7 +125,7 @@ class SellOverlay extends StatelessWidget {
   void onSellOther(context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => PostBookPage(),
+        builder: (context) => PostPage(),
       ),
     );
 

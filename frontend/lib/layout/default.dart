@@ -8,6 +8,7 @@ import 'package:week_3/my/my_page.dart';
 import 'package:week_3/layout/tab_button.dart';
 import 'package:week_3/layout/sell_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:week_3/wish/wish_page.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
@@ -95,7 +96,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
             case 1:
               return ChatPage();
             case 2:
-              return Container();
+              return WishPage();
             case 3:
               return MyPage();
           }
