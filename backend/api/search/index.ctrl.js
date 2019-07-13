@@ -21,7 +21,6 @@ ctrl.searchBooks = async ctx => {
     )
 
     const data = JSON.parse(body)
-    console.log(data)
 
     ctx.body = data
   } catch (e) {

@@ -1,9 +1,10 @@
 const Koa = require("koa")
+const serve = require("koa-static")
 const Router = require("koa-router")
 const consola = require("consola")
 const koaBody = require("koa-body")
+const mount = require("koa-mount")
 const mongoose = require("mongoose")
-const Schema = mongoose.Schema
 const { jwtMiddleware } = require("lib/token")
 const admin = require("firebase-admin")
 
@@ -20,6 +21,11 @@ const server = http.createServer(app.callback())
 
 //시작 함수
 const start = async () => {
+  //정적 파일 제공
+  const publicApp = new Koa()
+  publicApp.use(serve("./public"))
+  app.use(mount("/public", publicApp))
+
   //DB 연결
   await mongoose.connect("mongodb://localhost:27017/kaimarket", {
     useNewUrlParser: true
@@ -29,6 +35,9 @@ const start = async () => {
     ctx.db = db
     return next()
   })
+
+  // const createCategory = require("lib/createCategory")
+  // await createCategory(db.Category)
 
   //파이어베이스 연결
   const serviceAccount = require("data/firebase-admin.json")
