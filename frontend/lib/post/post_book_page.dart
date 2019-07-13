@@ -8,6 +8,7 @@ import 'package:week_3/post/photo_button.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:week_3/models/book.dart';
+import 'package:week_3/post/post_book_card.dart';
 
 class PostBookPage extends StatefulWidget {
   @override
@@ -69,8 +70,7 @@ class PostBookPageState extends State<PostBookPage> {
       child: Column(
         children: <Widget>[
           SizedBox(height: screenAwareSize(5.0, context)),
-          
-          
+
           _buildTextInput(context, c_width, "희망가격"),
           _buildTextInput(context, c_width, "사용한 수업명"),
 
@@ -102,33 +102,32 @@ class PostBookPageState extends State<PostBookPage> {
 
   Widget _buildTextInput(context, c_width, text) {
     return Padding(
-            padding: EdgeInsets.all(5.0),
-            child: Container(
-              alignment: FractionalOffset(0.5, 0.5),
-              width: c_width,
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(screenAwareSize(10.0, context)),
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.grey,
-                ),
+      padding: EdgeInsets.all(5.0),
+      child: Container(
+        alignment: FractionalOffset(0.5, 0.5),
+        width: c_width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
+          color: Colors.white,
+          border: Border.all(
+            color: Colors.grey,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: TextField(
+            maxLines: 1,
+            decoration: InputDecoration(
+              hintText: text,
+              hintStyle: TextStyle(
+                fontSize: 14.0,
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                child: TextField(
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    hintText: text,
-                    hintStyle: TextStyle(
-                      fontSize: 14.0,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
+              border: InputBorder.none,
             ),
-          );
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _buildContentInput(context) {
@@ -142,7 +141,8 @@ class PostBookPageState extends State<PostBookPage> {
       child: TextField(
         maxLines: 8,
         decoration: InputDecoration(
-          hintText: "책 상태를 자세하게 입력해주세요.             예시)                                                      구입날짜: 2019년 01월 01일                 상태:필기흔적없음, 깨끗함",
+          hintText:
+              "책 상태를 자세하게 입력해주세요.             예시)                                                      구입날짜: 2019년 01월 01일                 상태:필기흔적없음, 깨끗함",
           hintStyle: TextStyle(
             fontSize: 20.0,
           ),
