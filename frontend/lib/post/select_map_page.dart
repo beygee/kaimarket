@@ -33,11 +33,14 @@ class SelectMapPageState extends State<SelectMapPage> {
                 ),
               ),
             ]),
-        body: Column(children: <Widget>[
+        body: SingleChildScrollView(
+          child: Column(children: <Widget>[
           GoogleMapPage(
             onTap: _onTapLagLng,
           ),
-        ]));
+        ]),
+        )
+        );
   }
 
   //지도에서 마커를 선택했을 시 좌표 값을 받아온다.
