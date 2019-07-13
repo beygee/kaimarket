@@ -60,42 +60,30 @@ class PostBookPageState extends State<PostBookPage> {
   }
 
   Widget _buildTotal(context) {
-    double c_width = MediaQuery.of(context).size.width * 0.97;
-    // 키보드 떴을때 위로 끌어올리기.
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return SingleChildScrollView(
-        child: SafeArea(
       child: Column(
         children: <Widget>[
           SizedBox(height: screenAwareSize(5.0, context)),
           _buildBookInfo(context),
-          _buildTextInput(context, c_width, "희망가격"),
-          _buildTextInput(context, c_width, "사용한 수업명"),
-
-          ///// 내용
+          _buildDivider(context),
+          _buildPriceInput(context),
+          _buildDivider(context),
+          _buildMajorInput(context),
+          _buildDivider(context),
           Container(
-              alignment: FractionalOffset(0.5, 0.5),
-              width: c_width,
-              height: screenAwareSize(300, context),
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(screenAwareSize(10.0, context)),
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.grey,
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  selectedPhotos.length > 0
-                      ? _buildPhotoList(context)
-                      : Container(),
-                  _buildContentInput(context),
-                ],
-              )),
+            child: Column(
+              children: <Widget>[
+                selectedPhotos.length > 0
+                    ? _buildPhotoList(context)
+                    : Container(),
+                _buildContentInput(context),
+              ],
+            ),
+          ),
+          SizedBox(height: screenAwareSize(50.0, context))
         ],
       ),
-    ));
+    );
   }
 
   Widget _buildBookInfo(context) {
@@ -104,34 +92,50 @@ class PostBookPageState extends State<PostBookPage> {
         PostBookCard(
           book: widget.book,
         ),
-        Container(
-          width: double.infinity,
-          height: 1.0,
-          color: Colors.grey[300],
-        ),
       ],
     );
   }
 
-  Widget _buildTextInput(context, c_width, text) {
+  Widget _buildDivider(context) {
+    return Container(
+      width: double.infinity,
+      height: 1.0,
+      color: Colors.grey[300],
+    );
+  }
+
+  Widget _buildPriceInput(context) {
     return Padding(
       padding: EdgeInsets.all(5.0),
       child: Container(
-        alignment: FractionalOffset(0.5, 0.5),
-        width: c_width,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(screenAwareSize(10.0, context)),
-          color: Colors.white,
-          border: Border.all(
-            color: Colors.grey,
-          ),
-        ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: TextField(
             maxLines: 1,
             decoration: InputDecoration(
-              hintText: text,
+              hintText: "희망가격",
+              hintStyle: TextStyle(
+                fontSize: 14.0,
+              ),
+              border: InputBorder.none,
+            ),
+            keyboardType: TextInputType.number,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMajorInput(context) {
+    return Padding(
+      padding: EdgeInsets.all(5.0),
+      child: Container(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: TextField(
+            maxLines: 1,
+            decoration: InputDecoration(
+              hintText: "사용한 수업명",
               hintStyle: TextStyle(
                 fontSize: 14.0,
               ),
@@ -146,18 +150,13 @@ class PostBookPageState extends State<PostBookPage> {
   Widget _buildContentInput(context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      // child: AutoSizeText(
-
-      //   style: TextStyle(fontSize: 20),
-      //   maxLines: 4,
-      // ),
       child: TextField(
-        maxLines: 8,
+        maxLines: 10,
         decoration: InputDecoration(
           hintText:
               "책 상태를 자세하게 입력해주세요.\n예시)\n구입날짜: 2019년 01월 01일\n상태:필기흔적없음, 깨끗함",
           hintStyle: TextStyle(
-            fontSize: 20.0,
+            fontSize: 14.0,
           ),
           border: InputBorder.none,
         ),
@@ -235,39 +234,45 @@ class PostBookPageState extends State<PostBookPage> {
 
   Widget _buildBottomTabs(context) {
     return Positioned(
-      height: screenAwareSize(50.0, context),
       left: 0.0,
       right: 0.0,
       bottom: 0,
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: screenAwareSize(50.0, context),
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                blurRadius: 10.0,
-                color: Colors.black12,
-              )
-            ]),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.camera_alt),
-                    iconSize: 40,
-                    onPressed: () async {
-                      var galleryFiles = await MultiImagePicker.pickImages(
-                        maxImages: 10,
-                        enableCamera: true,
-                      );
-                      setState(() {
-                        selectedPhotos = galleryFiles;
-                      });
-                    })
-              ],
+      child: Container(
+        width: double.infinity,
+        height: screenAwareSize(50.0, context),
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          BoxShadow(
+            blurRadius: 10.0,
+            color: Colors.black12,
+          )
+        ]),
+        child: Row(
+          children: <Widget>[
+            Material(
+              color: Colors.transparent,
+              child: InkResponse(
+                containedInkWell: true,
+                onTap: () async {
+                  var galleryFiles = await MultiImagePicker.pickImages(
+                    maxImages: 10,
+                    enableCamera: true,
+                  );
+                  setState(() {
+                    selectedPhotos = galleryFiles;
+                  });
+                },
+                radius: 10.0,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenAwareSize(15.0, context),
+                    vertical: screenAwareSize(15.0, context),
+                  ),
+                  child: Icon(Icons.camera_alt),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
