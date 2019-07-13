@@ -3,8 +3,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:week_3/utils/utils.dart';
 
 class GoogleMapPage extends StatefulWidget {
+  final Function(double, double) onTap;
+
+  GoogleMapPage({this.onTap});
   @override
   State<StatefulWidget> createState() => _GoogleMapState();
 }
@@ -18,9 +22,6 @@ class _GoogleMapState extends State<GoogleMapPage> {
     target: LatLng(36.3708602, 127.3625224),
     zoom: 15.0,
   );
-
-  // for maptype change
-  MapType _currentMapType = MapType.normal;
 
   // for marker save
   final Set<Marker> _markers = {};
@@ -63,15 +64,19 @@ class _GoogleMapState extends State<GoogleMapPage> {
         icon: BitmapDescriptor.defaultMarker,
       ));
     });
+
+    //콜백함수 실행
+    if (widget.onTap != null) {
+      widget.onTap(latlang.latitude, latlang.longitude);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     markerpressed = 0;
 
     return Container(
-      height: 500.0,
+      height: screenAwareSize(450.0, context),
       width: MediaQuery.of(context).size.width,
       child: Stack(children: <Widget>[
         GoogleMap(
@@ -95,53 +100,37 @@ class _GoogleMapState extends State<GoogleMapPage> {
               _markers.clear();
             }
             _selectMapPosition = latlang;
-            if(markerpressed ==1){
-            _onAddMarkerButtonPressed(latlang);
+            if (markerpressed == 1) {
+              _onAddMarkerButtonPressed(latlang);
             }
           },
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Align(
-            alignment: Alignment.topRight,
-            child: Column(
-              children: <Widget>[
-                IconButton(
-                  onPressed: ()=> moveToKaist(),
-                  icon: Icon(Icons.refresh, size:36.0),
-                  color: Colors.black,
-                  
-                ),
-                IconButton(
-                  onPressed: (){
-                    if(markerpressed == 0){
-                      markerpressed = 1;
-                    }
-                    else{
-                      markerpressed = 0;
-                    }
-                  },
-                  icon: Icon(Icons.add_location, size:36.0),
-                  color: Colors.black,
-                )
-                // FloatingActionButton(
-                //   onPressed: moveToKaist,
-                //   materialTapTargetSize: MaterialTapTargetSize.padded,
-                //   backgroundColor: Colors.amber[200],
-                //   child: const Icon(Icons.refresh, size: 36.0),
-                // ),
-                // FloatingActionButton(
-                //   onPressed: ()=> _onAddMarkerButtonPressed(_selectMapPosition),
-                //   materialTapTargetSize: MaterialTapTargetSize.padded,
-                //   backgroundColor: Colors.amber[200],
-                //   child: const Icon(Icons.add_location, size: 36.0),
-                // )
-              ],
-            )
-          ),
-         )
-        ]
-      ),
+              alignment: Alignment.topRight,
+              child: Column(
+                children: <Widget>[
+                  IconButton(
+                    onPressed: () => moveToKaist(),
+                    icon: Icon(Icons.refresh, size: 36.0),
+                    color: Colors.black,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      if (markerpressed == 0) {
+                        markerpressed = 1;
+                      } else {
+                        markerpressed = 0;
+                      }
+                    },
+                    icon: Icon(Icons.add_location, size: 36.0),
+                    color: Colors.black,
+                  )
+                ],
+              )),
+        )
+      ]),
     );
   }
 }

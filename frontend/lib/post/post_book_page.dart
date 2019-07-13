@@ -11,6 +11,7 @@ import 'package:week_3/models/book.dart';
 import 'package:week_3/post/post_book_card.dart';
 import 'package:intl/intl.dart';
 import 'package:week_3/post/select_map_page.dart';
+import 'package:week_3/models/post.dart';
 
 class PostBookPage extends StatefulWidget {
   final Book book;
@@ -22,8 +23,20 @@ class PostBookPage extends StatefulWidget {
 }
 
 class PostBookPageState extends State<PostBookPage> {
+  TextEditingController priceController = TextEditingController();
+  TextEditingController majorController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
+
   static var selectedCategory;
   List<Asset> selectedPhotos = new List<Asset>();
+
+  @override
+  void dispose() {
+    priceController.dispose();
+    majorController.dispose();
+    contentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +60,25 @@ class PostBookPageState extends State<PostBookPage> {
         style: TextStyle(fontSize: 16.0),
       ),
       actions: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SelectMapPage()));
-          },
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text("완료"),
+        Material(
+          color: Colors.transparent,
+          child: InkResponse(
+            onTap: () {
+              //포스트를 만들어 전달한다.
+              Post post = Post.fromBook(widget.book);
+              post.price = int.parse(priceController.text);
+              post.bookMajor = majorController.text;
+              post.content = contentController.text;
+
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SelectMapPage(post: post)));
+            },
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text("다음"),
+            ),
           ),
         ),
       ],
@@ -107,42 +131,42 @@ class PostBookPageState extends State<PostBookPage> {
   }
 
   Widget _buildPriceInput(context) {
-    return Padding(
-      padding: EdgeInsets.only(top: screenAwareSize(5, context)),
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: TextField(
-            maxLines: 1,
-            decoration: InputDecoration(
-              hintText: "희망가격",
-              hintStyle: TextStyle(
-                fontSize: 14.0,
-              ),
-              border: InputBorder.none,
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: screenAwareSize(10.0, context),
+            vertical: screenAwareSize(5.0, context)),
+        child: TextField(
+          controller: priceController,
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: "희망가격",
+            hintStyle: TextStyle(
+              fontSize: 14.0,
             ),
-            keyboardType: TextInputType.number,
+            border: InputBorder.none,
           ),
+          keyboardType: TextInputType.number,
         ),
       ),
     );
   }
 
   Widget _buildMajorInput(context) {
-    return Padding(
-      padding: EdgeInsets.all(5.0),
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: TextField(
-            maxLines: 1,
-            decoration: InputDecoration(
-              hintText: "사용한 수업명",
-              hintStyle: TextStyle(
-                fontSize: 14.0,
-              ),
-              border: InputBorder.none,
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: screenAwareSize(10.0, context),
+            vertical: screenAwareSize(5.0, context)),
+        child: TextField(
+          controller: majorController,
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: "사용한 수업명",
+            hintStyle: TextStyle(
+              fontSize: 14.0,
             ),
+            border: InputBorder.none,
           ),
         ),
       ),
@@ -151,8 +175,11 @@ class PostBookPageState extends State<PostBookPage> {
 
   Widget _buildContentInput(context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(
+          horizontal: screenAwareSize(10.0, context),
+          vertical: screenAwareSize(5.0, context)),
       child: TextField(
+        controller: contentController,
         maxLines: 10,
         decoration: InputDecoration(
           hintText:
