@@ -8,6 +8,7 @@ import 'package:week_3/post/photo_button.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:week_3/models/book.dart';
+import 'package:intl/intl.dart';
 
 class PostBookPage extends StatefulWidget {
   @override
@@ -17,6 +18,8 @@ class PostBookPage extends StatefulWidget {
 class PostBookPageState extends State<PostBookPage> {
   static var selectedCategory;
   List<Asset> selectedPhotos = new List<Asset>();
+  Book selectedBook = new Book(title: "제목", link: "링크", author: "저자", price: 10000, discount: 5000, publisher: "출판사"
+  , pubdate: "출판일", isbn: "ISBN", description: "디스크립션");
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +73,7 @@ class PostBookPageState extends State<PostBookPage> {
         children: <Widget>[
           SizedBox(height: screenAwareSize(5.0, context)),
           
-          
+          _buildBookInfo(context, selectedBook),
           _buildTextInput(context, c_width, "희망가격"),
           _buildTextInput(context, c_width, "사용한 수업명"),
 
@@ -98,6 +101,99 @@ class PostBookPageState extends State<PostBookPage> {
         ],
       ),
     ));
+  }
+
+  Widget _buildBookInfo(context, book){
+    final TextStyle titleColumn = TextStyle(
+      fontSize: screenAwareSize(10.0, context),
+      color: Colors.grey[400],
+      height: 1.5,
+    );
+    final TextStyle contentColumn = TextStyle(
+      fontSize: screenAwareSize(10.0, context),
+      height: 1.5,
+    );
+
+    final numberFormat = new NumberFormat("#,##0", "en_US");
+    return Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(screenAwareSize(15.0, context)),
+              color: Colors.white,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          book.title,
+                          style: TextStyle(
+                            fontSize: screenAwareSize(14.0, context),
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(
+                          height: screenAwareSize(10.0, context),
+                        ),
+                        Table(
+                          columnWidths: {0: FixedColumnWidth(60.0)},
+                          children: [
+                            TableRow(
+                              children: [
+                                Text("저자", style: titleColumn),
+                                Text(
+                                  book.author,
+                                  style: contentColumn,
+                                ),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                Text("출판사", style: titleColumn),
+                                Text(book.publisher, style: contentColumn),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                Text("출판일", style: titleColumn),
+                                Text(book.pubdate, style: contentColumn),
+                              ],
+                            ),
+                            TableRow(
+                              children: [
+                                Text("정가", style: titleColumn),
+                                Text(numberFormat.format(book.price) + '원',
+                                    style: contentColumn),
+                              ],
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: 10.0),
+                  // Image.network(book.image),
+                  Container(
+                    height: 100,
+                    width: 100,
+                    child: Image.asset("assets/images/1.jpg"),
+                  )
+                  
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 1.0,
+              color: Colors.grey[300],
+            ),
+          ],
+        );
   }
 
   Widget _buildTextInput(context, c_width, text) {
