@@ -5,8 +5,9 @@ class PostCategoryButton extends StatelessWidget {
   final IconData icon;
   final String text;
   final VoidCallback onPressed;
+  bool picked = false;
 
-  PostCategoryButton({this.icon, this.text, this.onPressed});
+  PostCategoryButton({this.icon, this.text, this.onPressed, this.picked});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

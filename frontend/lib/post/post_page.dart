@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/post/post_category_button.dart';
@@ -11,6 +12,7 @@ import 'package:week_3/utils/utils.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:week_3/post/select_map_page.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 class PostPage extends StatefulWidget {
   @override
@@ -18,8 +20,8 @@ class PostPage extends StatefulWidget {
 }
 
 class PostPageState extends State<PostPage> {
-  int selectedCategory;
-  List<Uri> selectedPhotos = List<Uri>();
+  static var selectedCategory;
+ List<Asset> selectedPhotos = new List<Asset>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,7 @@ class PostPageState extends State<PostPage> {
         body: Stack(
           children: <Widget>[
             Positioned.fill(
-              child: 
-            _buildTotal(context),
+              child: _buildTotal(context),
             ),
             _buildBottomTabs(context),
           ],
@@ -47,7 +48,7 @@ class PostPageState extends State<PostPage> {
     return AppBar(
       backgroundColor: Colors.amber[100],
       title: Text(
-        '판매하기',
+        "판매하기",
         style: TextStyle(fontSize: 15.0),
       ),
       actions: <Widget>[
@@ -158,7 +159,7 @@ class PostPageState extends State<PostPage> {
               ),
               child: Column(
                 children: <Widget>[
-                  // _buildPhotoList(context),
+                  selectedPhotos.length > 0 ? _buildPhotoList(context) : Container(),
                   _buildContentInput(context),
                 ],
               )),
@@ -221,30 +222,42 @@ class PostPageState extends State<PostPage> {
   }
 
   Widget _buildPhotoList(context) {
-    List<PhotoButton> _buildGridCategoryList(int count) => List.generate(
-        count,
-        (i) => PhotoButton(
-              icon: Icons.camera,
-              onPressed: () async {
-                var galleryFile = await ImagePicker.pickImage(
-                  source: ImageSource.gallery,
-                  maxHeight: 40.0,
-                  maxWidth: 40.0,
-                );
-                setState(() {
-                  Image.file(galleryFile);
-                });
-              },
-            ));
+    List<String> names = [
+      "디지털/가전",
+      '생활/가구',
+      '탈것',
+      '뷰티/미용',
+      '여성의류',
+      '남성의류',
+      '기타'
+    ];
+    List<IconData> icons = [
+      FontAwesomeIcons.desktop,
+      FontAwesomeIcons.couch,
+      FontAwesomeIcons.bicycle,
+      Icons.movie,
+      Icons.movie,
+      Icons.movie,
+      Icons.movie
+    ];
 
     return Container(
-      height: screenAwareSize(65, context),
-      child: GridView.count(
-        crossAxisCount: 5,
-        padding: EdgeInsets.all(screenAwareSize(1, context)),
-        mainAxisSpacing: 4,
-        // crossAxisSpacing: 4,
-        children: _buildGridCategoryList(selectedPhotos.length),
+      height: screenAwareSize(75, context),
+      child: ListView.separated(
+        physics: BouncingScrollPhysics(),
+        padding: EdgeInsets.all(10.0),
+        itemBuilder: (context, idx) {
+          return PhotoButton(asset: selectedPhotos[idx],
+            onPressed: () => {},
+          );
+        },
+        separatorBuilder: (context, idx) {
+          return SizedBox(
+            width: 10.0,
+          );
+        },
+        itemCount: selectedPhotos.length,
+        scrollDirection: Axis.horizontal,
       ),
     );
   }
@@ -271,7 +284,11 @@ class PostPageState extends State<PostPage> {
 
     List<PostCategoryButton> _buildGridCategoryList(int count) {
       return List.generate(
-          count, (i) => PostCategoryButton(icon: icons[i], text: names[i]));
+          count,
+          (i) => PostCategoryButton(
+              icon: icons[i],
+              text: names[i],
+              ));
     }
 
     return Container(
@@ -305,10 +322,18 @@ class PostPageState extends State<PostPage> {
             ]),
             child: Row(
               children: <Widget>[
-                Text('a'),
-                Text('b'),
-                Text('c'),
-                Text('d'),
+                IconButton(
+                    icon: Icon(Icons.camera_alt),
+                    iconSize: 40,
+                    onPressed: () async {
+                      var galleryFiles = await MultiImagePicker.pickImages(
+                        maxImages: 10,
+                        enableCamera: true,
+                      );
+                      setState(() {
+                        selectedPhotos = galleryFiles;
+                      });
+                    })
               ],
             ),
           ),
