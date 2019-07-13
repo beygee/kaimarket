@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:week_3/home/home_page.dart';
 import 'package:week_3/post/post_category_button.dart';
 import 'package:week_3/post/select_map_page.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'package:week_3/post/photo_button.dart';
-import 'package:week_3/post/google_map.dart';
 import 'package:week_3/utils/utils.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:week_3/post/select_map_page.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 
-class PostPage extends StatefulWidget {
+class PostBookPage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => PostPageState();
+  State<StatefulWidget> createState() => PostBookPageState();
 }
 
-class PostPageState extends State<PostPage> {
+class PostBookPageState extends State<PostBookPage> {
   static var selectedCategory;
  List<Asset> selectedPhotos = new List<Asset>();
 
@@ -48,18 +42,17 @@ class PostPageState extends State<PostPage> {
     return AppBar(
       backgroundColor: Colors.amber[100],
       title: Text(
-        "판매하기",
+        "책 판매하기",
         style: TextStyle(fontSize: 15.0),
       ),
       actions: <Widget>[
         GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SelectMapPage()));
+            Navigator.popUntil(context, ModalRoute.withName('/'));
           },
           child: Padding(
             padding: EdgeInsets.all(20.0),
-            child: Text("선호 지역 설정"),
+            child: Text("완료"),
           ),
         ),
       ],

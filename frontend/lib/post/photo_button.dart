@@ -11,33 +11,38 @@ class PhotoButton extends StatelessWidget {
   PhotoButton({this.asset, this.onPressed});
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Stack(
-        children: <Widget>[
-          AssetThumb(
-            asset: asset,
-            width: screenAwareSize(55.0, context).toInt(),
-            height: screenAwareSize(55.0, context).toInt(),
+    return Stack(
+      children: <Widget>[
+        AssetThumb(
+          asset: asset,
+          width: screenAwareSize(55.0, context).toInt(),
+          height: screenAwareSize(55.0, context).toInt(),
+        ),
+        GestureDetector(
+          onTap: onPressed,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 20,
+              top: 20,
+            ),
+            child: Container(
+                width: screenAwareSize(35.0, context),
+                height: screenAwareSize(35.0, context),
+                child: Align(
+                    alignment: Alignment.topRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        top: 15,
+                        left: 20,
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.remove_circle, size: 22.0),
+                        color: Colors.black,
+                      ),
+                    ))),
           ),
-          Container(
-              width: screenAwareSize(55.0, context),
-              height: screenAwareSize(55.0, context),
-              child: Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: 38,
-                      left: 40,
-                    ),
-                    child: IconButton(
-                      onPressed: () => {},
-                      icon: Icon(Icons.remove_circle, size: 22.0),
-                      color: Colors.black,
-                    ),
-                  ))),
-        ],
-      ),
+        )
+      ],
     );
   }
 }
