@@ -7,9 +7,7 @@ import 'dart:developer';
 class ChatViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Chat(),
-    );
+    return Chat();
   }
 }
 
@@ -51,10 +49,6 @@ class ChatState extends State<Chat> {
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: EdgeInsets.all(screenAwareSize(5.0, context)),
-          // suffixIcon: SendButton(
-          //   text: "Send",
-          //   callback: callback,
-          // ),
           hintText: "Enter a message...",
           hintStyle: TextStyle(fontSize: 14.0),
         ),
@@ -148,7 +142,7 @@ class Message extends StatelessWidget {
             elevation: 0.0,
             child: Container(
               constraints: BoxConstraints(maxWidth: 250),
-              padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 24.0),
+              padding: EdgeInsets.symmetric(vertical: screenAwareSize(15.0, context), horizontal: 24.0),
               child: Text(
                 text,
                 style: _chatFont,

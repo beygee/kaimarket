@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/base_height.dart';
+import 'package:week_3/chat/chat_view_page.dart';
 
 class ChatPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ChatLists(),
-    );
+    return ChatLists();
   }
 }
 
@@ -84,24 +83,31 @@ class ChatListsState extends State<ChatLists> {
     ));
   }
 
-  Widget _chatRow() {
-    return Container(
-      padding: _paddingFormat,
-      child: new Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Row(children: <Widget>[
-            _chatLeft(),
+  Widget _chatRow(context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ChatViewPage()));
+      },
+      child: Container(
+        padding: _paddingFormat,
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(children: <Widget>[
+              _chatLeft(),
+              SizedBox(
+                width: 30,
+              ),
+              _chatMiddle(context),
+            ]),
             SizedBox(
-              width: 30,
+              width: 40,
             ),
-            _chatMiddle(context),
-          ]),
-          SizedBox(
-            width: 40,
-          ),
-          _chatRight(context),
-        ],
+            _chatRight(context),
+          ],
+        ),
       ),
     );
   }
@@ -111,9 +117,9 @@ class ChatListsState extends State<ChatLists> {
     return Scaffold(
       body: new ListView(
         children: <Widget>[
-          _chatRow(),
-          _chatRow(),
-          _chatRow(),
+          _chatRow(context),
+          _chatRow(context),
+          _chatRow(context),
         ],
       ),
     );
