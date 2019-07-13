@@ -10,7 +10,6 @@ class WishPage extends StatefulWidget {
 }
 
 class WishPageState extends State<WishPage> {
-
   List<Post> wishes = List<Post>();
 
   @override
@@ -18,15 +17,16 @@ class WishPageState extends State<WishPage> {
     return Scaffold(
       body: _buildSuggestions(),
     );
-    
   }
 
   Widget _buildSuggestions() {
-    return Expanded(
+    return SafeArea(
       child: ListView.separated(
         padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
         physics: BouncingScrollPhysics(),
-        itemCount: wishes.length+10,
+        // wishes에 있는 개수만큼 찍게끔 설정해야함.
+        // itemCount: wishes.length,
+        itemCount: 10,
         itemBuilder: (BuildContext context, int idx) {
           return _buildRow(context);
         },
