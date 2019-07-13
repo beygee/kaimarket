@@ -30,6 +30,8 @@ class _GoogleMapState extends State<GoogleMapPage> {
 
   LatLng _selectMapPosition;
 
+  int markerpressed;
+
   void _onCameraMove(CameraPosition position) {
     _lastMapPosition = position.target;
   }
@@ -56,8 +58,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
         markerId: MarkerId(_lastMapPosition.toString()),
         position: latlang,
         infoWindow: InfoWindow(
-          title: 'Selected',
-          snippet: 'test',
+          title: 'selected',
         ),
         icon: BitmapDescriptor.defaultMarker,
       ));
@@ -67,6 +68,8 @@ class _GoogleMapState extends State<GoogleMapPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    markerpressed = 0;
+
     return Container(
       height: 500.0,
       width: MediaQuery.of(context).size.width,
@@ -86,13 +89,16 @@ class _GoogleMapState extends State<GoogleMapPage> {
           zoomGesturesEnabled: true,
           scrollGesturesEnabled: true,
           tiltGesturesEnabled: true,
+          initialCameraPosition: kaist,
           onTap: (latlang) {
             if (_markers.length >= 1) {
               _markers.clear();
             }
             _selectMapPosition = latlang;
+            if(markerpressed ==1){
+            _onAddMarkerButtonPressed(latlang);
+            }
           },
-          initialCameraPosition: kaist,
         ),
         Padding(
           padding: const EdgeInsets.all(16.0),
@@ -107,7 +113,14 @@ class _GoogleMapState extends State<GoogleMapPage> {
                   
                 ),
                 IconButton(
-                  onPressed: ()=> _onAddMarkerButtonPressed(_selectMapPosition),
+                  onPressed: (){
+                    if(markerpressed == 0){
+                      markerpressed = 1;
+                    }
+                    else{
+                      markerpressed = 0;
+                    }
+                  },
                   icon: Icon(Icons.add_location, size:36.0),
                   color: Colors.black,
                 )
