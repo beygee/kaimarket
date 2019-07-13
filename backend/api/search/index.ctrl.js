@@ -21,8 +21,9 @@ ctrl.searchBooks = async ctx => {
     )
 
     const data = JSON.parse(body)
+    console.log(data)
 
-    ctx.body = body
+    ctx.body = data
   } catch (e) {
     ctx.error(403, "INVALID SEARCH", { code: 1 })
   }

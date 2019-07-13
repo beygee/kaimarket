@@ -1,6 +1,8 @@
 const Router = require("koa-router")
 const request = require("request-promise")
 const { generateToken } = require("lib/token")
+const validHakbun = require("lib/validHakbun")
+const mongoose = require("mongoose")
 
 const ctrl = {}
 
@@ -34,19 +36,17 @@ ctrl.authWithFacebook = async ctx => {
 
       //JWT 토큰
       const token = await generateToken({ id: newUser._id })
-      ctx.body = token
+      ctx.set("access_token", token)
+      ctx.body = { token, valid: false }
     } else {
       //JWT 토큰
       const token = await generateToken({ id: user._id })
-      ctx.body = token
+      ctx.set("access_token", token)
+      ctx.body = { token, valid: user.valid || false }
     }
   } catch (e) {
     ctx.error(401, "INVALID", { code: 1 })
   }
-
-  //데이터를 넣는다.
-
-  ctx.body = "OK"
 }
 
 ctrl.authWithNaver = async ctx => {
@@ -69,11 +69,13 @@ ctrl.authWithNaver = async ctx => {
 
     //JWT 토큰
     const token = await generateToken({ id: newUser._id })
-    ctx.body = token
+    ctx.set("access_token", token)
+    ctx.body = { token, valid: false }
   } else {
     //JWT 토큰
     const token = await generateToken({ id: user._id })
-    ctx.body = token
+    ctx.set("access_token", token)
+    ctx.body = { token, valid: user.valid || false }
   }
 }
 
@@ -98,11 +100,13 @@ ctrl.authWithKakao = async ctx => {
 
     //JWT 토큰
     const token = await generateToken({ id: newUser._id })
-    ctx.body = token
+    ctx.set("access_token", token)
+    ctx.body = { token, valid: false }
   } else {
     //JWT 토큰
     const token = await generateToken({ id: user._id })
-    ctx.body = token
+    ctx.set("access_token", token)
+    ctx.body = { token, valid: user.valid || false }
   }
 }
 
@@ -120,12 +124,29 @@ ctrl.authWithGuest = async ctx => {
 
     //JWT 토큰
     const token = await generateToken({ id: newUser._id })
-    ctx.body = token
+    ctx.set("access_token", token)
+    ctx.body = { token, valid: false }
   } else {
     //JWT 토큰
     const token = await generateToken({ id: user._id })
-    ctx.body = token
+    ctx.set("access_token", token)
+    ctx.body = { token, valid: user.valid || false }
   }
+}
+
+ctrl.validHakbun = async ctx => {
+  const { id, password } = ctx.request.body
+  const { User } = ctx.db
+  const { user } = ctx
+  const result = await validHakbun(id, password)
+
+  if (result) {
+    //DB에 저장한다.
+    const fetchedUser = await User.findById(mongoose.Types.ObjectId(user.id))
+    fetchedUser.valid = true
+    await fetchedUser.save()
+  }
+  ctx.body = result
 }
 
 module.exports = ctrl
