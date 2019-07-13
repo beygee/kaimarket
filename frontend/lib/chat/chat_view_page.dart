@@ -7,9 +7,7 @@ import 'dart:developer';
 class ChatViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Chat(),
-    );
+    return Chat();
   }
 }
 
