@@ -7,6 +7,7 @@ import 'package:week_3/utils/base_height.dart';
 import 'package:week_3/post/photo_button.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:week_3/models/book.dart';
 
 class PostBookPage extends StatefulWidget {
   @override
