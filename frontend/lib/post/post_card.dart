@@ -23,21 +23,20 @@ class PostCard extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: post.isBook
-                      ? Image.network(
-                          post.bookImage,
-                          width: screenAwareSize(100.0, context),
-                          height: screenAwareSize(90.0, context),
-                          fit: BoxFit.cover,
-                        )
-                      : Image.network(
-                          getUri('').toString() + post.images[0]['thumb'],
-                          width: screenAwareSize(100.0, context),
-                          height: screenAwareSize(90.0, context),
-                          fit: BoxFit.cover,
-                        )
-                ),
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: post.isBook
+                        ? Image.network(
+                            post.bookImage,
+                            width: screenAwareSize(100.0, context),
+                            height: screenAwareSize(90.0, context),
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(
+                            getUri('').toString() + post.images[0]['thumb'],
+                            width: screenAwareSize(100.0, context),
+                            height: screenAwareSize(90.0, context),
+                            fit: BoxFit.cover,
+                          )),
                 SizedBox(width: 15.0),
                 Expanded(
                   child: Column(
@@ -51,13 +50,18 @@ class PostCard extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Text(
-                                post.title,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: screenAwareSize(14.0, context),
-                                  fontWeight: FontWeight.bold,
+                              Container(
+                                width: screenAwareSize(150, context),
+                                child: Text(
+                                  post.title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: screenAwareSize(14.0, context),
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               GestureDetector(
@@ -67,16 +71,24 @@ class PostCard extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: screenAwareSize(5.0, context)),
-                          Text(
-                            post.content,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 3,
-                            softWrap: true,
-                            style: TextStyle(
-                              color: Colors.grey[500],
-                              fontSize: screenAwareSize(10.0, context),
-                            ),
-                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Container(
+                                width: screenAwareSize(150, context),
+                                child: Text(
+                                  post.content,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 3,
+                                  softWrap: true,
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontSize: screenAwareSize(10.0, context),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                       Row(

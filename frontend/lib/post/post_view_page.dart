@@ -8,6 +8,7 @@ import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/utils.dart';
 import 'dart:math' as math;
 import 'package:week_3/models/post.dart';
+import 'package:week_3/utils/dio.dart';
 
 class PostViewPage extends StatefulWidget {
   Post post;
@@ -155,13 +156,21 @@ class _PostViewPageState extends State<PostViewPage> {
     );
   }
 
+  List<Image> _getImages() {
+    List<Image> images = List<Image>();
+    for (int i = 0; i < post.images.length; i++){
+        images.add(Image.network(getUri('').toString() + post.images[i]['thumb']));
+    }
+    return images;
+  }
+
   Widget _buildImageCarousel() {
     return Container(
       height: screenAwareSize(350.0, context),
       child: Carousel(
         autoplay: false,
         boxFit: BoxFit.cover,
-        images: [Image.network(post.images[0]['thumb'])],
+        images: _getImages(),
         dotSize: 6.0,
         dotSpacing: 12.0,
         dotIncreaseSize: 1.6,
