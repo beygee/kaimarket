@@ -35,37 +35,20 @@ class _DefaultLayoutState extends State<DefaultLayout>
   //두번 백 버튼 누를시 꺼지게
   DateTime currentBackPressTime = DateTime.now();
 
-<<<<<<< HEAD
-
-    void _getAllPosts() async {
-      // final store = Provider.of<Store>(context);
-      var res = await dio.getUri(getUri('/api/posts'));
-      // var string = res.data[0].toString();
-      Post post = Post.fromJson(res.data[1]);
-      log.i(res.data[1]);
-      // List<dynamic> stringlist = json.decode(string);
-      // log.i(stringlist[0]);
-      // saved.add(res.data[i]);
-      // log.i(temp);
-      // store.addPosts(saved);
-      }
-
-  @override   
-=======
   void _getAllPosts() async {
-    // final store = Provider.of<Store>(context);
-    // var res = await dio.postUri(getUri('/api/posts'));
+    final store = Provider.of<Store>(context);
     var res = await dio.getUri(getUri('/api/posts'));
-    log.i(res.data[0]);
-    // store.addPosts(res);
+    List<Post> list = List<Post>();
+    for (var iterator in res.data) {
+      Post post = Post.fromJson(iterator);
+      list.add(post);
+    }
+    store.addPosts(list);
   }
 
   @override
->>>>>>> b1f53fa886d3a17e316a530877872a7c8cabb6e4
   void initState() {
-    _getAllPosts();
     super.initState();
-
     _sellButtonController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
     _sellButtonAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -76,6 +59,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
         Tween<Offset>(begin: Offset(0.0, -15.0), end: Offset(-60.0, -75.0))
             .animate(CurvedAnimation(
                 parent: _sellButtonController, curve: Curves.decelerate));
+    _getAllPosts();
   }
 
   @override
@@ -87,6 +71,9 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   @override
   Widget build(BuildContext context) {
+    // log.i("test");
+    // _getAllPosts();
+    
     return WillPopScope(
       onWillPop: () async {
         DateTime now = DateTime.now();
