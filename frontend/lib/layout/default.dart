@@ -9,6 +9,9 @@ import 'package:week_3/layout/tab_button.dart';
 import 'package:week_3/layout/sell_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:week_3/wish/wish_page.dart';
+import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+import 'package:week_3/store/store.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
@@ -17,6 +20,10 @@ class DefaultLayout extends StatefulWidget {
 
 class _DefaultLayoutState extends State<DefaultLayout>
     with TickerProviderStateMixin {
+
+      GlobalKey<LoadingWrapperState> _loadingWrapperKey =
+      GlobalKey<LoadingWrapperState>();
+
   PageController _pageController = PageController();
   int _selectedTabIndex = 0;
 
@@ -27,9 +34,23 @@ class _DefaultLayoutState extends State<DefaultLayout>
   //두번 백 버튼 누를시 꺼지게
   DateTime currentBackPressTime = DateTime.now();
 
-  @override
+    void _getAllPosts() async {
+      // final store = Provider.of<Store>(context);
+      // var res = await dio.postUri(getUri('/api/posts'));
+      var res = await dio.getUri(getUri('/api/posts'));
+      log.i(res);
+      // store.addPosts(res);
+      }
+
+
+  @override   
   void initState() {
+    _getAllPosts();
     super.initState();
+    // ChangeNotifierProvider<Store>(
+    //     builder: (context) => Store(),
+    //     child: _getAllPosts(),
+    //   );
 
     _sellButtonController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
