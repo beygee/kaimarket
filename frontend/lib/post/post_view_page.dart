@@ -11,7 +11,7 @@ import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/dio.dart';
 
 class PostViewPage extends StatefulWidget {
-  Post post;
+  final Post post;
 
   PostViewPage({@required this.post});
 
@@ -82,7 +82,7 @@ class _PostViewPageState extends State<PostViewPage> {
             title: Opacity(
                 opacity: opacityTween,
                 child: Text(
-                  "통기타",
+                  widget.post.title,
                   style: TextStyle(fontSize: 16.0),
                 )),
             backgroundColor: Colors.white.withOpacity(opacityTween),
@@ -159,7 +159,7 @@ class _PostViewPageState extends State<PostViewPage> {
   List<Image> _getImages() {
     List<Image> images = List<Image>();
     for (int i = 0; i < post.images.length; i++){
-        images.add(Image.network(getUri('').toString() + post.images[i]['thumb']));
+        images.add(Image.network(getUri('').toString() + post.images[i]['thumb'], fit: BoxFit.cover,));
     }
     return images;
   }
