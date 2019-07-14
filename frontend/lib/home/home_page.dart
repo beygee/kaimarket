@@ -6,6 +6,11 @@ import 'package:week_3/utils/base_height.dart';
 import 'package:week_3/home/category_button.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/post/post_card.dart';
+import 'package:week_3/models/category.dart';
+import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+import 'package:week_3/store/store.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,6 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +29,6 @@ class HomePageState extends State<HomePage> {
               SizedBox(
                   height: MediaQuery.of(context).padding.top), //상단 상태바 높이 띄우기
               _buildSearchInput(context),
-
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
               _buildSuggestions(),
@@ -60,28 +65,6 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildCategoryList(context) {
-    List<String> names = [
-      "전체",
-      "디지털/가전",
-      '생활/가구',
-      '탈것',
-      '뷰티/미용',
-      '여성의류',
-      '남성의류',
-      '도서',
-      '기타'
-    ];
-    List<IconData> icons = [
-      FontAwesomeIcons.thLarge,
-      FontAwesomeIcons.desktop,
-      FontAwesomeIcons.couch,
-      FontAwesomeIcons.bicycle,
-      Icons.movie,
-      Icons.movie,
-      Icons.movie,
-      FontAwesomeIcons.bookOpen,
-      Icons.movie
-    ];
     return Container(
       height: screenAwareSize(70, context),
       child: ListView.separated(
@@ -89,8 +72,8 @@ class HomePageState extends State<HomePage> {
         padding: EdgeInsets.symmetric(horizontal: 10.0),
         itemBuilder: (context, idx) {
           return HomeCategoryButton(
-            icon: icons[idx],
-            text: names[idx],
+            icon: CategoryList[idx].icon,
+            text: CategoryList[idx].name,
           );
         },
         separatorBuilder: (context, idx) {
@@ -98,7 +81,7 @@ class HomePageState extends State<HomePage> {
             width: 10.0,
           );
         },
-        itemCount: 9,
+        itemCount: CategoryList.length,
         scrollDirection: Axis.horizontal,
       ),
     );

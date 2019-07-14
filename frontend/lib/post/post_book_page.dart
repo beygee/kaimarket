@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:week_3/post/post_category_button.dart';
 import 'package:week_3/post/select_map_page.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'package:week_3/post/photo_button.dart';
@@ -9,8 +7,9 @@ import 'package:week_3/utils/utils.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:week_3/models/book.dart';
 import 'package:week_3/post/post_book_card.dart';
-import 'package:intl/intl.dart';
 import 'package:week_3/post/select_map_page.dart';
+import 'package:week_3/models/post.dart';
+import 'package:dio/dio.dart';
 
 class PostBookPage extends StatefulWidget {
   final Book book;
@@ -22,8 +21,20 @@ class PostBookPage extends StatefulWidget {
 }
 
 class PostBookPageState extends State<PostBookPage> {
+  TextEditingController priceController = TextEditingController();
+  TextEditingController majorController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
+
   static var selectedCategory;
-  List<Asset> selectedPhotos = new List<Asset>();
+  List<Map<String, String>> imageUrls = [];
+
+  @override
+  void dispose() {
+    priceController.dispose();
+    majorController.dispose();
+    contentController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +58,30 @@ class PostBookPageState extends State<PostBookPage> {
         style: TextStyle(fontSize: 16.0),
       ),
       actions: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SelectMapPage()));
-          },
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text("완료"),
+        Material(
+          color: Colors.transparent,
+          child: InkResponse(
+            onTap: _onTapNextPage,
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text("다음"),
+            ),
           ),
         ),
       ],
     );
+  }
+
+  void _onTapNextPage() {
+    //포스트를 만들어 전달한다.
+    Post post = Post.fromBook(widget.book);
+    post.price = int.parse(priceController.text);
+    post.bookMajor = majorController.text;
+    post.content = contentController.text;
+    post.images = imageUrls;
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => SelectMapPage(post: post)));
   }
 
   Widget _buildTotal(context) {
@@ -75,9 +98,7 @@ class PostBookPageState extends State<PostBookPage> {
           Container(
             child: Column(
               children: <Widget>[
-                selectedPhotos.length > 0
-                    ? _buildPhotoList(context)
-                    : Container(),
+                imageUrls.length > 0 ? _buildPhotoList(context) : Container(),
                 _buildContentInput(context),
               ],
             ),
@@ -107,42 +128,42 @@ class PostBookPageState extends State<PostBookPage> {
   }
 
   Widget _buildPriceInput(context) {
-    return Padding(
-      padding: EdgeInsets.only(top: screenAwareSize(5, context)),
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: TextField(
-            maxLines: 1,
-            decoration: InputDecoration(
-              hintText: "희망가격",
-              hintStyle: TextStyle(
-                fontSize: 14.0,
-              ),
-              border: InputBorder.none,
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: screenAwareSize(10.0, context),
+            vertical: screenAwareSize(5.0, context)),
+        child: TextField(
+          controller: priceController,
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: "희망가격",
+            hintStyle: TextStyle(
+              fontSize: 14.0,
             ),
-            keyboardType: TextInputType.number,
+            border: InputBorder.none,
           ),
+          keyboardType: TextInputType.number,
         ),
       ),
     );
   }
 
   Widget _buildMajorInput(context) {
-    return Padding(
-      padding: EdgeInsets.all(5.0),
-      child: Container(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: TextField(
-            maxLines: 1,
-            decoration: InputDecoration(
-              hintText: "사용한 수업명",
-              hintStyle: TextStyle(
-                fontSize: 14.0,
-              ),
-              border: InputBorder.none,
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: screenAwareSize(10.0, context),
+            vertical: screenAwareSize(5.0, context)),
+        child: TextField(
+          controller: majorController,
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: "사용한 수업명",
+            hintStyle: TextStyle(
+              fontSize: 14.0,
             ),
+            border: InputBorder.none,
           ),
         ),
       ),
@@ -151,8 +172,11 @@ class PostBookPageState extends State<PostBookPage> {
 
   Widget _buildContentInput(context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(
+          horizontal: screenAwareSize(10.0, context),
+          vertical: screenAwareSize(5.0, context)),
       child: TextField(
+        controller: contentController,
         maxLines: 10,
         decoration: InputDecoration(
           hintText:
@@ -168,16 +192,16 @@ class PostBookPageState extends State<PostBookPage> {
 
   Widget _buildPhotoList(context) {
     return Container(
-      height: screenAwareSize(75, context),
+      height: screenAwareSize(70, context),
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(screenAwareSize(10.0, context)),
         itemBuilder: (context, idx) {
           return PhotoButton(
-            asset: selectedPhotos[idx],
+            url: imageUrls[idx]['thumb'],
             onPressed: () {
               setState(() {
-                selectedPhotos.removeAt(idx);
+                imageUrls.removeAt(idx);
               });
             },
           );
@@ -187,7 +211,7 @@ class PostBookPageState extends State<PostBookPage> {
             width: 10.0,
           );
         },
-        itemCount: selectedPhotos.length,
+        itemCount: imageUrls.length,
         scrollDirection: Axis.horizontal,
       ),
     );
@@ -213,15 +237,7 @@ class PostBookPageState extends State<PostBookPage> {
               color: Colors.transparent,
               child: InkResponse(
                 containedInkWell: true,
-                onTap: () async {
-                  var galleryFiles = await MultiImagePicker.pickImages(
-                    maxImages: 10,
-                    enableCamera: true,
-                  );
-                  setState(() {
-                    selectedPhotos = galleryFiles;
-                  });
-                },
+                onTap: _uploadImages,
                 radius: 10.0,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
@@ -236,5 +252,38 @@ class PostBookPageState extends State<PostBookPage> {
         ),
       ),
     );
+  }
+
+  //이미지를 서버에 업로드하고 url과 썸네일을 받아온다.
+  _uploadImages() async {
+    List<Asset> images = await MultiImagePicker.pickImages(
+      maxImages: 10,
+      enableCamera: true,
+    );
+
+    //서버 업로드
+    try {
+      var imageData = await Future.wait(images.map((image) async {
+        var bytes = await image.requestOriginal();
+        FormData formData = FormData.from({
+          'image':
+              UploadFileInfo.fromBytes(bytes.buffer.asUint8List(), image.name)
+        });
+
+        var res = await dio.postUri(getUri('/api/upload'), data: formData);
+        return res.data;
+      }).toList());
+
+      setState(() {
+        imageUrls = imageData.map((json) {
+          return {
+            'thumb': json['thumb'].toString(),
+            'url': json['url'].toString(),
+          };
+        }).toList();
+      });
+    } catch (e) {
+      log.e(e);
+    }
   }
 }

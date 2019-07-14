@@ -7,7 +7,16 @@ module.exports = function(server) {
   })
 
   io.sockets.on("connection", async function(socket) {
-    socket.on("disconnect", () => {})
+    console.log("소켓 연결")
+
+    socket.on("message", message => {
+      console.log(message)
+      socket.emit("message", message)
+    })
+
+    socket.on("disconnect", () => {
+      console.log("소켓 연결 해제")
+    })
   })
 }
 

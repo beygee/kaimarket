@@ -3,12 +3,12 @@ const router = new Router()
 
 const ctrl = require("./index.ctrl")
 
-router.post("/google", ctrl.authWithGoogle)
-router.post("/facebook", ctrl.authWithFacebook)
-router.post("/naver", ctrl.authWithNaver)
-router.post("/kakao", ctrl.authWithKakao)
-router.post("/guest", ctrl.authWithGuest)
+router.post("/google", ctrl.authWithGoogle, ctrl.authToken)
+router.post("/facebook", ctrl.authWithFacebook, ctrl.authToken)
+router.post("/naver", ctrl.authWithNaver, ctrl.authToken)
+router.post("/kakao", ctrl.authWithKakao, ctrl.authToken)
+router.post("/guest", ctrl.authWithGuest, ctrl.authToken)
 
-router.post('/valid', ctrl.validHakbun)
+router.post("/valid", ctrl.validHakbun)
 
 module.exports = router
