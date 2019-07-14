@@ -38,3 +38,21 @@ class SocketLoaded extends SocketState {
     return super.toString();
   }
 }
+
+//채팅방 들어갔을 때
+class SocketChatLoaded extends SocketState {
+  final SocketIOManager manager;
+  final SocketIO socket;
+
+  SocketChatLoaded({@required this.manager, @required this.socket})
+      : super([manager, socket]);
+
+  void dispose() {
+    manager.clearInstance(socket).then((_) {});
+  }
+
+  @override
+  String toString() {
+    return super.toString();
+  }
+}

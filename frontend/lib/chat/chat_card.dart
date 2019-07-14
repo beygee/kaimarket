@@ -29,7 +29,7 @@ class ChatCard extends StatelessWidget {
       child: InkWell(
         onTap: () {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => ChatViewPage()));
+              .push(MaterialPageRoute(builder: (context) => ChatViewPage(chat: chat)));
         },
         child: Container(
           padding: _paddingFormat,

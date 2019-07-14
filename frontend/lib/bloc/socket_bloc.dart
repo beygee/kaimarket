@@ -27,9 +27,9 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
           "http://" + hostUrl + '/test1',
           query: {'auth_token': token}));
 
-      await socket.on("message", (data) {
-        log.i(data);
-      });
+      // await socket.on("message", (data) {
+      //   log.i(data);
+      // });
 
       socket.on('error', (e) {
         log.e(e);
@@ -45,6 +45,23 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     } else if (event is SocketDelete && currentState is SocketLoaded) {
       (currentState as SocketLoaded).dispose();
       yield SocketUninitialized();
+    } else if (event is SocketDelete && currentState is SocketChatLoaded) {
+      (currentState as SocketChatLoaded).dispose();
+      yield SocketUninitialized();
+    } else if (event is SocketChatEnter && currentState is SocketLoaded) {
+      //소켓 이벤트 붙이기
+      final socket = (currentState as SocketLoaded).socket;
+      final manager = (currentState as SocketLoaded).manager;
+      await socket.on("message", (data) {
+        log.i(data);
+      });
+      yield SocketChatLoaded(manager: manager, socket: socket);
+    } else if (event is SocketChatLeave && currentState is SocketChatLoaded) {
+      //소켓 이벤트 빼버리기
+      final socket = (currentState as SocketChatLoaded).socket;
+      final manager = (currentState as SocketChatLoaded).manager;
+      await socket.off('message');
+      yield SocketLoaded(manager: manager, socket: socket);
     }
   }
 
@@ -52,6 +69,9 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
   void dispose() {
     if (currentState is SocketLoaded) {
       (currentState as SocketLoaded).dispose();
+    }
+    if (currentState is SocketChatLoaded) {
+      (currentState as SocketChatLoaded).dispose();
     }
     super.dispose();
   }

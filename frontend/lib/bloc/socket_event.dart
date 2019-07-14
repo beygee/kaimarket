@@ -19,3 +19,17 @@ class SocketDelete extends SocketEvent {
     return "Delete";
   }
 }
+
+class SocketChatEnter extends SocketEvent {
+  @override
+  String toString() {
+    return "SocketChatEnter";
+  }
+}
+
+class SocketChatLeave extends SocketEvent {
+  @override
+  String toString() {
+    return "SocketChatLeave";
+  }
+}

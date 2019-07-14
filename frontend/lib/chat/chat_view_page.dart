@@ -6,8 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:intl/intl.dart';
+import 'package:week_3/models/chat.dart';
 
 class ChatViewPage extends StatefulWidget {
+  final Chat chat;
+  ChatViewPage({this.chat});
+
   @override
   _ChatViewPageState createState() => _ChatViewPageState();
 }
@@ -42,8 +46,13 @@ class _ChatViewPageState extends State<ChatViewPage> {
   void initState() {
     super.initState();
     _socketBloc = BlocProvider.of<SocketBloc>(context);
+    _socketBloc.dispatch(SocketChatEnter());
+  }
 
-    // _socketBloc.socket.on('message', )
+  @override
+  void dispose() {
+    _socketBloc.dispatch(SocketChatLeave());
+    super.dispose();
   }
 
   Future callback(socket) async {
@@ -56,9 +65,13 @@ class _ChatViewPageState extends State<ChatViewPage> {
       // log.i(time);
       // if (prev_user == "user.id" && prev_time == time)
       //   showTime = false;
-      
+
       await socket.emit("message", [
-        {"text": messageController.text, "userId": "user_id", "time": time}
+        {
+          'chatId': widget.chat.id,
+          "text": messageController.text,
+          "from": widget.chat.buyer.id,
+        }
       ]);
       // setState(() {
       //   docs.insert(0, {
@@ -180,7 +193,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
       // height: screenAwareSize(50.0, context),
       child: TextField(
         onSubmitted: (value) =>
-            callback((_socketBloc.currentState as SocketLoaded).socket),
+            callback((_socketBloc.currentState as SocketChatLoaded).socket),
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: EdgeInsets.all(screenAwareSize(5.0, context)),
@@ -238,7 +251,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
                         .toList(),
                     new Message(
                       from: 'diuni',
-                      text: 'heello 내 이름은 지윤팍팍 아임 지윤 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
+                      text: 'heello 내 이름은 지윤팍팍 아임 지�� 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
                       time: '오후 3:39',
                     ),
                     new Message(
@@ -260,7 +273,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
                           SendButton(
                             text: "Send",
                             callback: () =>
-                                callback((state as SocketLoaded).socket),
+                                callback((state as SocketChatLoaded).socket),
                           ),
                         ],
                       ),
