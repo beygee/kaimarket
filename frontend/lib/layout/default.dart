@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/layout/sell_overlay.dart';
@@ -9,9 +11,9 @@ import 'package:week_3/layout/tab_button.dart';
 import 'package:week_3/layout/sell_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:week_3/wish/wish_page.dart';
-import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:week_3/store/store.dart';
+import 'package:week_3/models/post.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
@@ -34,14 +36,19 @@ class _DefaultLayoutState extends State<DefaultLayout>
   //두번 백 버튼 누를시 꺼지게
   DateTime currentBackPressTime = DateTime.now();
 
+
     void _getAllPosts() async {
       // final store = Provider.of<Store>(context);
-      // var res = await dio.postUri(getUri('/api/posts'));
       var res = await dio.getUri(getUri('/api/posts'));
-      log.i(res);
-      // store.addPosts(res);
+      // var string = res.data[0].toString();
+      Post post = Post.fromJson(res.data[1]);
+      log.i(res.data[1]);
+      // List<dynamic> stringlist = json.decode(string);
+      // log.i(stringlist[0]);
+      // saved.add(res.data[i]);
+      // log.i(temp);
+      // store.addPosts(saved);
       }
-
 
   @override   
   void initState() {
