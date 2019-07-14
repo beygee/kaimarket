@@ -239,6 +239,21 @@ class PostPageState extends State<PostPage> {
   }
 
   Widget _buildCategoryList(context) {
+    List<HomeCategoryButton> list = [];
+    for (int i = 1; i < CategoryList.length; i++) {
+      if (i == 7) continue;
+      list.add(HomeCategoryButton(
+        active: selectedCategory == i,
+        icon: CategoryList[i].icon,
+        text: CategoryList[i].name,
+        onPressed: () {
+          setState(() {
+            selectedCategory = i;
+          });
+        },
+      ));
+    }
+
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: 10.0, vertical: screenAwareSize(15.0, context)),
@@ -246,17 +261,7 @@ class PostPageState extends State<PostPage> {
         spacing: screenAwareSize(10.0, context),
         runSpacing: screenAwareSize(10.0, context),
         children: <Widget>[
-          for (int i = 1; i < CategoryList.length; i++)
-            HomeCategoryButton(
-              active: selectedCategory == i,
-              icon: CategoryList[i].icon,
-              text: CategoryList[i].name,
-              onPressed: () {
-                setState(() {
-                  selectedCategory = i;
-                });
-              },
-            ),
+          ...list
         ],
       ),
     );
