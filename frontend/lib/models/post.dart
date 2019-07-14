@@ -80,6 +80,14 @@ class Post extends Equatable {
         bookImage = json['bookImage'],
         bookPrice = json['bookPrice'] {
     //
+    images = json['images'].map((image) {
+      return {
+        'thumb': image['thumb'].toString(),
+        'url': image['url'].toString()
+      };
+    }).toList();
+
+    category = CategoryList[json['category']['id']];
   }
 
   //책으로부터 정보 받아오기
