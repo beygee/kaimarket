@@ -26,6 +26,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
     }
     } catch (_) {
+      print(_);
       yield PostError();
     }
   }
