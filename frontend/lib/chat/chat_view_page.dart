@@ -28,93 +28,78 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   final _partnerNameFont = TextStyle(fontSize: 20.0, color: Colors.grey[600]);
   final _chatFont = TextStyle(fontSize: 14.0, color: Colors.grey[500]);
-  final _postFont = TextStyle(fontSize: 14.0,color: Colors.grey[600]);
+  final _postFont = TextStyle(fontSize: 14.0, color: Colors.grey[600]);
   final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
-  // socket
-  // SocketIOManager socketManager = SocketIOManager();
-  // SocketIO socket;
-
-  initialize() async {
-    // socket = await socketManager.createInstance(
-    //     SocketOptions("http://${hostUrl}", enableLogging: true));
-    // socket.onConnect((data) {
-    //   log.i("connected...");
-    // });
-    // socket.connect();
-    // socket.on("init", (data) {
-    //   socket.emit("init", ["access_token"]);
-    // });
-    // socket.on("message", (data) {
-    //   log.i(data);
-    //   // db에 메세지 보내기
-    //   //
-    // });
-    
-    // Map<String, dynamic> docs;
-    // Message message_first =
-    //     Message(from: 'diuni', text: 'hi', me: true, time: '오후 3:44');
-    // Message message_second = Message(
-    //     from: 'banana', text: "hi I'm banana", me: false, time: '오후 3:45');
-    // docs = {'1': message_first, '2': message_second};
-  }
+  var prev_time = "";
+  var prev_user = "user.id";
+  List<Widget> response;
+  var docs = [
+    {"text": "hi", "userId": "user_id", "time": "오후 10:15"},
+    {"text": "hhhhhhi", "userId": "user_id", "time": "오후 10:15"}
+  ];
 
   @override
   void initState() {
     super.initState();
-
     _socketBloc = BlocProvider.of<SocketBloc>(context);
-    initialize();
-  }
-
-  @override
-  void dispose() {
-    // socket.emit("end", []);
-    // socketManager.clearInstance(socket);
-    // socketManager.
-    // log.i("연결 해제");
-    super.dispose();
   }
 
   Future callback(socket) async {
     if (messageController.text.length > 0) {
       var now = new DateTime.now();
       var time = new DateFormat("hh:mm a").format(now);
-      var prev_user = "";
-      var prev_time = "";
-      bool showTime = true;
-      log.i(time);
-      if (prev_user == "user.id" && prev_time == prev_time)
-        showTime = false;
-      await socket.emit("message", [messageController.text, "user_id", time, showTime]);
+      // log.i(prev_time);
+      // bool showTime = true;
+      // log.i(time);
+      // if (prev_user == "user.id" && prev_time == time)
+      //   showTime = false;
+      await socket.emit("message", [
+        {"text": messageController.text, "userId": "user_id", "time": time}
+      ]);
+      setState(() {
+        docs.insert(0, {
+          "text": messageController.text,
+          "userId": "user_id",
+          "time": time
+        });
+      });
+
       // db에 저장은 소켓이 해준대 ~!
-      // response = await dio.post("message", data: from: user.id, text:messageController.text, time: time, showTime: showTime);
-      prev_user = "user.id";
-      prev_time = time;
+      // prev_user = "user.id";
+      // prev_time = time;
       messageController.clear();
-      // scrollController.animateTo(scrollController.position.maxScrollExtent,
-      //    curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
+      scrollController.animateTo(0.0,
+          //scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300));
+      //scrollController.jumpTo(scrollController.position.maxScrollExtent);
     }
   }
 
-  Future uploadMessage() async {
-
-  }
+  Future uploadMessage() async {}
 
   Widget _item(context) {
     return Container(
-        height: screenAwareSize(80.0, context),
-        width: 360.0,
-        color: Colors.white,
-        child: Row(
-          children: <Widget>[
-            SizedBox(width: 20.0,),
-            _itemLeft(context),
-            SizedBox(width: 20.0,),
-            _itemMiddle(context),
-            _itemRight(context),
-          ],
-        ),
+      height: screenAwareSize(80.0, context),
+      width: 360.0,
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 20.0,
+          ),
+          _itemLeft(context),
+          SizedBox(
+            width: 20.0,
+          ),
+          _itemMiddle(context),
+          SizedBox(
+            width: 70.0,
+          ),
+          _itemRight(context),
+        ],
+      ),
     );
   }
 
@@ -141,29 +126,50 @@ class _ChatViewPageState extends State<ChatViewPage> {
         Row(
           children: <Widget>[
             if (_postIsSold)
-              Text("[판매완료]", style: _postFont,),
-            Text("통기타", style: _postFont,),
+              Text(
+                "[판매완료]",
+                style: _postFont,
+              ),
+            Text(
+              "통기타",
+              style: _postFont,
+            ),
           ],
         ),
-        Text("15,500원", style: _postFont,),
+        Text(
+          "15,500원",
+          style: _postFont,
+        ),
       ],
     );
   }
 
-  Widget _itemRight(context){
+  Widget _itemRight(context) {
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => PostViewPage()));
       },
       child: Container(
-        height: screenAwareSize(80.0, context),
-        width: 80.0,
-        color: Colors.black,
-        child: Text("게시글\n확인하기")
+        height: screenAwareSize(45.0, context),
+        width: 70.0,
+        decoration: new BoxDecoration(
+          borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
+          border: Border.all(color: Colors.amber[600], width: 1.0),
+        ),
+        child: Center(
+            child: Text(
+          "게시글\n확인하기",
+          style: TextStyle(
+            fontSize: 12.0,
+            color: Colors.amber[600],
+          ),
+          textAlign: TextAlign.center,
+        )),
       ),
     );
   }
+
   Widget _typingbar(context) {
     return Container(
       width: 270.0,
@@ -203,28 +209,35 @@ class _ChatViewPageState extends State<ChatViewPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Divider(height: 1.0,),
+              Divider(
+                height: 1.0,
+              ),
               _item(context),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
                   controller: scrollController,
+                  reverse: true,
+                  shrinkWrap: true,
                   children: <Widget>[
                     // db에서 가져오기
                     // Response<Message> response = await dio.get<Message>("message", ??).toList();
+                    ...docs
+                        .map((doc) => Message(
+                              from: doc['from'],
+                              text: doc['text'],
+                              time: doc['time'],
+                            ))
+                        .toList(),
                     new Message(
                       from: 'diuni',
                       text: 'heello 내 이름은 지윤팍팍 아임 지윤 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
-                      me: true,
                       time: '오후 3:39',
-                      showTime: false,
                     ),
                     new Message(
                       from: 'diuni',
                       text: '짧은 거',
-                      me: false,
                       time: '오후 4:00',
-                      showTime: true,
                     ),
                   ],
                 ),
@@ -272,17 +285,15 @@ class Message extends StatelessWidget {
   final String from;
   final String text;
   final String time;
-  final bool showTime;
 
-  final bool me;
   // me = (from == user.name);
 
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
   final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
 
-  const Message(
-      {Key key, this.from, this.text, this.me, this.time, this.showTime})
-      : super(key: key);
+  Message({Key key, this.from, this.text, this.time}) : super(key: key);
+
+  bool me = true;
 
   @override
   Widget build(BuildContext context) {
@@ -293,7 +304,7 @@ class Message extends StatelessWidget {
         mainAxisAlignment: me ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          if (showTime && me)
+          if (me)
             new Text(
               time,
               style: _timeFont,
@@ -305,20 +316,40 @@ class Message extends StatelessWidget {
                 color: me ? Colors.white : Colors.amber[200],
                 borderRadius: BorderRadius.circular(30.0),
                 elevation: 0.0,
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 250),
-                  padding: EdgeInsets.symmetric(
-                      vertical: screenAwareSize(15.0, context),
-                      horizontal: 24.0),
-                  child: Text(
-                    text,
-                    style: _chatFont,
-                  ),
+                child: Stack(
+                  children: <Widget>[
+                    Container(
+                      constraints: BoxConstraints(maxWidth: 250),
+                      padding: EdgeInsets.symmetric(
+                          vertical: screenAwareSize(15.0, context),
+                          horizontal: 24.0),
+                      child: Text(
+                        text,
+                        style: _chatFont,
+                      ),
+                    ),
+                    if (me)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: CustomPaint(
+                          painter: RightTriangle(),
+                        ),
+                      ),
+                    if (!me)
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: CustomPaint(
+                          painter: LeftTriangle(),
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ],
           ),
-          if (showTime != time && !me)
+          if (!me)
             new Text(
               time,
               style: _timeFont,
@@ -327,5 +358,41 @@ class Message extends StatelessWidget {
       ),
       // updatePrev_time(time);
     );
+  }
+}
+
+class RightTriangle extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()..color = Colors.white;
+
+    var path = Path();
+    path.lineTo(-25, 0);
+    path.lineTo(-10, 15);
+    path.lineTo(5, 0);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
+  }
+}
+
+class LeftTriangle extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()..color = Colors.amber[200];
+
+    var path = Path();
+    path.lineTo(-5, 0);
+    path.lineTo(10, 15);
+    path.lineTo(25, 0);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return true;
   }
 }
