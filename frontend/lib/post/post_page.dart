@@ -21,7 +21,8 @@ class PostPage extends StatefulWidget {
 
 class PostPageState extends State<PostPage> {
   static var selectedCategory;
- List<Asset> selectedPhotos = new List<Asset>();
+  List<Asset> selectedPhotos = new List<Asset>();
+  List<Map<String, String>> imageUrls = [];
 
   @override
   Widget build(BuildContext context) {
@@ -76,27 +77,12 @@ class PostPageState extends State<PostPage> {
         children: <Widget>[
           SizedBox(height: screenAwareSize(5.0, context)),
 
-          ///// 카테고리 선택
-          Container(
-              alignment: FractionalOffset(0.5, 0.5),
-              width: c_width,
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(screenAwareSize(10.0, context)),
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.grey,
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.all(5.0),
-                    child: Text('카테고리 선택', style: TextStyle(fontSize: 15.0)),
-                  ),
-                  _buildCategoryList(context),
-                ],
-              )),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+            child: Text('카테고리 선택', style: TextStyle(fontSize: 15.0)),
+          ),
+          _buildCategoryList(context),
+          Divider(),
 
           // //// 사진버튼
           // Padding(
@@ -105,64 +91,20 @@ class PostPageState extends State<PostPage> {
           // ),
 
           SizedBox(height: screenAwareSize(5.0, context)),
-          ///// 상품명
-          Container(
-              alignment: FractionalOffset(0.5, 0.5),
-              width: c_width,
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(screenAwareSize(10.0, context)),
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.grey,
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  _buildTitleInput(context),
-                ],
-              )),
-
-          ///// 가격
-          Padding(
-            padding: EdgeInsets.all(5.0),
-            child: Container(
-                alignment: FractionalOffset(0.5, 0.5),
-                width: c_width,
-                decoration: BoxDecoration(
-                  borderRadius:
-                      BorderRadius.circular(screenAwareSize(10.0, context)),
-                  color: Colors.white,
-                  border: Border.all(
-                    color: Colors.grey,
-                  ),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    _buildPriceInput(context),
-                  ],
-                )),
-          ),
-
-          ///// 내용
-          Container(
-              alignment: FractionalOffset(0.5, 0.5),
-              width: c_width,
-              height: screenAwareSize(300, context),
-              decoration: BoxDecoration(
-                borderRadius:
-                    BorderRadius.circular(screenAwareSize(10.0, context)),
-                color: Colors.white,
-                border: Border.all(
-                  color: Colors.grey,
-                ),
-              ),
-              child: Column(
-                children: <Widget>[
-                  selectedPhotos.length > 0 ? _buildPhotoList(context) : Container(),
-                  _buildContentInput(context),
-                ],
-              )),
+          _buildTitleInput(context),
+          SizedBox(height: screenAwareSize(5.0, context)),
+          Divider(),
+          _buildPriceInput(context),
+          SizedBox(height: screenAwareSize(5.0, context)),
+          Divider(),
+          Column(
+            children: <Widget>[
+              selectedPhotos.length > 0
+                  ? _buildPhotoList(context)
+                  : Container(),
+              _buildContentInput(context),
+            ],
+          )
         ],
       ),
     ));
@@ -203,17 +145,12 @@ class PostPageState extends State<PostPage> {
   Widget _buildContentInput(context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      // child: AutoSizeText(
-
-      //   style: TextStyle(fontSize: 20),
-      //   maxLines: 4,
-      // ),
       child: TextField(
         maxLines: 8,
         decoration: InputDecoration(
-          hintText: "내용을 입력하세요",
+          hintText: "내용을 입력하세요.",
           hintStyle: TextStyle(
-            fontSize: 20.0,
+            fontSize: 15.0,
           ),
           border: InputBorder.none,
         ),
@@ -222,27 +159,27 @@ class PostPageState extends State<PostPage> {
   }
 
   Widget _buildPhotoList(context) {
-
     return Container(
-      height: screenAwareSize(75, context),
+      height: screenAwareSize(70, context),
       child: ListView.separated(
         physics: BouncingScrollPhysics(),
-        padding: EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(screenAwareSize(10.0, context)),
         itemBuilder: (context, idx) {
-          // return PhotoButton(asset: selectedPhotos[idx],
-          //   onPressed: () {
-          //     setState(() {
-          //     selectedPhotos.removeAt(idx);
-          //     });
-          //   },
-          // );
+          return PhotoButton(
+            url: imageUrls[idx]['thumb'],
+            onPressed: () {
+              setState(() {
+                imageUrls.removeAt(idx);
+              });
+            },
+          );
         },
         separatorBuilder: (context, idx) {
           return SizedBox(
             width: 10.0,
           );
         },
-        itemCount: selectedPhotos.length,
+        itemCount: imageUrls.length,
         scrollDirection: Axis.horizontal,
       ),
     );
@@ -272,8 +209,8 @@ class PostPageState extends State<PostPage> {
       return List.generate(
           count,
           (i) => PostCategoryButton(
-              icon: icons[i],
-              text: names[i],
+                icon: icons[i],
+                text: names[i],
               ));
     }
 
