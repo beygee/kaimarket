@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:week_3/models/category.dart';
 import 'package:week_3/models/book.dart';
 import 'package:week_3/models/user.dart';
+import 'package:equatable/equatable.dart';
 
-class Post {
+class Post extends Equatable {
   String id;
   String title;
   String content;
@@ -56,6 +57,9 @@ class Post {
     this.bookImage,
   });
 
+  @override
+  String toString() => 'Post { _id: $title }';
+
   Post.fromJson(Map<String, dynamic> json)
       : id = json['_id'],
         title = json['title'],
@@ -64,8 +68,8 @@ class Post {
         view = json['view'],
         wish = json['wish'],
         chat = json['chat'],
-        locationLat = json['locationLat'],
-        locationLng = json['locationLng'],
+        locationLat = json['locationLat'].toDouble(),
+        locationLng = json['locationLng'].toDouble(),
         created = json['created'],
         updated = json['updated'],
         isBook = json['isBook'],
