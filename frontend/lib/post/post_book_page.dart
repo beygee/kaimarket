@@ -25,7 +25,6 @@ class PostBookPageState extends State<PostBookPage> {
   TextEditingController majorController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
-  static var selectedCategory;
   List<Map<String, String>> imageUrls = [];
 
   @override
@@ -39,15 +38,23 @@ class PostBookPageState extends State<PostBookPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: _buildAppBar(context),
-        body: Stack(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: Builder(
+          builder: (context) => _buildAppBar(context),
+        ),
+      ),
+      body: Builder(builder: (context) {
+        return Stack(
           children: <Widget>[
             Positioned.fill(
               child: _buildTotal(context),
             ),
             _buildBottomTabs(context),
           ],
-        ));
+        );
+      }),
+    );
   }
 
   Widget _buildAppBar(context) {
@@ -61,7 +68,7 @@ class PostBookPageState extends State<PostBookPage> {
         Material(
           color: Colors.transparent,
           child: InkResponse(
-            onTap: _onTapNextPage,
+            onTap: () => _onTapNextPage(context),
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Text("다음"),
@@ -72,7 +79,24 @@ class PostBookPageState extends State<PostBookPage> {
     );
   }
 
-  void _onTapNextPage() {
+  void _onTapNextPage(context) {
+    if (priceController.text == '') {
+      showSnackBar(context, "희망가격을 입력해주세요.");
+      return;
+    }
+    if (majorController.text == '') {
+      showSnackBar(context, "수업명을 입력해주세요.");
+      return;
+    }
+    if (contentController.text == '') {
+      showSnackBar(context, "내용을 입력해주세요.");
+      return;
+    }
+    if (imageUrls.length == 0) {
+      showSnackBar(context, "상품의 이미지를 올려주세요.");
+      return;
+    }
+
     //포스트를 만들어 전달한다.
     Post post = Post.fromBook(widget.book);
     post.price = int.parse(priceController.text);

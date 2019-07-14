@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:week_3/home/home_page.dart';
-import 'package:week_3/post/post_category_button.dart';
+import 'package:week_3/home/category_button.dart';
+import 'package:week_3/models/category.dart';
 import 'package:week_3/post/select_map_page.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'package:week_3/post/photo_button.dart';
-import 'package:week_3/post/google_map.dart';
 import 'package:week_3/utils/utils.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:week_3/post/select_map_page.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:week_3/models/post.dart';
+import 'package:week_3/models/post.dart';
+import 'package:dio/dio.dart';
 
 class PostPage extends StatefulWidget {
   @override
@@ -20,47 +18,60 @@ class PostPage extends StatefulWidget {
 }
 
 class PostPageState extends State<PostPage> {
-  static var selectedCategory;
-  List<Asset> selectedPhotos = new List<Asset>();
+  //텍스트 컨트롤러
+  TextEditingController titleController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController contentController = TextEditingController();
+
+  int selectedCategory = 0;
   List<Map<String, String>> imageUrls = [];
 
   @override
-  Widget build(BuildContext context) {
-    double c_width = MediaQuery.of(context).size.width * 0.97;
-    // 키보드 떴을때 위로 끌어올리기.
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
+  void dispose() {
+    priceController.dispose();
+    titleController.dispose();
+    contentController.dispose();
+    super.dispose();
+  }
 
-    // TODO: implement build
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: true,
-        resizeToAvoidBottomInset: true,
-        appBar: _buildAppBar(context),
-        body: Stack(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(56),
+        child: Builder(
+          builder: (context) => _buildAppBar(context),
+        ),
+      ),
+      body: Builder(builder: (context) {
+        return Stack(
           children: <Widget>[
             Positioned.fill(
               child: _buildTotal(context),
             ),
             _buildBottomTabs(context),
           ],
-        ));
+        );
+      }),
+    );
   }
 
   Widget _buildAppBar(context) {
     return AppBar(
-      backgroundColor: Colors.amber[100],
+      backgroundColor: Colors.white,
       title: Text(
         "판매하기",
-        style: TextStyle(fontSize: 15.0),
+        style: TextStyle(fontSize: 16.0),
       ),
       actions: <Widget>[
-        GestureDetector(
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SelectMapPage()));
-          },
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text("선호 지역 설정"),
+        Material(
+          color: Colors.transparent,
+          child: InkResponse(
+            onTap: () => _onTapNextPage(context),
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text("다음"),
+            ),
           ),
         ),
       ],
@@ -68,75 +79,77 @@ class PostPageState extends State<PostPage> {
   }
 
   Widget _buildTotal(context) {
-    double c_width = MediaQuery.of(context).size.width * 0.97;
-    // 키보드 떴을때 위로 끌어올리기.
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
     return SingleChildScrollView(
-        child: SafeArea(
       child: Column(
         children: <Widget>[
-          SizedBox(height: screenAwareSize(5.0, context)),
-
-          Padding(
-            padding: EdgeInsets.all(5.0),
-            child: Text('카테고리 선택', style: TextStyle(fontSize: 15.0)),
-          ),
+          SizedBox(height: screenAwareSize(15.0, context)),
+          Text('카테고리 선택',
+              style: TextStyle(
+                  fontSize: screenAwareSize(12.0, context),
+                  color: Colors.grey[600])),
           _buildCategoryList(context),
-          Divider(),
-
-          // //// 사진버튼
-          // Padding(
-          //   padding: EdgeInsets.all(10.0),
-          //   child: _buildPhotoList(context),
-          // ),
-
-          SizedBox(height: screenAwareSize(5.0, context)),
+          _buildDivider(context),
           _buildTitleInput(context),
-          SizedBox(height: screenAwareSize(5.0, context)),
-          Divider(),
+          _buildDivider(context),
           _buildPriceInput(context),
-          SizedBox(height: screenAwareSize(5.0, context)),
-          Divider(),
+          _buildDivider(context),
           Column(
             children: <Widget>[
-              selectedPhotos.length > 0
-                  ? _buildPhotoList(context)
-                  : Container(),
+              imageUrls.length > 0 ? _buildPhotoList(context) : Container(),
               _buildContentInput(context),
             ],
           )
         ],
       ),
-    ));
+    );
   }
 
   Widget _buildTitleInput(context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: TextField(
-        maxLines: 1,
-        decoration: InputDecoration(
-          hintText: "상품명",
-          hintStyle: TextStyle(
-            fontSize: 14.0,
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: screenAwareSize(10.0, context),
+            vertical: screenAwareSize(5.0, context)),
+        child: TextField(
+          controller: titleController,
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: "상품명",
+            hintStyle: TextStyle(
+              fontSize: 14.0,
+            ),
+            border: InputBorder.none,
           ),
-          border: InputBorder.none,
         ),
       ),
     );
   }
 
+  Widget _buildDivider(context) {
+    return Container(
+      width: double.infinity,
+      height: 1.0,
+      color: Colors.grey[300],
+    );
+  }
+
   Widget _buildPriceInput(context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: TextField(
-        maxLines: 1,
-        decoration: InputDecoration(
-          hintText: "가격",
-          hintStyle: TextStyle(
-            fontSize: 14.0,
+    return Container(
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: screenAwareSize(10.0, context),
+            vertical: screenAwareSize(5.0, context)),
+        child: TextField(
+          controller: priceController,
+          maxLines: 1,
+          decoration: InputDecoration(
+            hintText: "희망가격",
+            hintStyle: TextStyle(
+              fontSize: 14.0,
+            ),
+            border: InputBorder.none,
           ),
-          border: InputBorder.none,
+          keyboardType: TextInputType.number,
         ),
       ),
     );
@@ -144,13 +157,16 @@ class PostPageState extends State<PostPage> {
 
   Widget _buildContentInput(context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      padding: EdgeInsets.symmetric(
+          horizontal: screenAwareSize(10.0, context),
+          vertical: screenAwareSize(5.0, context)),
       child: TextField(
-        maxLines: 8,
+        controller: contentController,
+        maxLines: 10,
         decoration: InputDecoration(
-          hintText: "내용을 입력하세요.",
+          hintText: "내용을 입력하세요",
           hintStyle: TextStyle(
-            fontSize: 15.0,
+            fontSize: 14.0,
           ),
           border: InputBorder.none,
         ),
@@ -185,83 +201,132 @@ class PostPageState extends State<PostPage> {
     );
   }
 
-  Widget _buildCategoryList(context) {
-    List<String> names = [
-      "디지털/가전",
-      '생활/가구',
-      '탈것',
-      '뷰티/미용',
-      '여성의류',
-      '남성의류',
-      '기타'
-    ];
-    List<IconData> icons = [
-      FontAwesomeIcons.desktop,
-      FontAwesomeIcons.couch,
-      FontAwesomeIcons.bicycle,
-      Icons.movie,
-      Icons.movie,
-      Icons.movie,
-      Icons.movie
-    ];
-
-    List<PostCategoryButton> _buildGridCategoryList(int count) {
-      return List.generate(
-          count,
-          (i) => PostCategoryButton(
-                icon: icons[i],
-                text: names[i],
-              ));
-    }
-
-    return Container(
-      height: screenAwareSize(140, context),
-      child: GridView.count(
-        crossAxisCount: 5,
-        padding: EdgeInsets.all(4),
-        mainAxisSpacing: 4,
-        // crossAxisSpacing: 4,
-        children: _buildGridCategoryList(names.length),
+  Widget _buildBottomTabs(context) {
+    return Positioned(
+      left: 0.0,
+      right: 0.0,
+      bottom: 0,
+      child: Container(
+        width: double.infinity,
+        height: screenAwareSize(50.0, context),
+        decoration: BoxDecoration(color: Colors.white, boxShadow: [
+          BoxShadow(
+            blurRadius: 10.0,
+            color: Colors.black12,
+          )
+        ]),
+        child: Row(
+          children: <Widget>[
+            Material(
+              color: Colors.transparent,
+              child: InkResponse(
+                containedInkWell: true,
+                onTap: _uploadImages,
+                radius: 10.0,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: screenAwareSize(15.0, context),
+                    vertical: screenAwareSize(15.0, context),
+                  ),
+                  child: Icon(Icons.camera_alt),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildBottomTabs(context) {
-    return Positioned(
-      height: screenAwareSize(50.0, context),
-      left: 0.0,
-      right: 0.0,
-      bottom: 0,
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            height: screenAwareSize(50.0, context),
-            decoration: BoxDecoration(color: Colors.white, boxShadow: [
-              BoxShadow(
-                blurRadius: 10.0,
-                color: Colors.black12,
-              )
-            ]),
-            child: Row(
-              children: <Widget>[
-                IconButton(
-                    icon: Icon(Icons.camera_alt),
-                    iconSize: 40,
-                    onPressed: () async {
-                      var galleryFiles = await MultiImagePicker.pickImages(
-                        maxImages: 10,
-                        enableCamera: true,
-                      );
-                      setState(() {
-                        selectedPhotos = galleryFiles;
-                      });
-                    })
-              ],
+  Widget _buildCategoryList(context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: 10.0, vertical: screenAwareSize(15.0, context)),
+      child: Wrap(
+        spacing: screenAwareSize(10.0, context),
+        runSpacing: screenAwareSize(10.0, context),
+        children: <Widget>[
+          for (int i = 1; i < CategoryList.length; i++)
+            HomeCategoryButton(
+              active: selectedCategory == i,
+              icon: CategoryList[i].icon,
+              text: CategoryList[i].name,
+              onPressed: () {
+                setState(() {
+                  selectedCategory = i;
+                });
+              },
             ),
-          ),
         ],
       ),
     );
+  }
+
+  //이미지를 서버에 업로드하고 url과 썸네일을 받아온다.
+  _uploadImages() async {
+    List<Asset> images = await MultiImagePicker.pickImages(
+      maxImages: 10,
+      enableCamera: true,
+    );
+
+    //서버 업로드
+    try {
+      var imageData = await Future.wait(images.map((image) async {
+        var bytes = await image.requestOriginal();
+        FormData formData = FormData.from({
+          'image':
+              UploadFileInfo.fromBytes(bytes.buffer.asUint8List(), image.name)
+        });
+
+        var res = await dio.postUri(getUri('/api/upload'), data: formData);
+        return res.data;
+      }).toList());
+
+      setState(() {
+        imageUrls = imageData.map((json) {
+          return {
+            'thumb': json['thumb'].toString(),
+            'url': json['url'].toString(),
+          };
+        }).toList();
+      });
+    } catch (e) {
+      log.e(e);
+    }
+  }
+
+  void _onTapNextPage(context) {
+    if (selectedCategory == 0) {
+      showSnackBar(context, "카테고리를 선택해주세요.");
+      return;
+    }
+    if (titleController.text == '') {
+      showSnackBar(context, "상품명을 입력해주세요.");
+      return;
+    }
+    if (priceController.text == '') {
+      showSnackBar(context, "희망가격을 입력해주세요.");
+      return;
+    }
+    if (contentController.text == '') {
+      showSnackBar(context, "내용을 입력해주세요.");
+      return;
+    }
+    if (imageUrls.length == 0) {
+      showSnackBar(context, "상품의 이미지를 올려주세요.");
+      return;
+    }
+
+    //포스트를 만들어 전달한다.
+    Post post = Post();
+
+    post.title = titleController.text;
+    post.price = int.parse(priceController.text);
+    post.content = contentController.text;
+    post.images = imageUrls;
+    post.category = CategoryList[selectedCategory];
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => SelectMapPage(post: post)));
   }
 }

@@ -26,6 +26,7 @@ class Post {
   String bookAuthor;
   String bookPublisher;
   String bookPubDate;
+  String bookImage;
   int bookPrice;
 
   Post({
@@ -52,6 +53,7 @@ class Post {
     this.bookPublisher,
     this.bookPubDate,
     this.bookPrice = 0,
+    this.bookImage,
   });
 
   Post.fromJson(Map<String, dynamic> json)
@@ -71,6 +73,7 @@ class Post {
         bookAuthor = json['bookAuther'],
         bookPublisher = json['bookPublisher'],
         bookPubDate = json['bookPubDate'],
+        bookImage = json['bookImage'],
         bookPrice = json['bookPrice'] {
     //
   }
@@ -82,6 +85,7 @@ class Post {
         bookPublisher = book.publisher,
         bookPubDate = book.pubdate,
         bookPrice = book.price,
+        bookImage = book.image,
         isBook = true,
         category = CategoryList[7];
 
@@ -103,10 +107,10 @@ class Post {
       'bookAuther': bookAuthor,
       'bookPublisher': bookPublisher,
       'bookPubDate': bookPubDate,
+      'bookImage': bookImage,
       'bookPrice': bookPrice,
       'category': category.toJson(),
       'images': images,
-      // 'user': user.toJson(),
     };
   }
 }
