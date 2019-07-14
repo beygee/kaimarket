@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/base_height.dart';
-import 'dart:developer';
 import 'package:week_3/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
@@ -31,7 +30,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
   final _postFont = TextStyle(fontSize: 14.0, color: Colors.grey[600]);
   final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
-<<<<<<< HEAD
   var prev_time = "";
   var prev_user = "user.id";
   List<Widget> response;
@@ -39,35 +37,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
     {"text": "hi", "userId": "user_id", "time": "오후 10:15"},
     {"text": "hhhhhhi", "userId": "user_id", "time": "오후 10:15"}
   ];
-=======
-  // socket
-  // SocketIOManager socketManager = SocketIOManager();
-  // SocketIO socket;
-
-  initialize() async {
-    // socket = await socketManager.createInstance(
-    //     SocketOptions("http://${hostUrl}", enableLogging: true));
-    // socket.onConnect((data) {
-    //   log.i("connected...");
-    // });
-    // socket.connect();
-    // socket.on("init", (data) {
-    //   socket.emit("init", ["access_token"]);
-    // });
-    // socket.on("message", (data) {
-    //   log.i(data);
-    //   // db에 메세지 보내기
-    //   //
-    // });
-
-    // Map<String, dynamic> docs;
-    // Message message_first =
-    //     Message(from: 'diuni', text: 'hi', me: true, time: '오후 3:44');
-    // Message message_second = Message(
-    //     from: 'banana', text: "hi I'm banana", me: false, time: '오후 3:45');
-    // docs = {'1': message_first, '2': message_second};
-  }
->>>>>>> ee70a6b2bd37bae50138ba3dc7f620c5c8639ee7
 
   @override
   void initState() {
@@ -79,7 +48,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
     if (messageController.text.length > 0) {
       var now = new DateTime.now();
       var time = new DateFormat("hh:mm a").format(now);
-<<<<<<< HEAD
       // log.i(prev_time);
       // bool showTime = true;
       // log.i(time);
@@ -96,15 +64,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
         });
       });
 
-=======
-      var prev_user = "";
-      var prev_time = "";
-      bool showTime = true;
-      log.i(time);
-      if (prev_user == "user.id" && prev_time == prev_time) showTime = false;
-      await socket
-          .emit("message", [messageController.text, "user_id", time, showTime]);
->>>>>>> ee70a6b2bd37bae50138ba3dc7f620c5c8639ee7
       // db에 저장은 소켓이 해준대 ~!
       // prev_user = "user.id";
       // prev_time = time;
@@ -134,12 +93,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
             width: 20.0,
           ),
           _itemMiddle(context),
-<<<<<<< HEAD
           SizedBox(
             width: 70.0,
           ),
-=======
->>>>>>> ee70a6b2bd37bae50138ba3dc7f620c5c8639ee7
           _itemRight(context),
         ],
       ),
@@ -194,7 +150,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
             .push(MaterialPageRoute(builder: (context) => PostViewPage()));
       },
       child: Container(
-<<<<<<< HEAD
         height: screenAwareSize(45.0, context),
         width: 70.0,
         decoration: new BoxDecoration(
@@ -211,12 +166,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
           textAlign: TextAlign.center,
         )),
       ),
-=======
-          height: screenAwareSize(80.0, context),
-          width: 80.0,
-          color: Colors.black,
-          child: Text("게시글\n확인하기")),
->>>>>>> ee70a6b2bd37bae50138ba3dc7f620c5c8639ee7
     );
   }
 

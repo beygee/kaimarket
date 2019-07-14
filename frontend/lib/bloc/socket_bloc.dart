@@ -16,8 +16,6 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     SocketEvent event,
   ) async* {
     if (event is SocketInit && currentState is SocketUninitialized) {
-      log.i("연결!!");
-
       //액세스 토큰을 얻어온다.
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.containsKey("access_token")
@@ -26,7 +24,7 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
 
       //소켓 초기화
       SocketIO socket = await manager.createInstance(SocketOptions(
-          "http://" + hostUrl + '/test',
+          "http://" + hostUrl + '/test1',
           query: {'auth_token': token}));
 
       await socket.on("message", (data) {

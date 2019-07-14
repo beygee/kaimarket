@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'package:week_3/chat/chat_view_page.dart';
+import 'package:week_3/utils/utils.dart';
+import 'package:week_3/models/chat.dart';
 
 class ChatPage extends StatelessWidget {
   @override
@@ -24,6 +26,29 @@ class ChatListsState extends State<ChatLists> {
 
   final _paddingFormat =
       EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
+
+  List<Chat> chats = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    fetchList();
+  }
+
+  Future fetchList() async {
+    var res = await dio.getUri(getUri('/api/chats'));
+    if (res.statusCode == 200) {
+      setState(() {
+        List<Chat> test = res.data.map((chat) {
+          return Chat.fromJson(chat);
+        }).toList();
+        // log.i(test);
+      });
+
+      // log.i(chats);
+    }
+  }
 
   Widget _chatLeft() {
     return new Container(
