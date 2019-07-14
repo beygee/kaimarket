@@ -4,7 +4,7 @@ const jwtSecret = "mySecret!kaimarket@@"
 
 function generateToken(payload) {
   return new Promise((res, rej) => {
-    jwt.sign(payload, jwtSecret, { expiresIn: "7d" }, (err, token) => {
+    jwt.sign(payload, jwtSecret, { expiresIn: "30d" }, (err, token) => {
       if (err) rej(err)
       res(token)
     })
@@ -29,9 +29,9 @@ exports.jwtMiddleware = async (ctx, next) => {
   try {
     const decoded = await decodeToken(token)
 
-    //토큰 발급일로부터 하루가 지나면 토큰을 재발급한다.
-    if (Date.now() / 1000 - decoded.iat > 60 * 60 * 24) {
-      //하루가 지나면 갱신해준다.
+    //토큰 발급일로부터 일주일이 지나면 토큰을 재발급한다.
+    if (Date.now() / 1000 - decoded.iat > 60 * 60 * 24 * 7) {
+      //일주일이 지나면 갱신해준다.
       const { id } = decoded
 
       const freshToken = await generateToken({ id })

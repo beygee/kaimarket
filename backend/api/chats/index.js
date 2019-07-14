@@ -3,9 +3,6 @@ const router = new Router()
 
 const ctrl = require("./index.ctrl")
 
-router.get('/', ctrl.getPosts)
-router.get('/:id', ctrl.getPost)
-
-router.post("/", ctrl.createPost)
+router.get("/", ctrl.getChats)
 
 module.exports = router

@@ -36,6 +36,14 @@ const start = async () => {
     return next()
   })
 
+  // const chat = new db.Chat({
+  //   seller: await db.User.findById(mongoose.Types.ObjectId('5d26db570145306b417f1581')),
+  //   buyer: await db.User.findById(mongoose.Types.ObjectId('5d26c168d118a3691c97564a')),
+  //   post: await db.Post.findById(mongoose.Types.ObjectId('5d2b508b26acd940b9273137')),
+  // })
+
+  // await chat.save()
+
   // const createCategory = require("lib/createCategory")
   // await createCategory(db.Category)
 
@@ -62,8 +70,9 @@ const start = async () => {
   router.use("/api", api.routes())
   app.use(router.routes()).use(router.allowedMethods())
 
+  //소켓 연결
   server.listen(port)
-  createSocketServer(server)
+  createSocketServer(server, db)
 
   console.ready({
     message: `서버 오픈 :) ${port} >_ <`,

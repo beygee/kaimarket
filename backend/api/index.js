@@ -9,6 +9,7 @@ const users = require("./users")
 const me = require("./me")
 const search = require("./search")
 const posts = require("./posts")
+const chats = require("./chats")
 
 //오류 검출
 router.use(async (ctx, next) => {
@@ -30,6 +31,7 @@ router.use("/users", users.routes())
 router.use("/me", me.routes())
 router.use("/search", search.routes())
 router.use("/posts", posts.routes())
+router.use("/chats", chats.routes())
 
 //파일 업로드
 const upload = require("lib/upload")
