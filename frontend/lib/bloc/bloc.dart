@@ -4,3 +4,6 @@ export 'user_state.dart';
 export 'socket_bloc.dart';
 export 'socket_event.dart';
 export 'socket_state.dart';
+export 'post_bloc.dart';
+export 'post_event.dart';
+export 'post_state.dart';

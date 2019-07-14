@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:week_3/models/category.dart';
 import 'package:week_3/models/book.dart';
 import 'package:week_3/models/user.dart';
+import 'package:equatable/equatable.dart';
 
-class Post {
+class Post extends Equatable {
   String id;
   String title;
   String content;
@@ -26,6 +27,7 @@ class Post {
   String bookAuthor;
   String bookPublisher;
   String bookPubDate;
+  String bookImage;
   int bookPrice;
 
   Post({
@@ -52,7 +54,11 @@ class Post {
     this.bookPublisher,
     this.bookPubDate,
     this.bookPrice = 0,
+    this.bookImage,
   });
+
+  @override
+  String toString() => 'Post { _id: $title }';
 
   Post.fromJson(Map<String, dynamic> json)
       : id = json['_id'],
@@ -62,8 +68,8 @@ class Post {
         view = json['view'],
         wish = json['wish'],
         chat = json['chat'],
-        locationLat = json['locationLat'],
-        locationLng = json['locationLng'],
+        locationLat = json['locationLat'].toDouble(),
+        locationLng = json['locationLng'].toDouble(),
         created = json['created'],
         updated = json['updated'],
         isBook = json['isBook'],
@@ -71,6 +77,7 @@ class Post {
         bookAuthor = json['bookAuther'],
         bookPublisher = json['bookPublisher'],
         bookPubDate = json['bookPubDate'],
+        bookImage = json['bookImage'],
         bookPrice = json['bookPrice'] {
     //
   }
@@ -82,6 +89,7 @@ class Post {
         bookPublisher = book.publisher,
         bookPubDate = book.pubdate,
         bookPrice = book.price,
+        bookImage = book.image,
         isBook = true,
         category = CategoryList[7];
 
@@ -103,10 +111,10 @@ class Post {
       'bookAuther': bookAuthor,
       'bookPublisher': bookPublisher,
       'bookPubDate': bookPubDate,
+      'bookImage': bookImage,
       'bookPrice': bookPrice,
       'category': category.toJson(),
       'images': images,
-      // 'user': user.toJson(),
     };
   }
 }

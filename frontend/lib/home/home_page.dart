@@ -9,8 +9,10 @@ import 'package:week_3/post/post_card.dart';
 import 'package:week_3/models/category.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
-import 'package:week_3/store/store.dart';
-
+import 'package:week_3/models/post.dart';
+import 'package:week_3/bloc/post_bloc.dart';
+import 'package:week_3/bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,9 +21,14 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
 
+  final PostBloc _postBloc = PostBloc();
+
+  HomePageState(){
+    _postBloc.dispatch(PostInit());
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Builder(
         builder: (context) {
@@ -32,8 +39,30 @@ class HomePageState extends State<HomePage> {
               _buildSearchInput(context),
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
-              _buildSuggestions(),
-              SizedBox(height: screenAwareSize(10.0, context)),
+              BlocBuilder(
+                bloc: _postBloc,
+                builder: (BuildContext context, PostState state){
+                  if (state is PostUninitialized){
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (state is PostError) {
+                    return Center(
+                      child : Text('Failed to get posts'),
+                    );
+                  }
+                  if (state is PostLoaded){
+                    if (state.posts.isEmpty){
+                      return Center(
+                        child: Text('게시글이 없어요!'),
+                      );
+                    }
+                    return Text(state.posts[0].toString());
+                    // return _buildSuggestions(context, state.posts);
+                  }
+                }
+              ),
             ],
           );
         },
@@ -88,24 +117,23 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildSuggestions() {
-    return Expanded(
-      child: ListView.separated(
-        padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
-        physics: BouncingScrollPhysics(),
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int idx) {
-          return _buildRow(context);
-        },
-        separatorBuilder: (BuildContext context, int i) {
-          return Divider();
-        },
-      ),
+  Widget _buildSuggestions(context, posts) {
+    return ListView.separated(
+          padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
+          physics: BouncingScrollPhysics(),
+          itemCount: posts.length,
+          itemBuilder: (BuildContext context, int idx) {
+            return _buildRow(context, posts[idx]);
+          },
+          separatorBuilder: (BuildContext context, int i) {
+            return Divider();
+          },
     );
   }
 
-  Widget _buildRow(context) {
+  Widget _buildRow(context, post) {
     return PostCard(
+      post: post,
       onTap: () {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => PostViewPage()));

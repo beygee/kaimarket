@@ -44,7 +44,7 @@ class PostCard extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                '통기타',
+                                post.title,
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: screenAwareSize(14.0, context),
@@ -59,7 +59,7 @@ class PostCard extends StatelessWidget {
                           ),
                           SizedBox(height: screenAwareSize(5.0, context)),
                           Text(
-                            '상태 좋고 흥정 가능해kjhkjhkhkdsada요1년 정도 사용했어요1년 정도 사용했어요1년 정도 사용했어요',
+                            post.content,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 3,
                             softWrap: true,
@@ -74,14 +74,14 @@ class PostCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            "3일 전",
+                            post.updated,
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontSize: screenAwareSize(9.0, context),
                             ),
                           ),
                           Text(
-                            "50,000원",
+                            post.price.toString(),
                             style: TextStyle(
                               color: Colors.grey[600],
                               fontSize: screenAwareSize(11.0, context),

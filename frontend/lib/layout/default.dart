@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:week_3/home/home_page.dart';
 import 'package:week_3/layout/sell_overlay.dart';
@@ -9,6 +11,8 @@ import 'package:week_3/layout/tab_button.dart';
 import 'package:week_3/layout/sell_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:week_3/wish/wish_page.dart';
+import 'package:provider/provider.dart';
+import 'package:week_3/models/post.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 
@@ -24,6 +28,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   PageController _pageController = PageController();
   int _selectedTabIndex = 0;
+  var getallpost;
 
   AnimationController _sellButtonController;
   Animation _sellButtonAnimation;
@@ -34,17 +39,8 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   SocketBloc _socketBloc;
 
-  void _getAllPosts() async {
-    // final store = Provider.of<Store>(context);
-    // var res = await dio.postUri(getUri('/api/posts'));
-    var res = await dio.getUri(getUri('/api/posts'));
-    // log.i(res.data[0]);
-    // store.addPosts(res);
-  }
-
   @override
   void initState() {
-    _getAllPosts();
     super.initState();
 
     //소켓 초기화
@@ -75,6 +71,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   @override
   Widget build(BuildContext context) {
+    
     return WillPopScope(
       onWillPop: () async {
         DateTime now = DateTime.now();

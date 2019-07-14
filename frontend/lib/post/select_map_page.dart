@@ -78,7 +78,7 @@ class SelectMapPageState extends State<SelectMapPage> {
     _loadingWrapperKey.currentState.loadFuture(() async {
       await dio
           .postUri(getUri('/api/posts'), data: {'data': widget.post.toJson()});
-      Navigator.popUntil(context, ModalRoute.withName('/'));
+      Navigator.popUntil(context, ModalRoute.withName('/home'));
     });
   }
 }
