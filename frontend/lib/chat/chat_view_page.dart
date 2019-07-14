@@ -2,26 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'dart:developer';
-import 'package:adhara_socket_io/adhara_socket_io.dart';
 import 'package:week_3/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:intl/intl.dart';
 
-class ChatViewPage extends StatelessWidget {
+class ChatViewPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return Chat();
-  }
+  _ChatViewPageState createState() => _ChatViewPageState();
 }
 
-class Chat extends StatefulWidget {
-  @override
-  ChatState createState() => ChatState();
-}
-
-class ChatState extends State<Chat> {
+class _ChatViewPageState extends State<ChatViewPage> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
+  SocketBloc _socketBloc;
 
   final _paddingFormat =
       EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
@@ -37,21 +32,25 @@ class ChatState extends State<Chat> {
   final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
   // socket
-  SocketIOManager socketManager = SocketIOManager();
-  SocketIO socket;
+  // SocketIOManager socketManager = SocketIOManager();
+  // SocketIO socket;
 
   initialize() async {
-    socket = await socketManager.createInstance('http://' + hostUrl);
-    socket.onConnect((data) {
-      log.i("connected...");
-    });
-    socket.connect();
-    socket.on("init", (data) {
-      socket.emit("init", ["access_token"]);
-    });
-    socket.on("message", (data) {
-      log.i(data);
-    });
+    // socket = await socketManager.createInstance(
+    //     SocketOptions("http://${hostUrl}", enableLogging: true));
+    // socket.onConnect((data) {
+    //   log.i("connected...");
+    // });
+    // socket.connect();
+    // socket.on("init", (data) {
+    //   socket.emit("init", ["access_token"]);
+    // });
+    // socket.on("message", (data) {
+    //   log.i(data);
+    //   // db에 메세지 보내기
+    //   //
+    // });
+    
     // Map<String, dynamic> docs;
     // Message message_first =
     //     Message(from: 'diuni', text: 'hi', me: true, time: '오후 3:44');
@@ -63,17 +62,21 @@ class ChatState extends State<Chat> {
   @override
   void initState() {
     super.initState();
+
+    _socketBloc = BlocProvider.of<SocketBloc>(context);
     initialize();
   }
 
   @override
   void dispose() {
-    socketManager.clearInstance(socket);
-    log.i("연결 해제");
+    // socket.emit("end", []);
+    // socketManager.clearInstance(socket);
+    // socketManager.
+    // log.i("연결 해제");
     super.dispose();
   }
 
-  Future callback() async {
+  Future callback(socket) async {
     if (messageController.text.length > 0) {
       var now = new DateTime.now();
       var time = new DateFormat("hh:mm a").format(now);
@@ -166,7 +169,8 @@ class ChatState extends State<Chat> {
       width: 270.0,
       height: screenAwareSize(50.0, context),
       child: TextField(
-        onSubmitted: (value) => callback(),
+        onSubmitted: (value) =>
+            callback((_socketBloc.currentState as SocketLoaded).socket),
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: EdgeInsets.all(screenAwareSize(5.0, context)),
@@ -225,17 +229,23 @@ class ChatState extends State<Chat> {
                   ],
                 ),
               ),
-              Container(
-                  padding: EdgeInsets.only(left: 30.0),
-                  child: new Row(
-                    children: <Widget>[
-                      _typingbar(context),
-                      SendButton(
-                        text: "Send",
-                        callback: callback,
+              BlocBuilder(
+                  bloc: _socketBloc,
+                  builder: (context, state) {
+                    return Container(
+                      padding: EdgeInsets.only(left: 30.0),
+                      child: new Row(
+                        children: <Widget>[
+                          _typingbar(context),
+                          SendButton(
+                            text: "Send",
+                            callback: () =>
+                                callback((state as SocketLoaded).socket),
+                          ),
+                        ],
                       ),
-                    ],
-                  ))
+                    );
+                  })
             ],
           ),
         ));
@@ -277,7 +287,7 @@ class Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-     // width: 320.0,
+      // width: 320.0,
       padding: EdgeInsets.only(top: screenAwareSize(10.0, context)),
       child: Row(
         mainAxisAlignment: me ? MainAxisAlignment.end : MainAxisAlignment.start,
