@@ -26,3 +26,17 @@ class PostDelete extends PostEvent {
     return "Delete";
   }
 }
+
+class PostSelectCategory extends PostEvent{
+  @override
+  String toString() {
+    return "SelectCategory";
+  }
+}
+
+class PostSearch extends PostEvent{
+  @override
+  String toString() {
+    return "Search";
+  }
+}

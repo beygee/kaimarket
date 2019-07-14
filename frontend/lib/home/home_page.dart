@@ -22,6 +22,8 @@ class HomePage extends StatefulWidget {
 class HomePageState extends State<HomePage> {
   final PostBloc _postBloc = PostBloc();
 
+  int selectedCategory = 0;
+
   HomePageState() {
     _postBloc.dispatch(PostInit());
   }
@@ -58,8 +60,7 @@ class HomePageState extends State<HomePage> {
                         );
                       }
                       return Expanded(
-                        child: _buildSuggestions(context, state.posts)
-                      );
+                          child: _buildSuggestions(context, state.posts));
                     }
                   }),
             ],
@@ -101,8 +102,14 @@ class HomePageState extends State<HomePage> {
         padding: EdgeInsets.symmetric(horizontal: 10.0),
         itemBuilder: (context, idx) {
           return HomeCategoryButton(
+            active: selectedCategory == idx,
             icon: CategoryList[idx].icon,
             text: CategoryList[idx].name,
+            onPressed: () {
+              setState(() {
+                selectedCategory = idx;
+              });
+            },
           );
         },
         separatorBuilder: (context, idx) {
@@ -134,8 +141,8 @@ class HomePageState extends State<HomePage> {
     return PostCard(
       post: post,
       onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PostViewPage(post: post)));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => PostViewPage(post: post)));
       },
     );
   }
