@@ -2,19 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:week_3/post/google_map_fixed.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/utils.dart';
 import 'dart:math' as math;
+import 'package:week_3/models/post.dart';
+import 'package:week_3/utils/dio.dart';
 
 class PostViewPage extends StatefulWidget {
+  Post post;
+
+  PostViewPage({@required this.post});
+
   @override
-  _PostViewPageState createState() => _PostViewPageState();
+  _PostViewPageState createState() => _PostViewPageState(post: post);
 }
 
 class _PostViewPageState extends State<PostViewPage> {
-  static const double horizontalPadding = 16.0;
+  Post post;
 
-  final _explanation = '상태 좋고 흥정 가능해요 \n1년정도 사용했어요';
+  _PostViewPageState({@required this.post});
+
+  static const double horizontalPadding = 16.0;
 
   ScrollController scrollController;
 
@@ -42,7 +52,7 @@ class _PostViewPageState extends State<PostViewPage> {
               children: <Widget>[
                 _buildImageCarousel(),
                 SizedBox(height: screenAwareSize(10.0, context)),
-                _buildPostHeader(context),
+                post.isBook? _buildBookPostHeader(context) : _buildPostHeader(context),
                 _buildDivider(),
                 _buildPostContent(context),
                 _buildLocation(),
@@ -146,18 +156,21 @@ class _PostViewPageState extends State<PostViewPage> {
     );
   }
 
+  List<Image> _getImages() {
+    List<Image> images = List<Image>();
+    for (int i = 0; i < post.images.length; i++){
+        images.add(Image.network(getUri('').toString() + post.images[i]['thumb']));
+    }
+    return images;
+  }
+
   Widget _buildImageCarousel() {
     return Container(
       height: screenAwareSize(350.0, context),
       child: Carousel(
         autoplay: false,
         boxFit: BoxFit.cover,
-        images: [
-          AssetImage('assets/images/guitar.jpg'),
-          AssetImage('assets/images/guitar2.jpg'),
-          AssetImage('assets/images/guitar3.jpg'),
-          AssetImage('assets/images/guitar4.jpg'),
-        ],
+        images: _getImages(),
         dotSize: 6.0,
         dotSpacing: 12.0,
         dotIncreaseSize: 1.6,
@@ -171,6 +184,94 @@ class _PostViewPageState extends State<PostViewPage> {
     );
   }
 
+  Widget _buildBookPostHeader(context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Padding(
+      padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: screenAwareSize(10.0, context)),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              post.price.toString() + " 원",
+              style: TextStyle(
+                fontSize: screenAwareSize(18.0, context),
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
+            ),
+            SizedBox(height: screenAwareSize(5.0, context)),
+            Text(
+              post.title,
+              style: TextStyle(
+                fontSize: screenAwareSize(
+                  14.0,
+                  context,
+                ),
+                color: Colors.grey[800],
+              ),
+            ),
+            SizedBox(height: screenAwareSize(10.0, context)),
+            Row(
+              children: <Widget>[
+                Icon(
+                  FontAwesomeIcons.clock,
+                  size: 12.0,
+                  color: Colors.grey[400],
+                ),
+                SizedBox(width: 2.0),
+                Text(
+                  post.updated,
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 12.0,
+                  ),
+                ),
+                SizedBox(width: 10.0),
+                Icon(
+                  FontAwesomeIcons.eye,
+                  size: 12.0,
+                  color: Colors.grey[400],
+                ),
+                SizedBox(width: 3.0),
+                Text(
+                  post.view.toString(),
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 12.0,
+                  ),
+                ),
+                SizedBox(width: 20.0),
+                Icon(
+                  FontAwesomeIcons.heart,
+                  size: 12.0,
+                  color: Colors.grey[400],
+                ),
+                SizedBox(width: 3.0),
+                Text(
+                  post.wish.toString(),
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 12.0,
+                  ),
+                ),
+              ],
+            )
+          ],
+      ),
+    ),
+        ),
+        Image.network(post.bookImage),
+        SizedBox(width: screenAwareSize(7, context),)
+      ],
+    );
+    
+  }
+
+
   Widget _buildPostHeader(context) {
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -180,7 +281,7 @@ class _PostViewPageState extends State<PostViewPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            "15,500 원",
+            post.price.toString() + " 원",
             style: TextStyle(
               fontSize: screenAwareSize(18.0, context),
               fontWeight: FontWeight.bold,
@@ -189,7 +290,7 @@ class _PostViewPageState extends State<PostViewPage> {
           ),
           SizedBox(height: screenAwareSize(5.0, context)),
           Text(
-            "통기타",
+            post.title,
             style: TextStyle(
               fontSize: screenAwareSize(
                 14.0,
@@ -208,7 +309,7 @@ class _PostViewPageState extends State<PostViewPage> {
               ),
               SizedBox(width: 3.0),
               Text(
-                "16시간전",
+                post.updated,
                 style: TextStyle(
                   color: Colors.grey[400],
                   fontSize: 12.0,
@@ -222,7 +323,7 @@ class _PostViewPageState extends State<PostViewPage> {
               ),
               SizedBox(width: 3.0),
               Text(
-                "638",
+                post.view.toString(),
                 style: TextStyle(
                   color: Colors.grey[400],
                   fontSize: 12.0,
@@ -236,7 +337,7 @@ class _PostViewPageState extends State<PostViewPage> {
               ),
               SizedBox(width: 3.0),
               Text(
-                "23",
+                post.wish.toString(),
                 style: TextStyle(
                   color: Colors.grey[400],
                   fontSize: 12.0,
@@ -247,13 +348,6 @@ class _PostViewPageState extends State<PostViewPage> {
         ],
       ),
     );
-    // return Container(
-    //   constraints: BoxConstraints.expand(),
-    //   padding: EdgeInsets.symmetric(
-    //       horizontal: horizontalPadding,
-    //       vertical: screenAwareSize(20.0, context)),
-    //   child:
-    // );
   }
 
   Widget _buildPostContent(context) {
@@ -271,7 +365,7 @@ class _PostViewPageState extends State<PostViewPage> {
             ),
           ),
           SizedBox(height: screenAwareSize(15.0, context)),
-          Text(_explanation, style: TextStyle(height: 1.2)),
+          Text(post.content, style: TextStyle(height: 1.2)),
         ],
       ),
     );
@@ -318,7 +412,7 @@ class _PostViewPageState extends State<PostViewPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "diuni",
+                  'gkdl',
                   style: TextStyle(
                     fontSize: screenAwareSize(14.0, context),
                     color: Colors.grey[800],
@@ -354,10 +448,7 @@ class _PostViewPageState extends State<PostViewPage> {
             ),
           ),
           SizedBox(height: screenAwareSize(10.0, context)),
-          Placeholder(
-            fallbackHeight: 300.0,
-            color: Colors.grey[200],
-          ),
+          GoogleMapfixed(picked: LatLng(post.locationLat,post.locationLng,))
         ],
       ),
     );

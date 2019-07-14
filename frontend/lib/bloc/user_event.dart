@@ -5,3 +5,10 @@ import 'package:meta/meta.dart';
 abstract class UserEvent extends Equatable {
   UserEvent([List props = const []]) : super(props);
 }
+
+class UserInit extends UserEvent {
+  @override
+  String toString() {
+    return "Init";
+  }
+}
