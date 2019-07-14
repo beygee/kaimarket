@@ -86,6 +86,7 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xffaaaaaa),
           onPressed: () => _loginWithGuest(context),
         ),
+        // SizedBox(height: 10.0),
         // LoginButton(
         //   text: "구글과 연결하기",
         //   icon: FontAwesomeIcons.google,
@@ -131,9 +132,9 @@ class _LoginPageState extends State<LoginPage> {
       final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
 
       GoogleSignInAccount googleUser = await googleSignIn.signIn();
-      // GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      // var token = googleAuth.accessToken;
+      var token = googleAuth.accessToken;
 
       // var res = await Dio()
       //     .postUri(getUri('/api/auth/google'), data: {'access_token': token});
