@@ -26,7 +26,7 @@ class Store with ChangeNotifier {
     socket.onError(log.i);
     socket.onDisconnect(log.i);
     await socket.onConnect((data) {
-      log.i('연결');
+      log.i('모든 포스트 불러오기 완료.');
     });
     await socket.connect();
   }
@@ -43,6 +43,11 @@ class Store with ChangeNotifier {
     this.user = User.fromJson(json);
     notifyListeners();
   }
+
+  //포스트 불러오기
+  getPostsCount() => posts.length;
+  getPosts() => posts;
+  getPost(int i) => posts[i];
 
   //포스트를 추가한다.
   void addPosts(List<Post> saved) {

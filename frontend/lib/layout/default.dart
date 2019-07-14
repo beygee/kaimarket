@@ -27,6 +27,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   PageController _pageController = PageController();
   int _selectedTabIndex = 0;
+  var getallpost;
 
   AnimationController _sellButtonController;
   Animation _sellButtonAnimation;
@@ -38,17 +39,12 @@ class _DefaultLayoutState extends State<DefaultLayout>
   void _getAllPosts() async {
     final store = Provider.of<Store>(context);
     var res = await dio.getUri(getUri('/api/posts'));
-<<<<<<< HEAD
     List<Post> list = List<Post>();
     for (var iterator in res.data) {
       Post post = Post.fromJson(iterator);
       list.add(post);
     }
     store.addPosts(list);
-=======
-    // log.i(res.data[0]);
-    // store.addPosts(res);
->>>>>>> c2aab8d2f6de6a7b529a4fd4b398047d0c8d0c6f
   }
 
   @override
@@ -64,7 +60,6 @@ class _DefaultLayoutState extends State<DefaultLayout>
         Tween<Offset>(begin: Offset(0.0, -15.0), end: Offset(-60.0, -75.0))
             .animate(CurvedAnimation(
                 parent: _sellButtonController, curve: Curves.decelerate));
-    _getAllPosts();
   }
 
   @override
@@ -77,7 +72,10 @@ class _DefaultLayoutState extends State<DefaultLayout>
   @override
   Widget build(BuildContext context) {
     // log.i("test");
-    // _getAllPosts();
+    if (getallpost == 0){
+      _getAllPosts();
+      getallpost = 1;
+    }
     
     return WillPopScope(
       onWillPop: () async {

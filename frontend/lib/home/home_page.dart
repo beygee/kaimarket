@@ -10,7 +10,7 @@ import 'package:week_3/models/category.dart';
 import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:week_3/store/store.dart';
-
+import 'package:week_3/models/post.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -18,10 +18,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Builder(
         builder: (context) {
@@ -32,7 +30,7 @@ class HomePageState extends State<HomePage> {
               _buildSearchInput(context),
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
-              _buildSuggestions(),
+              _buildSuggestions(context),
               SizedBox(height: screenAwareSize(10.0, context)),
             ],
           );
@@ -88,24 +86,28 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildSuggestions() {
-    return Expanded(
-      child: ListView.separated(
-        padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
-        physics: BouncingScrollPhysics(),
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int idx) {
-          return _buildRow(context);
-        },
-        separatorBuilder: (BuildContext context, int i) {
-          return Divider();
-        },
+  Widget _buildSuggestions(context) {
+    return Consumer<Store>(
+      builder: (context, value, child) => Expanded(
+        child: ListView.separated(
+          padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
+          physics: BouncingScrollPhysics(),
+          itemCount: value.getPostsCount(),
+          itemBuilder: (BuildContext context, int idx) {
+            Post post = value.getPost(idx);
+            return _buildRow(context, post);
+          },
+          separatorBuilder: (BuildContext context, int i) {
+            return Divider();
+          },
+        ),
       ),
     );
   }
 
-  Widget _buildRow(context) {
+  Widget _buildRow(context, post) {
     return PostCard(
+      post: post,
       onTap: () {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => PostViewPage()));
