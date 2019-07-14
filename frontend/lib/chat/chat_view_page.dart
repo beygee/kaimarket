@@ -6,6 +6,7 @@ import 'package:week_3/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
+import 'package:intl/intl.dart';
 
 class ChatViewPage extends StatefulWidget {
   @override
@@ -27,7 +28,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   final _partnerNameFont = TextStyle(fontSize: 20.0, color: Colors.grey[600]);
   final _chatFont = TextStyle(fontSize: 14.0, color: Colors.grey[500]);
-  final _postFont = TextStyle(fontSize: 14.0,color: Colors.grey[600]);
+  final _postFont = TextStyle(fontSize: 14.0, color: Colors.grey[600]);
   final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
   // socket
@@ -49,6 +50,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
     //   // db에 메세지 보내기
     //   //
     // });
+
     // Map<String, dynamic> docs;
     // Message message_first =
     //     Message(from: 'diuni', text: 'hi', me: true, time: '오후 3:44');
@@ -76,31 +78,49 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   Future callback(socket) async {
     if (messageController.text.length > 0) {
-      await socket.emit("message", [messageController.text]);
+      var now = new DateTime.now();
+      var time = new DateFormat("hh:mm a").format(now);
+      var prev_user = "";
+      var prev_time = "";
+      bool showTime = true;
+      log.i(time);
+      if (prev_user == "user.id" && prev_time == prev_time) showTime = false;
+      await socket
+          .emit("message", [messageController.text, "user_id", time, showTime]);
+      // db에 저장은 소켓이 해준대 ~!
+      // response = await dio.post("message", data: from: user.id, text:messageController.text, time: time, showTime: showTime);
+      prev_user = "user.id";
+      prev_time = time;
       messageController.clear();
       // scrollController.animateTo(scrollController.position.maxScrollExtent,
       //    curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
     }
   }
 
+  Future uploadMessage() async {}
+
   Widget _item(context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PostViewPage()));
-      },
-      child: Container(
-        height: screenAwareSize(80.0, context),
-        width: 360.0,
-        color: Colors.white,
-        child: Center(
-          child: _itemContent(context),
-        ),
+    return Container(
+      height: screenAwareSize(80.0, context),
+      width: 360.0,
+      color: Colors.white,
+      child: Row(
+        children: <Widget>[
+          SizedBox(
+            width: 20.0,
+          ),
+          _itemLeft(context),
+          SizedBox(
+            width: 20.0,
+          ),
+          _itemMiddle(context),
+          _itemRight(context),
+        ],
       ),
     );
   }
 
-  Widget _itemImage(context) {
+  Widget _itemLeft(context) {
     return new Container(
       width: screenAwareSize(60.0, context),
       height: screenAwareSize(60.0, context),
@@ -115,26 +135,44 @@ class _ChatViewPageState extends State<ChatViewPage> {
     );
   }
 
-  Widget _itemContent(context) {
-    return Row(children: <Widget>[
-      SizedBox(width: 20.0,),
-      _itemImage(context),
-      SizedBox(width: 20.0,),
-      Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              if (_postIsSold)
-                Text("[판매완료]", style: _postFont,),
-              Text("통기타", style: _postFont,),
-            ],
-          ),
-          Text("15,500원", style: _postFont,),
-        ],
-      ),
-    ],);
+  Widget _itemMiddle(context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            if (_postIsSold)
+              Text(
+                "[판매완료]",
+                style: _postFont,
+              ),
+            Text(
+              "통기타",
+              style: _postFont,
+            ),
+          ],
+        ),
+        Text(
+          "15,500원",
+          style: _postFont,
+        ),
+      ],
+    );
+  }
+
+  Widget _itemRight(context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => PostViewPage()));
+      },
+      child: Container(
+          height: screenAwareSize(80.0, context),
+          width: 80.0,
+          color: Colors.black,
+          child: Text("게시글\n확인하기")),
+    );
   }
 
   Widget _typingbar(context) {
@@ -176,7 +214,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Divider(height: 1.0,),
+              Divider(
+                height: 1.0,
+              ),
               _item(context),
               Expanded(
                 child: ListView(
@@ -184,6 +224,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   controller: scrollController,
                   children: <Widget>[
                     // db에서 가져오기
+                    // Response<Message> response = await dio.get<Message>("message", ??).toList();
                     new Message(
                       from: 'diuni',
                       text: 'heello 내 이름은 지윤팍팍 아임 지윤 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
