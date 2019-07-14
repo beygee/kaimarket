@@ -137,7 +137,7 @@ class _MyPageState extends State<MyPage> {
             borderRadius: BorderRadius.circular(screenAwareSize(15.0, context)),
           ),
           child: DefaultTabController(
-            length: 2,
+            length: 1,
             child: Column(
               children: <Widget>[
                 TabBar(
@@ -151,15 +151,15 @@ class _MyPageState extends State<MyPage> {
                                 fontSize: screenAwareSize(12.0, context))),
                       ),
                     ),
-                    Tab(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: screenAwareSize(10.0, context)),
-                        child: Text("구매 내역",
-                            style: TextStyle(
-                                fontSize: screenAwareSize(12.0, context))),
-                      ),
-                    ),
+                    // Tab(
+                    //   child: Padding(
+                    //     padding: EdgeInsets.symmetric(
+                    //         vertical: screenAwareSize(10.0, context)),
+                    //     child: Text("구매 내역",
+                    //         style: TextStyle(
+                    //             fontSize: screenAwareSize(12.0, context))),
+                    //   ),
+                    // ),
                   ],
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.grey,
