@@ -1,20 +1,24 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'dart:developer';
+import 'package:adhara_socket_io/adhara_socket_io.dart';
+import 'package:week_3/utils/utils.dart';
 
 class ChatViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Chat();
+    return Chat(
+    );
   }
 }
 
-class ChatState extends State<Chat> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-//  final Firestore _firestore = Firestore.instance;
+class Chat extends StatefulWidget {
+  @override
+  ChatState createState() => ChatState();
+}
 
+class ChatState extends State<Chat> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
@@ -26,17 +30,46 @@ class ChatState extends State<Chat> {
   final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);
   // final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
-  Future<void> callback() async {
+  // socket
+  SocketIOManager socketManager = SocketIOManager();
+  SocketIO socket;
+
+  initialize() async {
+    socket = await socketManager.createInstance('http://' + hostUrl);
+    socket.onConnect((data){
+      log.i("connected...");
+    });
+    socket.connect();
+    socket.on("init", (data){
+      socket.emit("init", ["access_token"]);
+    });
+    socket.on("message", (data){
+      log.i(data);
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    initialize();
+  }
+
+  @override
+  void dispose() {
+    // socket.emit("end", []);
+    socketManager.clearInstance(socket);
+    log.i("연결 해제");
+    super.dispose();
+  }
+
+  Future callback() async {
     if (messageController.text.length > 0) {
-      await
-          //     _firestore.collections('messages').add({
-          // 'text': messageController.text,
-          // 'from': widget.user.id,
-//      });
-          log('add message to db');
+      await socket.emit("message", [messageController.text]);
+      // db에 저장도 하기    
+      //log.i('add message to db');
       messageController.clear();
-      scrollController.animateTo(scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
+      // scrollController.animateTo(scrollController.position.maxScrollExtent,
+      //     curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
     }
   }
 
@@ -75,10 +108,12 @@ class ChatState extends State<Chat> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              // db에서 가져오기
               new Message(
                 from: 'diuni',
                 text: 'heello 내 이름은 지윤팍팍 아임 지윤 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
-                me: false,
+                me: true,
+                time: '오후 3:39',
               ),
               Container(
                   padding: EdgeInsets.only(left: 30.0),
@@ -95,11 +130,6 @@ class ChatState extends State<Chat> {
           ),
         ));
   }
-}
-
-class Chat extends StatefulWidget {
-  @override
-  ChatState createState() => ChatState();
 }
 
 class SendButton extends StatelessWidget {
@@ -129,12 +159,15 @@ class Message extends StatelessWidget {
 
   const Message({Key key, this.from, this.text, this.me, this.time})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 320.0,
+      padding: EdgeInsets.only(top: screenAwareSize(10.0, context)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        // crossAxisAlignment: me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Material(
             color: me ? Colors.white : Colors.amber[200],
