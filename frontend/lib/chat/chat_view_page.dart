@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'dart:developer';
 import 'package:week_3/utils/utils.dart';
+<<<<<<< HEAD
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
+=======
+import 'package:week_3/post/post_view_page.dart';
+>>>>>>> bd4ac2031968dd210cbe265fa5a79404f7e31a88
 
 class ChatViewPage extends StatefulWidget {
   @override
@@ -21,9 +25,12 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   final _dialPartnerName = 'diuni';
   final _postId = '통기타의 아이디';
+  final _postIsSold = true;
+  final _postImage = 'assets/images/guitar3.jpg';
 
   final _partnerNameFont = TextStyle(fontSize: 20.0, color: Colors.grey[600]);
-  final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);
+  final _chatFont = TextStyle(fontSize: 14.0, color: Colors.grey[500]);
+  final _postFont = TextStyle(fontSize: 14.0,color: Colors.grey[600]);
   final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
   // socket
@@ -79,6 +86,60 @@ class _ChatViewPageState extends State<ChatViewPage> {
     }
   }
 
+  Widget _item(context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => PostViewPage()));
+      },
+      child: Container(
+        height: screenAwareSize(80.0, context),
+        width: 360.0,
+        color: Colors.white,
+        child: Center(
+          child: _itemContent(context),
+        ),
+      ),
+    );
+  }
+
+  Widget _itemImage(context) {
+    return new Container(
+      width: screenAwareSize(60.0, context),
+      height: screenAwareSize(60.0, context),
+      decoration: new BoxDecoration(
+          borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
+          image: new DecorationImage(
+            fit: BoxFit.fill,
+            //image: new NetworkImage(
+            //  "url"
+            image: ExactAssetImage(_postImage),
+          )),
+    );
+  }
+
+  Widget _itemContent(context) {
+    return Row(children: <Widget>[
+      SizedBox(width: 20.0,),
+      _itemImage(context),
+      SizedBox(width: 20.0,),
+      Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              if (_postIsSold)
+                Text("[판매완료]", style: _postFont,),
+              Text("통기타", style: _postFont,),
+            ],
+          ),
+          Text("15,500원", style: _postFont,),
+        ],
+      ),
+    ],);
+  }
+
   Widget _typingbar(context) {
     return Container(
       width: 270.0,
@@ -118,6 +179,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              Divider(height: 1.0,),
+              _item(context),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
