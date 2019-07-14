@@ -8,8 +8,7 @@ import 'package:week_3/utils/utils.dart';
 class ChatViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Chat(
-    );
+    return Chat();
   }
 }
 
@@ -22,13 +21,15 @@ class ChatState extends State<Chat> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
 
-  final _paddingFormat = EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
+  final _paddingFormat =
+      EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
 
   final _dialPartnerName = 'diuni';
+  final _postId = '통기타의 아이디';
 
   final _partnerNameFont = TextStyle(fontSize: 20.0, color: Colors.grey[600]);
   final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);
-  // final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
+  final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
   // socket
   SocketIOManager socketManager = SocketIOManager();
@@ -36,20 +37,28 @@ class ChatState extends State<Chat> {
 
   initialize() async {
     socket = await socketManager.createInstance('http://' + hostUrl);
-    socket.onConnect((data){
+    socket.onConnect((data) {
       log.i("connected...");
     });
     socket.connect();
-    socket.on("init", (data){
+    socket.on("init", (data) {
       socket.emit("init", ["access_token"]);
     });
-    socket.on("message", (data){
+    socket.on("message", (data) {
       log.i(data);
+      // db에 메세지 보내기
+      //
     });
+    // Map<String, dynamic> docs;
+    // Message message_first =
+    //     Message(from: 'diuni', text: 'hi', me: true, time: '오후 3:44');
+    // Message message_second = Message(
+    //     from: 'banana', text: "hi I'm banana", me: false, time: '오후 3:45');
+    // docs = {'1': message_first, '2': message_second};
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     initialize();
   }
@@ -65,11 +74,11 @@ class ChatState extends State<Chat> {
   Future callback() async {
     if (messageController.text.length > 0) {
       await socket.emit("message", [messageController.text]);
-      // db에 저장도 하기    
+      // db에 저장도 하기
       //log.i('add message to db');
       messageController.clear();
       // scrollController.animateTo(scrollController.position.maxScrollExtent,
-      //     curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
+      //    curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
     }
   }
 
@@ -99,7 +108,10 @@ class ChatState extends State<Chat> {
     return Scaffold(
         appBar: AppBar(
           title: Center(
-            child: Text(_dialPartnerName, style: _partnerNameFont,),
+            child: Text(
+              _dialPartnerName,
+              style: _partnerNameFont,
+            ),
           ),
           backgroundColor: Colors.white,
           elevation: 0.0,
@@ -108,12 +120,28 @@ class ChatState extends State<Chat> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              // db에서 가져오기
-              new Message(
-                from: 'diuni',
-                text: 'heello 내 이름은 지윤팍팍 아임 지윤 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
-                me: true,
-                time: '오후 3:39',
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  controller: scrollController,
+                  children: <Widget>[
+                    // db에서 가져오기
+                    new Message(
+                      from: 'diuni',
+                      text: 'heello 내 이름은 지윤팍팍 아임 지윤 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
+                      me: true,
+                      time: '오후 3:39',
+                      showTime: false,
+                    ),
+                    new Message(
+                      from: 'diuni',
+                      text: '짧은 거',
+                      me: false,
+                      time: '오후 4:00',
+                      showTime: true,
+                    ),
+                  ],
+                ),
               ),
               Container(
                   padding: EdgeInsets.only(left: 30.0),
@@ -152,38 +180,60 @@ class Message extends StatelessWidget {
   final String from;
   final String text;
   final String time;
+  final bool showTime;
 
   final bool me;
+  // me = (from == user.name);
 
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
+  final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
 
-  const Message({Key key, this.from, this.text, this.me, this.time})
+  const Message(
+      {Key key, this.from, this.text, this.me, this.time, this.showTime})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 320.0,
+     // width: 320.0,
       padding: EdgeInsets.only(top: screenAwareSize(10.0, context)),
-      child: Column(
-        //crossAxisAlignment: CrossAxisAlignment.start,
-        crossAxisAlignment: me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      child: Row(
+        mainAxisAlignment: me ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          Material(
-            color: me ? Colors.white : Colors.amber[200],
-            borderRadius: BorderRadius.circular(30.0),
-            elevation: 0.0,
-            child: Container(
-              constraints: BoxConstraints(maxWidth: 250),
-              padding: EdgeInsets.symmetric(vertical: screenAwareSize(15.0, context), horizontal: 24.0),
-              child: Text(
-                text,
-                style: _chatFont,
-              ),
+          if (showTime && me)
+            new Text(
+              time,
+              style: _timeFont,
             ),
-          )
+          Column(
+            //crossAxisAlignment: me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            children: <Widget>[
+              Material(
+                color: me ? Colors.white : Colors.amber[200],
+                borderRadius: BorderRadius.circular(30.0),
+                elevation: 0.0,
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 250),
+                  padding: EdgeInsets.symmetric(
+                      vertical: screenAwareSize(15.0, context),
+                      horizontal: 24.0),
+                  child: Text(
+                    text,
+                    style: _chatFont,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (showTime != time && !me)
+            new Text(
+              time,
+              style: _timeFont,
+            ),
         ],
       ),
+      // updatePrev_time(time);
     );
   }
 }

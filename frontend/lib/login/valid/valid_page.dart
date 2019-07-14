@@ -103,7 +103,7 @@ class _ValidPageState extends State<ValidPage> {
       if (res.statusCode == 200) {
         if (res.data) {
           //학번 인증 성공
-          Navigator.of(context).pushReplacementNamed('/');
+          Navigator.of(context).pushReplacementNamed('/home');
         } else {
           showSnackBar(context, "학번 인증에 실패했습니다.");
         }

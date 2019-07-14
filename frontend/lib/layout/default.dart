@@ -38,12 +38,17 @@ class _DefaultLayoutState extends State<DefaultLayout>
   void _getAllPosts() async {
     final store = Provider.of<Store>(context);
     var res = await dio.getUri(getUri('/api/posts'));
+<<<<<<< HEAD
     List<Post> list = List<Post>();
     for (var iterator in res.data) {
       Post post = Post.fromJson(iterator);
       list.add(post);
     }
     store.addPosts(list);
+=======
+    // log.i(res.data[0]);
+    // store.addPosts(res);
+>>>>>>> c2aab8d2f6de6a7b529a4fd4b398047d0c8d0c6f
   }
 
   @override
