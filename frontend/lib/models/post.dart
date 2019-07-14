@@ -27,6 +27,7 @@ class Post extends Equatable {
   String bookAuthor;
   String bookPublisher;
   String bookPubDate;
+  String bookImage;
   int bookPrice;
 
   Post({
@@ -53,6 +54,7 @@ class Post extends Equatable {
     this.bookPublisher,
     this.bookPubDate,
     this.bookPrice = 0,
+    this.bookImage,
   });
 
   @override
@@ -75,6 +77,7 @@ class Post extends Equatable {
         bookAuthor = json['bookAuther'],
         bookPublisher = json['bookPublisher'],
         bookPubDate = json['bookPubDate'],
+        bookImage = json['bookImage'],
         bookPrice = json['bookPrice'] {
     //
   }
@@ -86,6 +89,7 @@ class Post extends Equatable {
         bookPublisher = book.publisher,
         bookPubDate = book.pubdate,
         bookPrice = book.price,
+        bookImage = book.image,
         isBook = true,
         category = CategoryList[7];
 
@@ -107,10 +111,10 @@ class Post extends Equatable {
       'bookAuther': bookAuthor,
       'bookPublisher': bookPublisher,
       'bookPubDate': bookPubDate,
+      'bookImage': bookImage,
       'bookPrice': bookPrice,
       'category': category.toJson(),
       'images': images,
-      // 'user': user.toJson(),
     };
   }
 }
