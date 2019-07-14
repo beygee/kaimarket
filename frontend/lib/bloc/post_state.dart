@@ -39,3 +39,27 @@ class PostLoaded extends PostState {
     return super.toString();
   }
 }
+
+class PostSearched extends PostState{
+  final List<Post> searchedPosts;
+  PostSearched({
+    this.searchedPosts,
+  }) : super([PostState]);
+
+  @override
+  String toString() {
+    return super.toString();
+  }
+}
+
+class PostSelectedCategory extends PostState{
+  final List<Post> categoryPosts;
+  PostSelectedCategory({
+    this.categoryPosts,
+  }) : super([PostState]);
+
+  @override
+  String toString() {
+    return super.toString();
+  }
+}
