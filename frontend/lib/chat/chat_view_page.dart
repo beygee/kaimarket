@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'dart:developer';
 import 'package:week_3/utils/utils.dart';
-<<<<<<< HEAD
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
-=======
 import 'package:week_3/post/post_view_page.dart';
->>>>>>> bd4ac2031968dd210cbe265fa5a79404f7e31a88
 
 class ChatViewPage extends StatefulWidget {
   @override
