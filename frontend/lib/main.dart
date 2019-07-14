@@ -4,25 +4,30 @@ import 'package:week_3/styles/theme.dart';
 import 'package:week_3/splash.dart';
 import 'layout/default.dart';
 import 'package:week_3/login/valid/valid_page.dart';
+import 'package:provider/provider.dart';
+import 'store/store.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Material App',
-      theme: ThemeData(
-        primarySwatch: ThemeColor.primary,
+    return ChangeNotifierProvider<Store>(
+      builder: (context) => Store(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Material App',
+        theme: ThemeData(
+          primarySwatch: ThemeColor.primary,
+        ),
+        initialRoute: '/splash',
+        routes: {
+          '/': (context) => DefaultLayout(),
+          '/splash': (context) => SplashPage(),
+          '/login': (context) => LoginPage(),
+          '/valid': (context) => ValidPage(),
+        },
       ),
-      initialRoute: '/splash',
-      routes: {
-        '/': (context) => DefaultLayout(),
-        '/splash': (context) => SplashPage(),
-        '/login': (context) => LoginPage(),
-        '/valid': (context) => ValidPage(),
-      },
     );
   }
 

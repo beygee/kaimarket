@@ -20,8 +20,7 @@ class DefaultLayout extends StatefulWidget {
 
 class _DefaultLayoutState extends State<DefaultLayout>
     with TickerProviderStateMixin {
-
-      GlobalKey<LoadingWrapperState> _loadingWrapperKey =
+  GlobalKey<LoadingWrapperState> _loadingWrapperKey =
       GlobalKey<LoadingWrapperState>();
 
   PageController _pageController = PageController();
@@ -34,23 +33,18 @@ class _DefaultLayoutState extends State<DefaultLayout>
   //두번 백 버튼 누를시 꺼지게
   DateTime currentBackPressTime = DateTime.now();
 
-    void _getAllPosts() async {
-      // final store = Provider.of<Store>(context);
-      // var res = await dio.postUri(getUri('/api/posts'));
-      var res = await dio.getUri(getUri('/api/posts'));
-      log.i(res);
-      // store.addPosts(res);
-      }
+  void _getAllPosts() async {
+    // final store = Provider.of<Store>(context);
+    // var res = await dio.postUri(getUri('/api/posts'));
+    var res = await dio.getUri(getUri('/api/posts'));
+    log.i(res.data[0]);
+    // store.addPosts(res);
+  }
 
-
-  @override   
+  @override
   void initState() {
     _getAllPosts();
     super.initState();
-    // ChangeNotifierProvider<Store>(
-    //     builder: (context) => Store(),
-    //     child: _getAllPosts(),
-    //   );
 
     _sellButtonController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));

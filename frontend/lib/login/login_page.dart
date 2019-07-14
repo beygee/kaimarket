@@ -11,8 +11,10 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:week_3/layout/default.dart';
 import 'package:week_3/login/valid/valid_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginPage extends StatefulWidget {
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   @override
   _LoginPageState createState() => _LoginPageState();
 }
