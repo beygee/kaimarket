@@ -42,9 +42,12 @@ class _ChatViewPageState extends State<ChatViewPage> {
   void initState() {
     super.initState();
     _socketBloc = BlocProvider.of<SocketBloc>(context);
+
+    // _socketBloc.socket.on('message', )
   }
 
   Future callback(socket) async {
+    log.i("클릭");
     if (messageController.text.length > 0) {
       var now = new DateTime.now();
       var time = new DateFormat("hh:mm a").format(now);
@@ -53,16 +56,17 @@ class _ChatViewPageState extends State<ChatViewPage> {
       // log.i(time);
       // if (prev_user == "user.id" && prev_time == time)
       //   showTime = false;
+      
       await socket.emit("message", [
         {"text": messageController.text, "userId": "user_id", "time": time}
       ]);
-      setState(() {
-        docs.insert(0, {
-          "text": messageController.text,
-          "userId": "user_id",
-          "time": time
-        });
-      });
+      // setState(() {
+      //   docs.insert(0, {
+      //     "text": messageController.text,
+      //     "userId": "user_id",
+      //     "time": time
+      //   });
+      // });
 
       // db에 저장은 소켓이 해준대 ~!
       // prev_user = "user.id";
@@ -78,26 +82,23 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   Future uploadMessage() async {}
 
-  Widget _item(context) {
+  Widget _buildItem(context) {
     return Container(
       height: screenAwareSize(80.0, context),
-      width: 360.0,
       color: Colors.white,
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: 20.0,
-          ),
-          _itemLeft(context),
-          SizedBox(
-            width: 20.0,
-          ),
-          _itemMiddle(context),
-          SizedBox(
-            width: 70.0,
-          ),
-          _itemRight(context),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(children: <Widget>[
+              _itemLeft(context),
+              SizedBox(width: 15.0),
+              _itemMiddle(context),
+            ]),
+            _itemRight(context),
+          ],
+        ),
       ),
     );
   }
@@ -129,6 +130,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
                 "[판매완료]",
                 style: _postFont,
               ),
+            SizedBox(width: 5.0),
             Text(
               "통기타",
               style: _postFont,
@@ -144,35 +146,38 @@ class _ChatViewPageState extends State<ChatViewPage> {
   }
 
   Widget _itemRight(context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PostViewPage()));
-      },
-      child: Container(
-        height: screenAwareSize(45.0, context),
-        width: 70.0,
-        decoration: new BoxDecoration(
-          borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
-          border: Border.all(color: Colors.amber[600], width: 1.0),
-        ),
-        child: Center(
-            child: Text(
-          "게시글\n확인하기",
-          style: TextStyle(
-            fontSize: 12.0,
-            color: Colors.amber[600],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
+        onTap: () {
+          Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => PostViewPage()));
+        },
+        child: Container(
+          height: screenAwareSize(45.0, context),
+          width: 70.0,
+          decoration: new BoxDecoration(
+            borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
+            border: Border.all(color: Colors.amber[600], width: 1.0),
           ),
-          textAlign: TextAlign.center,
-        )),
+          child: Center(
+              child: Text(
+            "게시글\n확인하기",
+            style: TextStyle(
+              fontSize: 12.0,
+              color: Colors.amber[600],
+            ),
+            textAlign: TextAlign.center,
+          )),
+        ),
       ),
     );
   }
 
   Widget _typingbar(context) {
     return Container(
-      width: 270.0,
-      height: screenAwareSize(50.0, context),
+      // height: screenAwareSize(50.0, context),
       child: TextField(
         onSubmitted: (value) =>
             callback((_socketBloc.currentState as SocketLoaded).socket),
@@ -183,7 +188,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
           hintStyle: TextStyle(fontSize: 14.0),
         ),
         controller: messageController,
-        maxLines: 2,
+        maxLines: 1,
+        // textAlignVertical: TextAlignVertical.center,
+        // keyboardType: TextInputType.multiline,
         autofocus: true,
         style: TextStyle(fontSize: 14.0),
         scrollPadding: EdgeInsets.all(2.0),
@@ -195,11 +202,10 @@ class _ChatViewPageState extends State<ChatViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Center(
-            child: Text(
-              _dialPartnerName,
-              style: _partnerNameFont,
-            ),
+          centerTitle: true,
+          title: Text(
+            _dialPartnerName,
+            style: _partnerNameFont,
           ),
           backgroundColor: Colors.white,
           elevation: 0.0,
@@ -211,10 +217,12 @@ class _ChatViewPageState extends State<ChatViewPage> {
               Divider(
                 height: 1.0,
               ),
-              _item(context),
+              _buildItem(context),
               Expanded(
                 child: ListView(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 15.0,
+                      vertical: screenAwareSize(10.0, context)),
                   controller: scrollController,
                   reverse: true,
                   shrinkWrap: true,
@@ -245,10 +253,10 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   bloc: _socketBloc,
                   builder: (context, state) {
                     return Container(
-                      padding: EdgeInsets.only(left: 30.0),
-                      child: new Row(
+                      color: Colors.white,
+                      child: Row(
                         children: <Widget>[
-                          _typingbar(context),
+                          Expanded(child: _typingbar(context)),
                           SendButton(
                             text: "Send",
                             callback: () =>

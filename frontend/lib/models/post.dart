@@ -3,6 +3,7 @@ import 'package:week_3/models/category.dart';
 import 'package:week_3/models/book.dart';
 import 'package:week_3/models/user.dart';
 import 'package:equatable/equatable.dart';
+import 'package:week_3/utils/utils.dart';
 
 class Post extends Equatable {
   String id;
