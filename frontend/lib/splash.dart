@@ -36,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
 
       if (res.statusCode == 200) {
         if (res.data['valid']) {
-          Navigator.of(context).pushReplacementNamed('/');
+          Navigator.of(context).pushReplacementNamed('/home');
         } else {
           Navigator.of(context).pushReplacementNamed('/valid');
         }

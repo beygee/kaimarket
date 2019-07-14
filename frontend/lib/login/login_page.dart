@@ -242,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _goToHomePage(context) {
-    Navigator.of(context).pushReplacementNamed('/');
+    Navigator.of(context).pushReplacementNamed('/home');
   }
 
   _authUserWithValid(context, res) {
