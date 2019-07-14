@@ -12,8 +12,9 @@ import 'package:week_3/layout/sell_button.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:week_3/wish/wish_page.dart';
 import 'package:provider/provider.dart';
-import 'package:week_3/store/store.dart';
 import 'package:week_3/models/post.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:week_3/bloc/bloc.dart';
 
 class DefaultLayout extends StatefulWidget {
   @override
@@ -36,20 +37,16 @@ class _DefaultLayoutState extends State<DefaultLayout>
   //두번 백 버튼 누를시 꺼지게
   DateTime currentBackPressTime = DateTime.now();
 
-  void _getAllPosts() async {
-    final store = Provider.of<Store>(context);
-    var res = await dio.getUri(getUri('/api/posts'));
-    List<Post> list = List<Post>();
-    for (var iterator in res.data) {
-      Post post = Post.fromJson(iterator);
-      list.add(post);
-    }
-    store.addPosts(list);
-  }
+  SocketBloc _socketBloc;
 
   @override
   void initState() {
     super.initState();
+
+    //소켓 초기화
+    _socketBloc = BlocProvider.of<SocketBloc>(context);
+    _socketBloc.dispatch(SocketInit());
+
     _sellButtonController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
     _sellButtonAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
@@ -64,6 +61,9 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   @override
   void dispose() {
+    //소켓 제거
+    _socketBloc.dispatch(SocketDelete());
+
     _pageController.dispose();
     _sellButtonController.dispose();
     super.dispose();
@@ -71,11 +71,6 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   @override
   Widget build(BuildContext context) {
-    // log.i("test");
-    if (getallpost == 0){
-      _getAllPosts();
-      getallpost = 1;
-    }
     
     return WillPopScope(
       onWillPop: () async {

@@ -27,7 +27,7 @@ dependencies:
   flutter_kakao_login: ^0.3.0
   flutter_naver_login: ^0.3.1
   multi_image_picker: ^4.3.4
-  adhara_socket_io: ^0.1.11
+  adhara_socket_io: ^0.2.0
   logger: ^0.7.0+2
   dio: ^2.1.10
   shared_preferences: ^0.5.3+2
@@ -43,6 +43,7 @@ dependencies:
   bloc: ^0.14.4
   flutter_bloc: ^0.19.0
   provider: ^3.0.0+1
+  flutter_socket_io: ^0.5.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
