@@ -62,9 +62,9 @@ class ChatState extends State<Chat> {
     super.dispose();
   }
 
-  Future<void> callback() async {
+  Future callback() async {
     if (messageController.text.length > 0) {
-      socket.emit("message", [messageController.text]);
+      await socket.emit("message", [messageController.text]);
       // db에 저장도 하기    
       //log.i('add message to db');
       messageController.clear();
@@ -108,10 +108,11 @@ class ChatState extends State<Chat> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
+              // db에서 가져오기
               new Message(
                 from: 'diuni',
                 text: 'heello 내 이름은 지윤팍팍 아임 지윤 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
-                me: false,
+                me: true,
                 time: '오후 3:39',
               ),
               Container(
@@ -162,10 +163,11 @@ class Message extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 320.0,
       padding: EdgeInsets.only(top: screenAwareSize(10.0, context)),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        // crossAxisAlignment: me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        //crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: me ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           Material(
             color: me ? Colors.white : Colors.amber[200],
