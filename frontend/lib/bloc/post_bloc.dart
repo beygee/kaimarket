@@ -40,6 +40,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       Post post = Post.fromJson(iterator);
       list.add(post);
     }
+    
     return list;
   }
 }

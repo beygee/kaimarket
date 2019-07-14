@@ -20,10 +20,9 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-
   final PostBloc _postBloc = PostBloc();
 
-  HomePageState(){
+  HomePageState() {
     _postBloc.dispatch(PostInit());
   }
 
@@ -40,29 +39,29 @@ class HomePageState extends State<HomePage> {
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
               BlocBuilder(
-                bloc: _postBloc,
-                builder: (BuildContext context, PostState state){
-                  if (state is PostUninitialized){
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (state is PostError) {
-                    return Center(
-                      child : Text('Failed to get posts'),
-                    );
-                  }
-                  if (state is PostLoaded){
-                    if (state.posts.isEmpty){
+                  bloc: _postBloc,
+                  builder: (BuildContext context, PostState state) {
+                    if (state is PostUninitialized) {
                       return Center(
-                        child: Text('게시글이 없어요!'),
+                        child: CircularProgressIndicator(),
                       );
                     }
-                    return Text(state.posts[0].toString());
-                    // return _buildSuggestions(context, state.posts);
-                  }
-                }
-              ),
+                    if (state is PostError) {
+                      return Center(
+                        child: Text('Failed to get posts'),
+                      );
+                    }
+                    if (state is PostLoaded) {
+                      if (state.posts.isEmpty) {
+                        return Center(
+                          child: Text('게시글이 없어요!'),
+                        );
+                      }
+                      return Expanded(
+                        child: _buildSuggestions(context, state.posts)
+                      );
+                    }
+                  }),
             ],
           );
         },
@@ -119,15 +118,15 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildSuggestions(context, posts) {
     return ListView.separated(
-          padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
-          physics: BouncingScrollPhysics(),
-          itemCount: posts.length,
-          itemBuilder: (BuildContext context, int idx) {
-            return _buildRow(context, posts[idx]);
-          },
-          separatorBuilder: (BuildContext context, int i) {
-            return Divider();
-          },
+      padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
+      physics: BouncingScrollPhysics(),
+      itemCount: posts.length,
+      itemBuilder: (BuildContext context, int idx) {
+        return _buildRow(context, posts[idx]);
+      },
+      separatorBuilder: (BuildContext context, int i) {
+        return Divider();
+      },
     );
   }
 
