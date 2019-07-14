@@ -71,6 +71,9 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildSearchInput(context) {
+
+    final myController = TextEditingController();
+
     return Padding(
       padding: EdgeInsets.only(
         left: 10.0,
@@ -79,8 +82,12 @@ class HomePageState extends State<HomePage> {
         bottom: screenAwareSize(10.0, context),
       ),
       child: TextField(
+        controller: myController,
         decoration: InputDecoration(
-          suffixIcon: Icon(Icons.search),
+          suffixIcon: GestureDetector(
+            onTap: ()=>_postBloc.dispatch(PostSearch(searchdata: myController.text)),
+            child: Icon(Icons.search),
+          ),
           hintText: "상품을 검색해보세요",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(screenAwareSize(15.0, context)),

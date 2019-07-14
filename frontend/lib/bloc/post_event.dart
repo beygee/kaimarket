@@ -35,6 +35,14 @@ class PostSelectCategory extends PostEvent{
 }
 
 class PostSearch extends PostEvent{
+  final String searchdata;
+
+  getData()=> this.searchdata;
+
+  PostSearch({
+    this.searchdata
+  });
+
   @override
   String toString() {
     return "Search";
