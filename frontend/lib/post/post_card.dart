@@ -45,6 +45,7 @@ class PostCard extends StatelessWidget {
                             children: <Widget>[
                               Text(
                                 post.title,
+                                overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.grey[600],
                                   fontSize: screenAwareSize(14.0, context),
@@ -81,7 +82,7 @@ class PostCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            post.price.toString(),
+                            post.price.toString()+"원",
                             style: TextStyle(
                               color: Colors.grey[600],
                               fontSize: screenAwareSize(11.0, context),
