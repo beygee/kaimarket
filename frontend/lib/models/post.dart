@@ -58,12 +58,12 @@ class Post {
       : id = json['_id'],
         title = json['title'],
         content = json['content'],
-        price = int.parse(json['price']),
-        view = int.parse(json['view']),
-        wish = int.parse(json['wish']),
-        chat = int.parse(json['chat']),
-        locationLat = double.parse(json['locationLat']),
-        locationLng = double.parse(json['locationLng']),
+        price = json['price'],
+        view = json['view'],
+        wish = json['wish'],
+        chat = json['chat'],
+        locationLat = json['locationLat'],
+        locationLng = json['locationLng'],
         created = json['created'],
         updated = json['updated'],
         isBook = json['isBook'],
@@ -71,7 +71,7 @@ class Post {
         bookAuthor = json['bookAuther'],
         bookPublisher = json['bookPublisher'],
         bookPubDate = json['bookPubDate'],
-        bookPrice = int.parse(json['bookPrice']) {
+        bookPrice = json['bookPrice'] {
     //
   }
 

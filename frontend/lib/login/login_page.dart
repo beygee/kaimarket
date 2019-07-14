@@ -11,8 +11,10 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:week_3/layout/default.dart';
 import 'package:week_3/login/valid/valid_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LoginPage extends StatefulWidget {
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -86,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xffaaaaaa),
           onPressed: () => _loginWithGuest(context),
         ),
+        // SizedBox(height: 10.0),
         // LoginButton(
         //   text: "구글과 연결하기",
         //   icon: FontAwesomeIcons.google,
@@ -131,9 +134,9 @@ class _LoginPageState extends State<LoginPage> {
       final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
 
       GoogleSignInAccount googleUser = await googleSignIn.signIn();
-      // GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-      // var token = googleAuth.accessToken;
+      var token = googleAuth.accessToken;
 
       // var res = await Dio()
       //     .postUri(getUri('/api/auth/google'), data: {'access_token': token});
