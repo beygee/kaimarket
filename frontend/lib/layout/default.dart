@@ -37,7 +37,7 @@ class _DefaultLayoutState extends State<DefaultLayout>
     // final store = Provider.of<Store>(context);
     // var res = await dio.postUri(getUri('/api/posts'));
     var res = await dio.getUri(getUri('/api/posts'));
-    log.i(res.data[0]);
+    // log.i(res.data[0]);
     // store.addPosts(res);
   }
 
