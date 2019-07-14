@@ -135,7 +135,7 @@ class HomePageState extends State<HomePage> {
       post: post,
       onTap: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PostViewPage()));
+            .push(MaterialPageRoute(builder: (context) => PostViewPage(post: post)));
       },
     );
   }
