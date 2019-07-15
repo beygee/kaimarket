@@ -261,7 +261,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
         borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => PostViewPage(post: widget.chat.post)));
+              builder: (context) => PostViewPage(postId: widget.chat.post.id)));
         },
         child: Container(
           height: screenAwareSize(45.0, context),

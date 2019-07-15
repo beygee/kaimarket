@@ -184,8 +184,8 @@ class HomePageState extends State<HomePage> {
     return PostCard(
       post: post,
       onTap: () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PostViewPage(post: post)));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => PostViewPage(postId: post.id)));
       },
     );
   }
