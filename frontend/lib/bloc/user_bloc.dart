@@ -72,6 +72,25 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             sales: currentstate.sales,
             chats: currentstate.chats);
       }
+      if (event is SearchWishInUser && currentState is UserLoaded) {
+        List<Post> wishlist = (currentState as UserLoaded).wish;
+        String postId = (event as SearchWishInUser).postId;
+        bool wish = (event as SearchWishInUser).wish;
+
+        wishlist = wishlist.map((p) {
+          if (p.id != postId) return p;
+          var post = Post.copyWith(p);
+          post.isWish = wish;
+          return post;
+        }).toList();
+        var currentstate = (currentState as UserLoaded);
+        yield UserLoaded(
+            id: currentstate.id,
+            name: currentstate.name,
+            wish: wishlist,
+            sales: currentstate.sales,
+            chats: currentstate.chats);
+      }
     } catch (_) {
       print(_);
       yield UserError();

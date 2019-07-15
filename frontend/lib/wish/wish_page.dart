@@ -88,7 +88,8 @@ class WishPageState extends State<WishPage> {
                 ),
               );
             }
-            return SafeArea(
+            return 
+            SafeArea(
               child: ListView.separated(
                 padding:
                     EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
@@ -117,6 +118,7 @@ class WishPageState extends State<WishPage> {
         },
         onTapHeart: () async {
           _userBloc.dispatch(UserChangeWish(postId: post.id));
+          _userBloc.dispatch(SearchWishInUser(postId: post.id, wish: true));
         },
         issaved: wish);
   }
