@@ -431,7 +431,7 @@ class _PostViewPageState extends State<PostViewPage> {
                   ),
                 ),
                 Text(
-                  "판매내역 : "+post.user.sales.length.toString(),
+                  "판매내역 : " + post.user.salesCount.toString() + '개',
                   style: TextStyle(
                     fontSize: screenAwareSize(10.0, context),
                     color: Colors.grey[400],
