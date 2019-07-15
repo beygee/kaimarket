@@ -38,12 +38,15 @@ class _ChatViewPageState extends State<ChatViewPage> {
   var prev_user = "user.id";
   List<Widget> response;
   var existMessages = [];
+  // test용
   var docs = [{'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
               {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}];
 
   Future initShow() async {
-    var dbChats = await dio.getUri(getUri('/api/chats'));
+    var dbChats = await dio.getUri(getUri('/api/chats/'+ widget.chat.id));
     var existMessages = Chat.fromJson(dbChats.data).messages;
+    // showTime 계산해서 넣어주기
+    // for (int i = 0; i < existMessages.length; i++)
   }
 
   @override
@@ -52,7 +55,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
     _socketBloc = BlocProvider.of<SocketBloc>(context);
     _socketBloc.dispatch(SocketChatEnter());
     initShow();
-    // existMessages에 있는 거 db에서 불러오고 띄워주기
   }
 
   @override
@@ -64,32 +66,41 @@ class _ChatViewPageState extends State<ChatViewPage> {
   Future callback(socket) async {
     log.i("클릭");
     if (messageController.text.length > 0) {
-      var now = new DateTime.now();
-      var time = new DateFormat("hh:mm a").format(now);
-      // log.i(prev_time);
-      // bool showTime = true;
-      // log.i(time);
-      // if (prev_user == "user.id" && prev_time == time)
-      //   showTime = false;
-
+      // server로 보내기
       await socket.emit("message", [
         {
           'chatId': widget.chat.id,
           "text": messageController.text,
-          "from": widget.chat.buyer.id,
+      //    "from": widget.user.id,
         }
       ]);
+      // server에서 ok 하면 socket으로 받아오기
+      // await socket.on("ok")
+      bool showTime = true;
+      // 서버에서 받은 메세지로 currentMessage에 넣어주기
+      var currentMessage = existMessages[1];
+      var prevMessage = existMessages[0];
+      if (prevMessage.from == currentMessage.from && prevMessage.time == currentMessage.time)
+        showTime = false;
+
+      // 소켓으로 서버에서 메세지 받기
+
       setState(() {
+        existMessages.remove(prevMessage);
+        existMessages.insert(0, {
+          "text": prevMessage.text,
+          "from": prevMessage.from,
+          "time": prevMessage.time,
+          "showTime": showTime,
+        });
          existMessages.insert(0, {
            "text": messageController.text,
-          "userId": "user_id",
-           "time": time
+           "from": currentMessage.from,
+           "time": currentMessage.time,
+           "showTime": true,
          });
        });
 
-      // db에 저장은 소켓이 해준대 ~!
-      // prev_user = "user.id";
-      // prev_time = time;
       messageController.clear();
       scrollController.animateTo(0.0,
           //scrollController.position.maxScrollExtent,
@@ -246,9 +257,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   reverse: true,
                   shrinkWrap: true,
                   children: <Widget>[
-                    // db에서 가져오기
-                    // Response<Message> response = await dio.get<Message>("message", ??).toList();
-                    ...existMessages
+                    //...existMessages
+                    ...docs
                         .map((doc) => MessageBubble(
                               from: doc['from'],
                               text: doc['text'],
@@ -310,9 +320,7 @@ class SendButton extends StatelessWidget {
 class MessageBubble extends StatelessWidget {
   final String from;
   final String text;
-  final String time;
-
-  // me = (from == user.name);
+  String time;
 
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
   final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
@@ -320,6 +328,10 @@ class MessageBubble extends StatelessWidget {
   MessageBubble({Key key, this.from, this.text, this.time}) : super(key: key);
 
   bool me = true;
+  // me = (from == widget.user.id);
+
+  // time format 바꿔주기
+  //time = new DateFormat("hh:mm a").format(time);
 
   @override
   Widget build(BuildContext context) {
