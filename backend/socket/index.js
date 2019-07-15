@@ -34,7 +34,6 @@ module.exports = function(server, db) {
   const emitToUser = (userId, event, data) => {
     if (sockets[userId]) {
       for (let i = 0; i < sockets[userId].length; i++) {
-        console.log(sockets[userId][i])
         nsp.to(sockets[userId][i]).emit(event, data)
       }
     }

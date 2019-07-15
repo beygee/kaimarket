@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/post.dart';
-import 'package:week_3/utils/dio.dart';
+import 'package:week_3/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final VoidCallback onTap;
+  final VoidCallback onTapHeart;
   final Post post;
+  final bool issaved;
 
-  PostCard({@required this.post, this.onTap});
+  PostCard({@required this.post, this.onTap, this.onTapHeart, this.issaved});
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +81,20 @@ class PostCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Icon(Icons.favorite),
-                              ),
+                              InkResponse(
+                                  onTap: onTapHeart,
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical:
+                                            screenAwareSize(5.0, context)),
+                                    child: issaved
+                                        ? Icon(
+                                            Icons.favorite,
+                                            color: Colors.amber[200],
+                                          )
+                                        : Icon(Icons.favorite_border,
+                                            color: Colors.amber[200]),
+                                  )),
                             ],
                           ),
                           SizedBox(height: screenAwareSize(5.0, context)),

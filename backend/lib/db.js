@@ -44,7 +44,9 @@ const CategorySchema = new Schema({
 })
 const ChatSchema = new Schema({
   seller: { type: Schema.Types.ObjectId, ref: "user", required: true },
+  sellerRead: { type: Date, default: Date.now },
   buyer: { type: Schema.Types.ObjectId, ref: "user", required: true },
+  buyerRead: { type: Date, default: Date.now },
   messages: [
     new Schema({
       from: { type: Schema.Types.ObjectId, ref: "user", required: true },
