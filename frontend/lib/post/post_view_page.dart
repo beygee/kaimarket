@@ -448,7 +448,7 @@ class _PostViewPageState extends State<PostViewPage> {
                   ),
                 ),
                 Text(
-                  "판매내역 : " ,
+                  "판매내역 : ",
                   style: TextStyle(
                     fontSize: screenAwareSize(10.0, context),
                     color: Colors.grey[400],
