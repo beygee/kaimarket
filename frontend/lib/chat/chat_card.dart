@@ -3,11 +3,13 @@ import 'package:week_3/chat/chat_view_page.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/chat.dart';
+import 'package:week_3/chat/chat_page.dart';
 
 class ChatCard extends StatelessWidget {
   final Chat chat;
+  final String loggedUserId;
 
-  ChatCard({this.chat});
+  ChatCard({this.chat, this.loggedUserId});
 
   final _profileImage = 'assets/images/logo.jpg';
   // var _userName = chat.buyer.name;
@@ -75,7 +77,7 @@ class ChatCard extends StatelessWidget {
         child: new Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Text(chat.buyer.name, style: _userNameFont),
+        new Text(loggedUserId == chat.buyer.id ? chat.seller.name: chat.buyer.name, style: _userNameFont),
         SizedBox(
           height: screenAwareSize(5.0, context),
         ),

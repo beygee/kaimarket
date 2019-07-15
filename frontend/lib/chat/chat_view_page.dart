@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/models/chat.dart';
-import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ChatViewPage extends StatefulWidget {
   final Chat chat;
@@ -28,11 +28,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
   final _paddingFormat =
       EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
 
-  final _dialPartnerName = 'diuni';
-  final _postId = '통기타의 아이디';
-  final _postIsSold = true;
-  final _postImage = 'assets/images/guitar3.jpg';
-
   final _partnerNameFont = TextStyle(fontSize: 20.0, color: Colors.grey[600]);
   final _chatFont = TextStyle(fontSize: 14.0, color: Colors.grey[500]);
   final _postFont = TextStyle(fontSize: 14.0, color: Colors.grey[600]);
@@ -50,50 +45,52 @@ class _ChatViewPageState extends State<ChatViewPage> {
     var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
     log.i("뭐해?");
     existMessages = Chat.fromJson(dbChats.data).messages;
-    
-    if (existMessages.length > 0){
+
+    if (existMessages.length > 0) {
       // me 계산하기
-      for(int i = 0; i < existMessages.length; i++){
-        if (loggedUserId == existMessages[i].from){
-            existMessages[i].me = true;
-        }
-        else{
+      for (int i = 0; i < existMessages.length; i++) {
+        if (loggedUserId == existMessages[i].from) {
+          existMessages[i].me = true;
+        } else {
           existMessages[i].me = false;
         }
       }
       // showTime 계산하기
       existMessages[0].showTime = true;
-      if (existMessages.length != 1){
+      if (existMessages.length != 1) {
         int i;
-        for (i = 0; i < existMessages.length - 1; i++){
-          for (int j = i; j < existMessages.length - i; j++){
-            if (existMessages[i].from == existMessages[j+1].from && existMessages[i].time == existMessages[j+1].time)
-              existMessages[j+1].showTime = false;
+        for (i = 0; i < existMessages.length - 1; i++) {
+          for (int j = i; j < existMessages.length - i; j++) {
+            if (existMessages[i].from == existMessages[j + 1].from &&
+                existMessages[i].time == existMessages[j + 1].time)
+              existMessages[j + 1].showTime = false;
             else {
-              i = j+1;
+              i = j + 1;
               existMessages[i].showTime = true;
               break;
             }
-          }  
+          }
         }
-        if (existMessages[i].from == existMessages[i-1].from && existMessages[i].time == existMessages[i-1].time)
+        if (existMessages[i].from == existMessages[i - 1].from &&
+            existMessages[i].time == existMessages[i - 1].time)
           existMessages[i].showTime = false;
         else {
           existMessages[i].showTime = true;
         }
-      } 
+      }
     }
-    // reverse 
-    
-    for (int i = 0; i < (existMessages.length -1)/2; i++){
-      Message tempMessage = existMessages[i];
-      existMessages[i] = existMessages[existMessages.length-1-i];
-      existMessages[existMessages.length-1-i] = tempMessage;
-    }
+    // reverse
+    setState(() {
+      for (int i = 0; i < (existMessages.length - 1) / 2; i++) {
+        Message tempMessage = existMessages[i];
+        existMessages[i] = existMessages[existMessages.length - 1 - i];
+        existMessages[existMessages.length - 1 - i] = tempMessage;
+      }
+    });
 
     scrollController.animateTo(
-      //0.0,
-       scrollController.position.minScrollExtent,
+        //0.0,
+        scrollController.position.minScrollExtent,
         curve: Curves.easeOut,
         duration: const Duration(milliseconds: 300));
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
@@ -109,7 +106,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     _socketBloc = BlocProvider.of<SocketBloc>(context);
     _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async {
-     updateMessage(data);      
+      updateMessage(data);
     }));
     initShow();
   }
@@ -136,28 +133,31 @@ class _ChatViewPageState extends State<ChatViewPage> {
     setState(() {
       existMessages.remove(prevMessage);
       // log.i(existMessages.length);
-      existMessages.insert(0, Message(
-        text: prevMessage.text,
-        from: prevMessage.from,
-        time: prevMessage.time,
-        me: prevMessage.me,
-        showTime: showTime,
-      ));
-      existMessages.insert(0, Message(
-        text: currentMessage['text'],
-        from: currentMessage['from'],
-        time: currentMessage['time'],
-        me: currentMessage['from'] == loggedUserId,
-        showTime: true,
-      ));
+      existMessages.insert(
+          0,
+          Message(
+            text: prevMessage.text,
+            from: prevMessage.from,
+            time: prevMessage.time,
+            me: prevMessage.me,
+            showTime: showTime,
+          ));
+      existMessages.insert(
+          0,
+          Message(
+            text: currentMessage['text'],
+            from: currentMessage['from'],
+            time: currentMessage['time'],
+            me: currentMessage['from'] == loggedUserId,
+            showTime: true,
+          ));
     });
     scrollController.animateTo(
-      //0.0,
-       scrollController.position.minScrollExtent,
+        //0.0,
+        scrollController.position.minScrollExtent,
         curve: Curves.easeOut,
         duration: const Duration(milliseconds: 300));
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
-
   }
 
   Future callback(socket) async {
@@ -187,11 +187,16 @@ class _ChatViewPageState extends State<ChatViewPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Row(children: <Widget>[
-              _itemLeft(context),
-              SizedBox(width: 15.0),
-              _itemMiddle(context),
-            ]),
+            Expanded(
+              child: Row(children: <Widget>[
+                _itemLeft(context),
+                SizedBox(width: 15.0),
+                _itemMiddle(context),
+              ]),
+            ),
+            SizedBox(
+              width: 5.0,
+            ),
             _itemRight(context),
           ],
         ),
@@ -200,44 +205,54 @@ class _ChatViewPageState extends State<ChatViewPage> {
   }
 
   Widget _itemLeft(context) {
-    return new Container(
-      width: screenAwareSize(60.0, context),
-      height: screenAwareSize(60.0, context),
-      decoration: new BoxDecoration(
-          borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
-          image: new DecorationImage(
-            fit: BoxFit.fill,
-            //image: new NetworkImage(
-            //  "url"
-            image: ExactAssetImage(_postImage),
-          )),
+    return new ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: widget.chat.post.isBook
+          ? CachedNetworkImage(
+              imageUrl: widget.chat.post.bookImage,
+              width: screenAwareSize(60.0, context),
+              height: screenAwareSize(60.0, context),
+              fit: BoxFit.cover,
+            )
+          : CachedNetworkImage(
+              imageUrl:
+                  getUri('').toString() + widget.chat.post.images[0]['url'],
+              width: screenAwareSize(60.0, context),
+              height: screenAwareSize(60.0, context),
+              fit: BoxFit.cover,
+            ),
     );
   }
 
   Widget _itemMiddle(context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            if (_postIsSold)
-              Text(
-                "[판매완료]",
-                style: _postFont,
+    return Expanded(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              // if (widget.chat.post.isSold)
+              //   Text(
+              //     "[판매완료]",
+              //     style: _postFont,
+              //   ),
+              // SizedBox(width: 5.0),
+              Expanded(
+                child: Text(
+                  widget.chat.post.title,
+                  style: _postFont,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-            SizedBox(width: 5.0),
-            Text(
-              "통기타",
-              style: _postFont,
-            ),
-          ],
-        ),
-        Text(
-          "15,500원",
-          style: _postFont,
-        ),
-      ],
+            ],
+          ),
+          Text(
+            widget.chat.post.price.toString() + '원',
+            style: _postFont,
+          ),
+        ],
+      ),
     );
   }
 
@@ -247,8 +262,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
       child: InkWell(
         borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
         onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => PostViewPage()));
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PostViewPage(postId: widget.chat.post.id)));
         },
         child: Container(
           height: screenAwareSize(45.0, context),
@@ -279,15 +294,12 @@ class _ChatViewPageState extends State<ChatViewPage> {
             callback((_socketBloc.currentState as SocketChatLoaded).socket),
         decoration: InputDecoration(
           border: InputBorder.none,
-          contentPadding: EdgeInsets.all(screenAwareSize(5.0, context)),
+          contentPadding: EdgeInsets.all(screenAwareSize(10.0, context)),
           hintText: "Enter a message...",
           hintStyle: TextStyle(fontSize: 14.0),
         ),
         controller: messageController,
         maxLines: 1,
-        // textAlignVertical: TextAlignVertical.center,
-        // keyboardType: TextInputType.multiline,
-        autofocus: true,
         style: TextStyle(fontSize: 14.0),
         scrollPadding: EdgeInsets.all(2.0),
       ),
@@ -300,7 +312,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            _dialPartnerName,
+            loggedUserId == widget.chat.buyer.id
+                ? widget.chat.seller.name
+                : widget.chat.buyer.name,
             style: _partnerNameFont,
           ),
           backgroundColor: Colors.white,
@@ -321,11 +335,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
                       vertical: screenAwareSize(10.0, context)),
                   controller: scrollController,
                   reverse: true,
-                  //shrinkWrap: true,
                   children: <Widget>[
                     ...existMessages
-                    // ...docs
-                         .map((message) => MessageBubble(
+                        .map((message) => MessageBubble(
                               from: message.from,
                               text: message.text,
                               time: message.time,
@@ -333,18 +345,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
                               showTime: message.showTime,
                             ))
                         .toList(),
-                    // new MessageBubble(
-                    //   from: 'diuni',
-                    //   text: 'heello 내 이름은 지윤팍팍 아임 지�� 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
-                    //   time: '오후 3:39',
-                    //   me: true,
-                    // ),
-                    // new MessageBubble(
-                    //   from: 'diuni',
-                    //   text: '짧은 거',
-                    //   time: '오후 4:00',
-                    //   me: false,
-                    // ),
                   ],
                 ),
               ),
@@ -397,9 +397,16 @@ class MessageBubble extends StatelessWidget {
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
   final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
 
-  MessageBubble({Key key, this.from, this.text, this.time, this.me = true, this.showTime = true}) : super(key: key);
-  
- // bool me = true;
+  MessageBubble(
+      {Key key,
+      this.from,
+      this.text,
+      this.time,
+      this.me = true,
+      this.showTime = true})
+      : super(key: key);
+
+  // bool me = true;
 
   // time format 바꿔주기
   //time = new DateFormat("hh:mm a").format(time);
@@ -417,7 +424,7 @@ class MessageBubble extends StatelessWidget {
         children: <Widget>[
           if (me && showTime)
             new Text(
-              time, 
+              parseDate(time),
               //new DateFormat("hh:mm a").format(time),
               style: _timeFont,
             ),
@@ -463,13 +470,18 @@ class MessageBubble extends StatelessWidget {
           ),
           if (!me && showTime)
             new Text(
-              time,
+              parseDate(time),
               style: _timeFont,
             ),
         ],
       ),
       // updatePrev_time(time);
     );
+  }
+
+  String parseDate(String date) {
+    final dateTime = DateTime.parse(date);
+    return date;
   }
 }
 

@@ -148,7 +148,10 @@ class Post extends Equatable {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Post && runtimeType == other.runtimeType && id == other.id;
+      other is Post &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          isWish == other.isWish;
 
   @override
   int get hashCode => id.hashCode;

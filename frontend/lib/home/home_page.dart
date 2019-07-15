@@ -192,7 +192,7 @@ class HomePageState extends State<HomePage> {
         post: post,
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => PostViewPage(post: post)));
+              builder: (context) => PostViewPage(postId: post.id)));
         },
         onTapHeart: () {
           _userBloc.dispatch(UserChangeWish(postId: post.id));
