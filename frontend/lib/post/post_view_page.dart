@@ -11,7 +11,7 @@ import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/dio.dart';
 
 class PostViewPage extends StatefulWidget {
-  Post post;
+  final Post post;
 
   PostViewPage({@required this.post});
 
@@ -32,6 +32,13 @@ class _PostViewPageState extends State<PostViewPage> {
   void initState() {
     super.initState();
     scrollController = ScrollController();
+    increaseView();
+    widget.post.view++;
+  }
+
+  //조회수 증가
+  void increaseView() async {
+    await dio.postUri(getUri('/api/posts/${widget.post.id}/view'));
   }
 
   @override
@@ -52,7 +59,9 @@ class _PostViewPageState extends State<PostViewPage> {
               children: <Widget>[
                 _buildImageCarousel(),
                 SizedBox(height: screenAwareSize(10.0, context)),
-                post.isBook? _buildBookPostHeader(context) : _buildPostHeader(context),
+                post.isBook
+                    ? _buildBookPostHeader(context)
+                    : _buildPostHeader(context),
                 _buildDivider(),
                 _buildPostContent(context),
                 _buildLocation(),
@@ -82,7 +91,7 @@ class _PostViewPageState extends State<PostViewPage> {
             title: Opacity(
                 opacity: opacityTween,
                 child: Text(
-                  "통기타",
+                  widget.post.title,
                   style: TextStyle(fontSize: 16.0),
                 )),
             backgroundColor: Colors.white.withOpacity(opacityTween),
@@ -158,8 +167,11 @@ class _PostViewPageState extends State<PostViewPage> {
 
   List<Image> _getImages() {
     List<Image> images = List<Image>();
-    for (int i = 0; i < post.images.length; i++){
-        images.add(Image.network(getUri('').toString() + post.images[i]['thumb']));
+    for (int i = 0; i < post.images.length; i++) {
+      images.add(Image.network(
+        getUri('').toString() + post.images[i]['thumb'],
+        fit: BoxFit.cover,
+      ));
     }
     return images;
   }
@@ -189,88 +201,88 @@ class _PostViewPageState extends State<PostViewPage> {
       children: <Widget>[
         Expanded(
           child: Padding(
-      padding: EdgeInsets.symmetric(
-            horizontal: horizontalPadding,
-            vertical: screenAwareSize(10.0, context)),
-      child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              post.price.toString() + " 원",
-              style: TextStyle(
-                fontSize: screenAwareSize(18.0, context),
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
-              ),
-            ),
-            SizedBox(height: screenAwareSize(5.0, context)),
-            Text(
-              post.title,
-              style: TextStyle(
-                fontSize: screenAwareSize(
-                  14.0,
-                  context,
-                ),
-                color: Colors.grey[800],
-              ),
-            ),
-            SizedBox(height: screenAwareSize(10.0, context)),
-            Row(
+            padding: EdgeInsets.symmetric(
+                horizontal: horizontalPadding,
+                vertical: screenAwareSize(10.0, context)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Icon(
-                  FontAwesomeIcons.clock,
-                  size: 12.0,
-                  color: Colors.grey[400],
-                ),
-                SizedBox(width: 2.0),
                 Text(
-                  post.updated,
+                  post.price.toString() + " 원",
                   style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 12.0,
+                    fontSize: screenAwareSize(18.0, context),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[800],
                   ),
                 ),
-                SizedBox(width: 10.0),
-                Icon(
-                  FontAwesomeIcons.eye,
-                  size: 12.0,
-                  color: Colors.grey[400],
-                ),
-                SizedBox(width: 3.0),
+                SizedBox(height: screenAwareSize(5.0, context)),
                 Text(
-                  post.view.toString(),
+                  post.title,
                   style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 12.0,
+                    fontSize: screenAwareSize(
+                      14.0,
+                      context,
+                    ),
+                    color: Colors.grey[800],
                   ),
                 ),
-                SizedBox(width: 20.0),
-                Icon(
-                  FontAwesomeIcons.heart,
-                  size: 12.0,
-                  color: Colors.grey[400],
-                ),
-                SizedBox(width: 3.0),
-                Text(
-                  post.wish.toString(),
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 12.0,
-                  ),
-                ),
+                SizedBox(height: screenAwareSize(10.0, context)),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      FontAwesomeIcons.clock,
+                      size: 12.0,
+                      color: Colors.grey[400],
+                    ),
+                    SizedBox(width: 2.0),
+                    Text(
+                      post.updated,
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 12.0,
+                      ),
+                    ),
+                    SizedBox(width: 10.0),
+                    Icon(
+                      FontAwesomeIcons.eye,
+                      size: 12.0,
+                      color: Colors.grey[400],
+                    ),
+                    SizedBox(width: 3.0),
+                    Text(
+                      post.view.toString(),
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 12.0,
+                      ),
+                    ),
+                    SizedBox(width: 20.0),
+                    Icon(
+                      FontAwesomeIcons.heart,
+                      size: 12.0,
+                      color: Colors.grey[400],
+                    ),
+                    SizedBox(width: 3.0),
+                    Text(
+                      post.wish.toString(),
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ],
+                )
               ],
-            )
-          ],
-      ),
-    ),
+            ),
+          ),
         ),
         Image.network(post.bookImage),
-        SizedBox(width: screenAwareSize(7, context),)
+        SizedBox(
+          width: screenAwareSize(7, context),
+        )
       ],
     );
-    
   }
-
 
   Widget _buildPostHeader(context) {
     return Padding(
@@ -448,7 +460,11 @@ class _PostViewPageState extends State<PostViewPage> {
             ),
           ),
           SizedBox(height: screenAwareSize(10.0, context)),
-          GoogleMapfixed(picked: LatLng(post.locationLat,post.locationLng,))
+          GoogleMapfixed(
+              picked: LatLng(
+            post.locationLat,
+            post.locationLng,
+          ))
         ],
       ),
     );
