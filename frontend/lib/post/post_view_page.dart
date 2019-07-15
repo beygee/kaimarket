@@ -160,7 +160,7 @@ class _PostViewPageState extends State<PostViewPage> {
         for (int i = 0; i < relatedPosts.length; i++)
           PostCard(
             post: relatedPosts[i],
-            issaved: false,
+            issaved: relatedPosts[i].isWish,
             onTap: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) =>
@@ -294,7 +294,7 @@ class _PostViewPageState extends State<PostViewPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  post.price.toString() + " 원",
+                  getMoneyFormat(post.price) + " 원",
                   style: TextStyle(
                     fontSize: screenAwareSize(18.0, context),
                     fontWeight: FontWeight.bold,
