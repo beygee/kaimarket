@@ -117,7 +117,6 @@ class Post extends Equatable {
         bookImage = json['bookImage'],
         bookPrice = json['bookPrice'] {
     try {
-      log.i(json['isWish']);
       images = json['images']
           .where((p) {
             return p is! String;

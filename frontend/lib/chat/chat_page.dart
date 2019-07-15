@@ -31,14 +31,17 @@ class ChatListsState extends State<ChatLists> {
   Future fetchList() async {
     var res = await dio.getUri(getUri('/api/chats'));
     if (res.statusCode == 200) {
-      setState(() {
-        chats = res.data
-            .map((chat) {
-              return Chat.fromJson(chat);
-            })
-            .toList()
-            .cast<Chat>();
-      });
+      log.i(res.data);
+      if (mounted) {
+        setState(() {
+          chats = res.data
+              .map((chat) {
+                return Chat.fromJson(chat);
+              })
+              .toList()
+              .cast<Chat>();
+        });
+      }
     }
   }
 
@@ -47,7 +50,8 @@ class ChatListsState extends State<ChatLists> {
     return Scaffold(
       body: new ListView(
         children: <Widget>[
-          for (int i = 0; i < chats.length; i++) ChatCard(chat: chats[i], loggedUserId: loggedUserId)
+          for (int i = 0; i < chats.length; i++)
+            ChatCard(chat: chats[i], loggedUserId: loggedUserId)
         ],
       ),
     );

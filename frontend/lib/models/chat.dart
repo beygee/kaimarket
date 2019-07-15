@@ -9,17 +9,27 @@ class Chat {
   Post post;
   List<Message> messages;
 
+  //최근 메시지
+  Message recentMessage;
+  int buyerNonReadCount;
+  int sellerNonReadCount;
+
   Chat.fromJson(Map<String, dynamic> json)
       : id = json['_id'],
         seller = User.fromJson(json['seller']),
         buyer = User.fromJson(json['buyer']),
-        post = Post.fromJson(json['post']) {
-          
+        post = Post.fromJson(json['post']),
+        buyerNonReadCount = json['buyerNonReadCount'],
+        sellerNonReadCount = json['sellerNonReadCount'] {
+    recentMessage = Message.fromJson(json['recentMessage']);
 
     messages = json['messages'].length > 0
-        ? json['messages'].map((message) {
-            return Message.fromJson(message);
-          }).toList().cast<Message>()
+        ? json['messages']
+            .map((message) {
+              return Message.fromJson(message);
+            })
+            .toList()
+            .cast<Message>()
         : <Message>[];
   }
 }
@@ -32,7 +42,6 @@ class Message {
   bool me;
 
   Message({this.from, this.text, this.time, this.showTime, this.me});
-  
 
   Message.fromJson(Map<String, dynamic> json)
       : from = json['from'],

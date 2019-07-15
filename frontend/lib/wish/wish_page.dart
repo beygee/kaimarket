@@ -15,7 +15,7 @@ class WishPageState extends State<WishPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _buildSuggestions(),
+      // body: _buildSuggestions(),
     );
   }
 

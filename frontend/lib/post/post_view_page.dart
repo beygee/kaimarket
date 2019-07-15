@@ -148,10 +148,12 @@ class _PostViewPageState extends State<PostViewPage> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.favorite_border,
-                    color: ThemeColor.primary,
-                  ),
+                  post.isWish
+                      ? Icon(
+                          Icons.favorite,
+                          color: Colors.amber[200],
+                        )
+                      : Icon(Icons.favorite_border, color: Colors.amber[200]),
                   SizedBox(width: 5.0),
                   Text('찜', style: TextStyle(color: ThemeColor.primary)),
                 ],

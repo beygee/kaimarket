@@ -10,7 +10,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 import 'package:date_format/date_format.dart';
 
-
 class ChatViewPage extends StatefulWidget {
   final Chat chat;
   ChatViewPage({this.chat});
@@ -63,12 +62,11 @@ class _ChatViewPageState extends State<ChatViewPage> {
         int i;
         for (i = 0; i < existMessages.length - 1; i++) {
           for (int j = i; j < existMessages.length - i; j++) {
-            log.i(minute(existMessages[i].time),minute(existMessages[j + 1].time));
             if (existMessages[i].from == existMessages[j + 1].from &&
-                minute(existMessages[i].time) == minute(existMessages[j + 1].time)){
+                minute(existMessages[i].time) ==
+                    minute(existMessages[j + 1].time)) {
               existMessages[j + 1].showTime = false;
-                }
-            else {
+            } else {
               i = j + 1;
               existMessages[i].showTime = true;
               break;
@@ -100,10 +98,10 @@ class _ChatViewPageState extends State<ChatViewPage> {
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
 
-  String minute(String time){
-  return DateFormat("yyyy-MM-dd hh:mm").format(convertDateFromString(time));
+  String minute(String time) {
+    return DateFormat("yyyy-MM-dd hh:mm").format(convertDateFromString(time));
   }
-  
+
   @override
   void initState() {
     super.initState();
@@ -136,7 +134,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
     };
     var prevMessage = existMessages[0];
     if (prevMessage.from == currentMessage['from'] &&
-        minute(prevMessage.time) == minute(currentMessage['time'])) showTime = false;
+        minute(prevMessage.time) == minute(currentMessage['time']))
+      showTime = false;
 
     setState(() {
       existMessages.remove(prevMessage);
@@ -427,8 +426,8 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           if (me && showTime)
-            new Text(
-              new DateFormat("hh:mm a").format(convertDateFromString(time)),
+            Text(
+              DateFormat("hh:mm a").format(convertDateFromString(time)),
               style: _timeFont,
             ),
           Column(
@@ -472,8 +471,8 @@ class MessageBubble extends StatelessWidget {
             ],
           ),
           if (!me && showTime)
-            new Text(
-               new DateFormat("hh:mm a").format(convertDateFromString(time)),
+            Text(
+              DateFormat("hh:mm a").format(convertDateFromString(time)),
               style: _timeFont,
             ),
         ],
@@ -481,14 +480,13 @@ class MessageBubble extends StatelessWidget {
       // updatePrev_time(time);
     );
   }
-
 }
 
-DateTime convertDateFromString(String strDate){
-   DateTime todayDate = DateTime.parse(strDate);
-   return todayDate;
+DateTime convertDateFromString(String strDate) {
+  DateTime todayDate = DateTime.parse(strDate);
+  return todayDate.add(Duration(hours: 9));
 }
- 
+
 class RightTriangle extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
