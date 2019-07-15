@@ -40,7 +40,7 @@ class HomePageState extends State<HomePage> {
               _buildSearchInput(context),
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
-              BlocBuilder( 
+              BlocBuilder(
                   bloc: _postBloc,
                   builder: (BuildContext context, PostState state) {
                     if (state is PostUninitialized) {
@@ -73,16 +73,14 @@ class HomePageState extends State<HomePage> {
                         child: _buildSuggestions(context, state.searchedPosts),
                       );
                     }
-                    if (state is PostSelectedCategory){
-                      log.i("카테고리선택");
-                      log.i(state.categoryPosts);
-                      if (state.categoryPosts.isEmpty){
+                    if (state is PostSelectedCategory) {
+                      log.i("카테고리선택: $selectedCategory");
+                      if (state.categoryPosts.isEmpty) {
                         return Center(
                           child: Text('해당 카테고리의 게시글이 없어요!'),
                         );
                       }
                       return Expanded(
-
                         child: _buildSuggestions(context, state.categoryPosts),
                       );
                     }
@@ -108,8 +106,8 @@ class HomePageState extends State<HomePage> {
         controller: myController,
         decoration: InputDecoration(
           suffixIcon: GestureDetector(
-            onTap: () async =>
-                await _postBloc.dispatch(PostSearch(searchdata: myController.text)),
+            onTap: () async => await _postBloc
+                .dispatch(PostSearch(searchdata: myController.text)),
             child: Icon(Icons.search),
           ),
           hintText: "상품을 검색해보세요",
@@ -139,7 +137,8 @@ class HomePageState extends State<HomePage> {
             onPressed: () {
               setState(() {
                 selectedCategory = idx;
-                _postBloc.dispatch(PostSelectCategory(selectedcategory: selectedCategory));
+                _postBloc.dispatch(
+                    PostSelectCategory(selectedcategory: selectedCategory));
               });
             },
           );
