@@ -31,7 +31,7 @@ class ChatListsState extends State<ChatLists> {
   Future fetchList() async {
     var res = await dio.getUri(getUri('/api/chats'));
     if (res.statusCode == 200) {
-      log.i(res.data);
+      // log.i(res.data);
       if (mounted) {
         setState(() {
           chats = res.data

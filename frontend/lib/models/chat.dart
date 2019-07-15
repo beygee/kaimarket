@@ -21,7 +21,9 @@ class Chat {
         post = Post.fromJson(json['post']),
         buyerNonReadCount = json['buyerNonReadCount'],
         sellerNonReadCount = json['sellerNonReadCount'] {
-    recentMessage = Message.fromJson(json['recentMessage']);
+    if (json['recentMessage'] != null) {
+      recentMessage = Message.fromJson(json['recentMessage']);
+    }
 
     messages = json['messages'].length > 0
         ? json['messages']
