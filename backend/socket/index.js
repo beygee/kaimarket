@@ -14,6 +14,7 @@ const addUsers = (sockets, userId, socketId) => {
   }
 }
 
+//해당 소켓 아이디를 저장소에서 지운다.
 const removeUsers = (sockets, userId, socketId) => {
   if (sockets[userId]) {
     sockets[userId] = sockets[userId].filter(s => s != socketId)
@@ -29,12 +30,22 @@ module.exports = function(server, db) {
 
   const nsp = io.of("/test1")
 
+  //해당 유저에게 이벤트 함수를 보낸다.
+  const emitToUser = (userId, event, data) => {
+    if (sockets[userId]) {
+      for (let i = 0; i < sockets[userId].length; i++) {
+        console.log(sockets[userId][i])
+        nsp.to(sockets[userId][i]).emit(event, data)
+      }
+    }
+  }
+
   nsp.use(
     jwtAuth.authenticate(
       { secret: "mySecret!kaimarket@@" },
       async (payload, done) => {
         // db.User.find
-        console.log(payload)
+        // console.log(payload)
         try {
           const user = await db.User.findById(ObjectId(payload.id))
           if (!user) {
@@ -51,15 +62,20 @@ module.exports = function(server, db) {
   nsp.on("connection", async function(socket) {
     try {
       const { _id: userId, name } = socket.request.user
-      console.log("소켓 연결")
-      console.log(io.engine.clientsCount)
+      console.log(`소켓 연결 ${io.engine.clientsCount}`)
+      // console.log(io.engine.clientsCount)
       addUsers(sockets, userId, socket.id)
-      console.log(sockets)
+      // console.log(sockets)
 
       socket.on("message", async message => {
-        const { from, text, chatId } = message
+        const { from, to, text, chatId } = message
 
-        socket.emit("message", {
+        //로그인한 유저와 메시지를 받는 유저 둘다에게 소켓을 보내준다.
+        emitToUser(from, "message", {
+          ...message,
+          time: moment().format("YYYY-MM-DD HH:mm")
+        })
+        emitToUser(to, "message", {
           ...message,
           time: moment().format("YYYY-MM-DD HH:mm")
         })

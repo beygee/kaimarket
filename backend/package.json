@@ -9,6 +9,7 @@
     "clean": "fuser -k -n tcp 3005",
     "crowl": "cross-env NODE_PATH=./ node crowl/index.js"
   },
+  "nodemonConfig": {"delay": "1500"},
   "keywords": [],
   "author": "",
   "license": "ISC",
