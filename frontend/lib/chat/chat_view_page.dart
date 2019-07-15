@@ -7,6 +7,9 @@ import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
+import 'package:date_format/date_format.dart';
+
 
 class ChatViewPage extends StatefulWidget {
   final Chat chat;
@@ -424,8 +427,7 @@ class MessageBubble extends StatelessWidget {
         children: <Widget>[
           if (me && showTime)
             new Text(
-              parseDate(time),
-              //new DateFormat("hh:mm a").format(time),
+              new DateFormat("hh:mm a").format(convertDateFromString(time)),
               style: _timeFont,
             ),
           Column(
@@ -470,7 +472,7 @@ class MessageBubble extends StatelessWidget {
           ),
           if (!me && showTime)
             new Text(
-              parseDate(time),
+               new DateFormat("hh:mm a").format(convertDateFromString(time)),
               style: _timeFont,
             ),
         ],
@@ -479,10 +481,10 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  String parseDate(String date) {
-    final dateTime = DateTime.parse(date);
-    return date;
-  }
+  DateTime convertDateFromString(String strDate){
+   DateTime todayDate = DateTime.parse(strDate);
+   return todayDate;
+ }
 }
 
 class RightTriangle extends CustomPainter {
