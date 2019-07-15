@@ -61,36 +61,38 @@ class _ChatViewPageState extends State<ChatViewPage> {
     _userBloc = BlocProvider.of<UserBloc>(context);
     final UserLoaded user = _userBloc.currentState;
     loggedUserId = user.id;
-    
+
     _socketBloc = BlocProvider.of<SocketBloc>(context);
-    _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async{
-      log.i("메시지 : $data");
-      await uploadMessage(data);
-      log.i("오잉");
+    _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async {
+      updateMessage(data);
     }));
     initShow();
   }
-  
+
   @override
   void dispose() {
     _socketBloc.dispatch(SocketChatLeave());
     super.dispose();
   }
 
-  Future uploadMessage(data) {
+  void updateMessage(data) {
+    log.i(data);
     scrollController.animateTo(0.0,
         //scrollController.position.maxScrollExtent,
         curve: Curves.easeOut,
         duration: const Duration(milliseconds: 300));
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
-  
+
     bool showTime = true;
     // 서버에서 받은 메세지로 currentMessage에 넣어주기
-    var currentMessage = {"from": data['from'], "text": data['text'], "time": data['time']};
-    log.i(data['from']);
+    var currentMessage = {
+      "from": data['from'],
+      "text": data['text'],
+      "time": data['time']
+    };
     var prevMessage = existMessages[0];
-    if (prevMessage.from == currentMessage['from'] && prevMessage.time == currentMessage['time'])
-      showTime = false;
+    if (prevMessage.from == currentMessage['from'] &&
+        prevMessage.time == currentMessage['time']) showTime = false;
 
     setState(() {
       existMessages.remove(prevMessage);
@@ -100,14 +102,13 @@ class _ChatViewPageState extends State<ChatViewPage> {
         "time": prevMessage.time,
         "showTime": showTime,
       });
-        existMessages.insert(0, {
-          "text": messageController.text,
-          "from": currentMessage['from'],
-          "time": currentMessage['time'],
-          "showTime": true,
-        });
+      existMessages.insert(0, {
+        "text": messageController.text,
+        "from": currentMessage['from'],
+        "time": currentMessage['time'],
+        "showTime": true,
       });
-
+    });
   }
 
   Future callback(socket) async {
@@ -118,18 +119,16 @@ class _ChatViewPageState extends State<ChatViewPage> {
         {
           'chatId': widget.chat.id,
           "text": messageController.text,
-          "from": widget.chat.buyer.id,
-          "to": widget.chat.buyer.id,
-          // "to": widget.user.id,
-          // "from": widget.user.id
+          "from": loggedUserId,
+          "to": loggedUserId == widget.chat.buyer.id
+              ? widget.chat.seller.id
+              : widget.chat.buyer.id,
         }
       ]);
 
       messageController.clear();
     }
   }
-
-
 
   Widget _buildItem(context) {
     return Container(
