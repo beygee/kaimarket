@@ -39,14 +39,13 @@ class _ChatViewPageState extends State<ChatViewPage> {
   List<Widget> response;
   List<Message> existMessages = [];
   // test용
-  var docs = [
-    {'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
-    {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}
-  ];
+  // var docs = [
+  //   {'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
+  //   {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}
+  // ];
 
   Future initShow() async {
     var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
-    log.i("뭐해?");
     existMessages = Chat.fromJson(dbChats.data).messages;
 
     if (existMessages.length > 0) {
@@ -64,9 +63,11 @@ class _ChatViewPageState extends State<ChatViewPage> {
         int i;
         for (i = 0; i < existMessages.length - 1; i++) {
           for (int j = i; j < existMessages.length - i; j++) {
+            log.i(minute(existMessages[i].time),minute(existMessages[j + 1].time));
             if (existMessages[i].from == existMessages[j + 1].from &&
-                existMessages[i].time == existMessages[j + 1].time)
+                minute(existMessages[i].time) == minute(existMessages[j + 1].time)){
               existMessages[j + 1].showTime = false;
+                }
             else {
               i = j + 1;
               existMessages[i].showTime = true;
@@ -75,7 +76,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
           }
         }
         if (existMessages[i].from == existMessages[i - 1].from &&
-            existMessages[i].time == existMessages[i - 1].time)
+            minute(existMessages[i].time) == minute(existMessages[i - 1].time))
           existMessages[i].showTime = false;
         else {
           existMessages[i].showTime = true;
@@ -99,6 +100,10 @@ class _ChatViewPageState extends State<ChatViewPage> {
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
 
+  String minute(String time){
+  return DateFormat("yyyy-MM-dd hh:mm").format(convertDateFromString(time));
+  }
+  
   @override
   void initState() {
     super.initState();
@@ -131,7 +136,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
     };
     var prevMessage = existMessages[0];
     if (prevMessage.from == currentMessage['from'] &&
-        prevMessage.time == currentMessage['time']) showTime = false;
+        minute(prevMessage.time) == minute(currentMessage['time'])) showTime = false;
 
     setState(() {
       existMessages.remove(prevMessage);
@@ -251,7 +256,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
             ],
           ),
           Text(
-            widget.chat.post.price.toString() + '원',
+            getMoneyFormat(widget.chat.post.price) + '원',
             style: _postFont,
           ),
         ],
@@ -409,15 +414,11 @@ class MessageBubble extends StatelessWidget {
       this.showTime = true})
       : super(key: key);
 
-  // bool me = true;
-
   // time format 바꿔주기
   //time = new DateFormat("hh:mm a").format(time);
 
   @override
   Widget build(BuildContext context) {
-    // me = true;
-    // showTime = true;
     return Container(
       // width: 320.0,
       padding: EdgeInsets.only(top: screenAwareSize(10.0, context)),
@@ -481,12 +482,13 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  DateTime convertDateFromString(String strDate){
-   DateTime todayDate = DateTime.parse(strDate);
-   return todayDate;
- }
 }
 
+DateTime convertDateFromString(String strDate){
+   DateTime todayDate = DateTime.parse(strDate);
+   return todayDate;
+}
+ 
 class RightTriangle extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
