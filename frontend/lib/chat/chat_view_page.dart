@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/models/chat.dart';
+import 'package:intl/intl.dart';
 
 class ChatViewPage extends StatefulWidget {
   final Chat chat;
@@ -51,15 +52,38 @@ class _ChatViewPageState extends State<ChatViewPage> {
     var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
     log.i(dbChats);
     existMessages = Chat.fromJson(dbChats.data).messages;
-    log.i(existMessages);
     // showTime 계산해서 넣어주기
-    //  for (int i = 0; i < existMessages.length - 1; i++){
-    //    if (existMessages[i].from == existMessages[i+1].from && )
-
-    //    if (loggedUserId == existMessages[i].from)
-    //     existMessages[i].putIfAbsent('me', () => true); 
-    //  }
-    // loggedUserId == from['from']
+    if (existMessages.length > 0){
+      for(int i = 0; i < existMessages.length; i++){
+        if (loggedUserId == existMessages[i].from){
+            existMessages[i].me = true;
+        }
+        else{
+          existMessages[i].me = false;
+        }
+      }
+      existMessages[0].showTime = true;
+      if (existMessages.length != 1){
+        int i;
+        for (i = 0; i < existMessages.length - 1; i++){
+          for (int j = i; j < existMessages.length - i; j++){
+            if (existMessages[i].from == existMessages[j+1].from && existMessages[i].time == existMessages[j+1].time)
+              existMessages[j+1].showTime = false;
+            else {
+              i = j+1;
+              existMessages[i].showTime = true;
+              log.i(i);
+              break;
+            }
+          }  
+        }
+        if (existMessages[i].from == existMessages[i-1].from && existMessages[i].time == existMessages[i-1].time)
+          existMessages[i].showTime = false;
+        else {
+          existMessages[i].showTime = true;
+        }
+      } 
+    }
   }
 
   @override
@@ -354,12 +378,13 @@ class MessageBubble extends StatelessWidget {
   final String text;
   String time;
   bool me;
+  bool showTime;
 
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
   final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
 
-  MessageBubble({Key key, this.from, this.text, this.time, me: true}) : super(key: key);
-
+  MessageBubble({Key key, this.from, this.text, this.time, this.me = true, this.showTime = true}) : super(key: key);
+  
  // bool me = true;
 
   // time format 바꿔주기
@@ -367,6 +392,8 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // me = true;
+    // showTime = true;
     return Container(
       // width: 320.0,
       padding: EdgeInsets.only(top: screenAwareSize(10.0, context)),
@@ -374,9 +401,10 @@ class MessageBubble extends StatelessWidget {
         mainAxisAlignment: me ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          if (me)
+          if (me && showTime)
             new Text(
-              time,
+              time, 
+              //new DateFormat("hh:mm a").format(time),
               style: _timeFont,
             ),
           Column(
@@ -419,7 +447,7 @@ class MessageBubble extends StatelessWidget {
               ),
             ],
           ),
-          if (!me)
+          if (!me && showTime)
             new Text(
               time,
               style: _timeFont,
