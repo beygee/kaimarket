@@ -86,7 +86,7 @@ class PostCard extends StatelessWidget {
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
                                         vertical:
-                                            screenAwareSize(5.0, context)),
+                                            screenAwareSize(10.0, context)),
                                     child: issaved
                                         ? Icon(
                                             Icons.favorite,
@@ -129,9 +129,10 @@ class PostCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            post.price.toString() + "원",
+                            getMoneyFormat(post.price) + "원",
                             style: TextStyle(
                               color: Colors.grey[600],
+                              fontWeight: FontWeight.bold,
                               fontSize: screenAwareSize(11.0, context),
                             ),
                           ),
