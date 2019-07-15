@@ -13,9 +13,6 @@ class ChatCard extends StatelessWidget {
   ChatCard({this.chat, this.loggedUserId});
 
   final _profileImage = 'assets/images/logo.jpg';
-  final _recentMsg = '언제 시간 되시나요?';
-  final _time = '오후 3:39';
-  final _noneReadNum = '1';
 
   final _userNameFont = TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
   final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);

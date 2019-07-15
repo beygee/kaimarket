@@ -123,7 +123,7 @@ class _MyPageState extends State<MyPage> {
       child: Container(
           constraints: BoxConstraints.expand(),
           margin: EdgeInsets.only(
-              left: 25.0, right: 25.0, bottom: screenAwareSize(80.0, context)),
+              left: 35.0, right: 35.0, bottom: screenAwareSize(80.0, context)),
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [

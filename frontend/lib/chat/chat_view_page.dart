@@ -48,69 +48,34 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     if (existMessages.length > 0) {
       // me 계산하기
+      for (int i = 0; i < (existMessages.length - 1) / 2; i++) {
+        Message tempMessage = existMessages[i];
+        existMessages[i] = existMessages[existMessages.length - 1 - i];
+        existMessages[existMessages.length - 1 - i] = tempMessage;
+      }
+    
+      // showTime 계산하기
+      existMessages[0].showTime = true;
+      Message compareMessage = existMessages[0];
+      if (existMessages.length != 1) {
+        for (int i = 1; i < existMessages.length; i++) {
+          if ((existMessages[i].from == compareMessage.from) && (minute(existMessages[i].time) == minute(compareMessage.time))) {
+            existMessages[i].showTime = false;
+          } else {
+            existMessages[i].showTime = true;
+            compareMessage = existMessages[i];
+          }
+        }
+      }
+    }
+    // reverse
+    setState(() {
       for (int i = 0; i < existMessages.length; i++) {
         if (loggedUserId == existMessages[i].from) {
           existMessages[i].me = true;
         } else {
           existMessages[i].me = false;
         }
-      }
-      // showTime 계산하기
-      // existMessages[0].showTime = true;
-      // if (existMessages.length != 1) {
-      //   int i;
-      //   for (i = 0; i < existMessages.length - 1; i++) {
-      //     for (int j = i; j < existMessages.length - i; j++) {
-      //       if ((existMessages[i].from == existMessages[j + 1].from) && (minute(existMessages[i].time) == minute(existMessages[j + 1].time))) {
-      //         existMessages[j + 1].showTime = false;
-      //       } else {
-      //         i = j + 1;
-      //         existMessages[i].showTime = true;
-      //         break;
-      //       }
-      //     }
-      //   }
-      //   if (existMessages[i].from == existMessages[i - 1].from &&
-      //       minute(existMessages[i].time) == minute(existMessages[i - 1].time))
-      //     existMessages[i].showTime = false;
-      //   else {
-      //     existMessages[i].showTime = true;
-      //   }
-      // }
-
-      // showTime 계산하기
-       existMessages[existMessages.length-1].showTime = true;
-       if (existMessages.length != 1) {
-         int i;
-         for (i = existMessages.length-1; i > 0; i--) {
-           for (int j = i; j > 0; j--) {
-            //  log.i(i);
-             if ((existMessages[i].from == existMessages[j - 1].from) && (minute(existMessages[i].time) == minute(existMessages[j - 1].time))) {
-               existMessages[j - 1].showTime = false;
-             } else {
-               i = j - 1;
-               existMessages[i].showTime = true;
-               break;
-             }
-           }
-         }
-         if (existMessages[i].from == existMessages[i + 1].from &&
-             minute(existMessages[i].time) == minute(existMessages[i + 1].time))
-           existMessages[i].showTime = false;
-         else {
-           existMessages[i].showTime = true;
-         }
-       }
-    }
-    // reverse
-    setState(() {
-      for (int i = 0; i < (existMessages.length) - 1; i++){
-        log.i(existMessages[i].text, existMessages[i].showTime);
-      }
-      for (int i = 0; i < (existMessages.length - 1) / 2; i++) {
-        Message tempMessage = existMessages[i];
-        existMessages[i] = existMessages[existMessages.length - 1 - i];
-        existMessages[existMessages.length - 1 - i] = tempMessage;
       }
     });
 
@@ -150,29 +115,34 @@ class _ChatViewPageState extends State<ChatViewPage> {
   void updateMessage(data) {
     log.i(data);
     bool showTime = true;
+    var prevMessage;
     // 서버에서 받은 메세지
     var currentMessage = {
       "from": data['from'],
       "text": data['text'],
       "time": data['time']
     };
-    var prevMessage = existMessages[0];
-    if (prevMessage.from == currentMessage['from'] &&
-        minute(prevMessage.time) == minute(currentMessage['time']))
-      showTime = false;
+    log.i (existMessages.length);
+    if (existMessages.length > 0){
+      prevMessage = existMessages[0];
+      if (prevMessage.from == currentMessage['from'] &&
+          minute(prevMessage.time) == minute(currentMessage['time']))
+        showTime = false;
+    }
     
     setState(() {
-      existMessages.remove(prevMessage);
-      // log.i(existMessages.length);
-      existMessages.insert(
-          0,
-          Message(
-            text: prevMessage.text,
-            from: prevMessage.from,
-            time: prevMessage.time,
-            me: prevMessage.me,
-            showTime: showTime,
-          ));
+      if (existMessages.length > 0){
+        existMessages.remove(prevMessage);
+        existMessages.insert(
+            0,
+            Message(
+              text: prevMessage.text,
+              from: prevMessage.from,
+              time: prevMessage.time,
+              me: prevMessage.me,
+              showTime: showTime,
+            ));
+      }
       existMessages.insert(
           0,
           Message(

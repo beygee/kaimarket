@@ -51,7 +51,8 @@ class ChatListsState extends State<ChatLists> {
       body: new ListView(
         children: <Widget>[
           for (int i = 0; i < chats.length; i++)
-            ChatCard(chat: chats[i], loggedUserId: loggedUserId)
+            ChatCard(chat: chats[i], loggedUserId: loggedUserId),
+          SizedBox(height: screenAwareSize(60.0, context),)
         ],
       ),
     );
