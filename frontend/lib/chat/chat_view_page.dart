@@ -38,8 +38,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
   final _postFont = TextStyle(fontSize: 14.0, color: Colors.grey[600]);
   final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
-  var prev_time = "";
-  var prev_user = "user.id";
   List<Widget> response;
   List<Message> existMessages = [];
   // test용
@@ -50,10 +48,11 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   Future initShow() async {
     var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
-    log.i(dbChats);
+    log.i("뭐해?");
     existMessages = Chat.fromJson(dbChats.data).messages;
-    // showTime 계산해서 넣어주기
+    
     if (existMessages.length > 0){
+      // me 계산하기
       for(int i = 0; i < existMessages.length; i++){
         if (loggedUserId == existMessages[i].from){
             existMessages[i].me = true;
@@ -62,6 +61,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
           existMessages[i].me = false;
         }
       }
+      // showTime 계산하기
       existMessages[0].showTime = true;
       if (existMessages.length != 1){
         int i;
@@ -83,6 +83,20 @@ class _ChatViewPageState extends State<ChatViewPage> {
         }
       } 
     }
+    // reverse 
+    
+    for (int i = 0; i < (existMessages.length -1)/2; i++){
+      Message tempMessage = existMessages[i];
+      existMessages[i] = existMessages[existMessages.length-1-i];
+      existMessages[existMessages.length-1-i] = tempMessage;
+    }
+
+    scrollController.animateTo(
+      //0.0,
+       scrollController.position.minScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300));
+    //scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
 
   @override
@@ -121,7 +135,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     setState(() {
       existMessages.remove(prevMessage);
-      log.i(existMessages.length);
+      // log.i(existMessages.length);
       existMessages.insert(0, Message(
         text: prevMessage.text,
         from: prevMessage.from,
