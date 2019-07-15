@@ -9,6 +9,8 @@ import 'package:week_3/utils/utils.dart';
 import 'dart:math' as math;
 import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/dio.dart';
+import 'package:week_3/bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PostViewPage extends StatefulWidget {
   final Post post;
@@ -27,10 +29,19 @@ class _PostViewPageState extends State<PostViewPage> {
   GlobalKey<LoadingWrapperState> _loadingWrapperKey =
       GlobalKey<LoadingWrapperState>();
 
+  UserBloc _userBloc;
+  String loggedUserId = '';
+
   @override
   void initState() {
     super.initState();
     scrollController = ScrollController();
+
+    _userBloc = BlocProvider.of<UserBloc>(context);
+    final UserLoaded user = _userBloc.currentState;
+    loggedUserId = user.id;
+
+    //조회수 증가
     increaseView();
     widget.post.view++;
   }
@@ -144,7 +155,9 @@ class _PostViewPageState extends State<PostViewPage> {
                 splashColor: Theme.of(context).primaryColorLight,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
-                onPressed: _onPressChatSeller,
+                onPressed: loggedUserId == widget.post.user.id
+                    ? null
+                    : _onPressChatSeller,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 60.0,

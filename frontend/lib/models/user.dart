@@ -37,7 +37,7 @@ class User {
               .cast<Post>()
           : <Post>[];
 
-      // salesCount = json['salesCount'];
+      salesCount = json['salesCount'];
 
       // wish = json['wish'].length > 0
       //     ? json['wish']

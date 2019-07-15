@@ -17,8 +17,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   @override
   Stream<UserState> mapEventToState(UserEvent event) async* {
-    log.i(event);
-    log.i(currentState);
     try {
       if ((event is UserInit || event is UserError) &&
           currentState is UserUninitialized) {
@@ -26,10 +24,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         var res = await dio.getUri(getUri('/api/me'));
 
         if (res.statusCode == 200) {
-          
           User user = User.fromJson(res.data);
-          // log.i(res.data);
-
           yield UserLoaded(
             id: user.id,
             name: user.name,
