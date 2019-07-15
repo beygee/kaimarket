@@ -3,6 +3,8 @@ import 'package:week_3/post/google_map.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:week_3/bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectMapPage extends StatefulWidget {
   final Post post;
@@ -15,6 +17,11 @@ class SelectMapPage extends StatefulWidget {
 class SelectMapPageState extends State<SelectMapPage> {
   GlobalKey<LoadingWrapperState> _loadingWrapperKey =
       GlobalKey<LoadingWrapperState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,9 +83,14 @@ class SelectMapPageState extends State<SelectMapPage> {
   //데이터 작성 완료
   _onTapComplete() {
     _loadingWrapperKey.currentState.loadFuture(() async {
-      await dio
+      final res = await dio
           .postUri(getUri('/api/posts'), data: {'data': widget.post.toJson()});
+
       Navigator.popUntil(context, ModalRoute.withName('/home'));
+
+      //데이터 새로 페치
+      final postBloc = BlocProvider.of<PostBloc>(context);
+      postBloc.dispatch(PostFetch());
     });
   }
 }
