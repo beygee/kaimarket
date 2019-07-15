@@ -40,7 +40,7 @@ class ChatListsState extends State<ChatLists> {
     return Scaffold(
       body: new ListView(
         children: <Widget>[
-          chats.length > 0 ? ChatCard(chat: chats[0]) : Container(),
+          for (int i = 0; i < chats.length; i++) ChatCard(chat: chats[i])
         ],
       ),
     );
