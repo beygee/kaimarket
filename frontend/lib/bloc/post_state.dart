@@ -56,7 +56,7 @@ class PostSelectedCategory extends PostState{
   final List<Post> categoryPosts;
   PostSelectedCategory({
     this.categoryPosts,
-  }) : super([PostState]);
+  }) : super([categoryPosts]);
 
   @override
   String toString() {
