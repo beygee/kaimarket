@@ -59,9 +59,9 @@ class GoogleMapfixed extends StatelessWidget {
               //       () => ScaleGestureRecognizer()))
               //   ..add(Factory<TapGestureRecognizer>(
               //       () => TapGestureRecognizer())),
-              // zoomGesturesEnabled: true,
-              // scrollGesturesEnabled: true,
-              // tiltGesturesEnabled: true,
+              zoomGesturesEnabled: false,
+              scrollGesturesEnabled: false,
+              tiltGesturesEnabled: false,
               initialCameraPosition: CameraPosition(
                   target: LatLng(picked.latitude, picked.longitude),
                   zoom: 15.0),
