@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/user_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:week_3/models/post.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -206,6 +207,20 @@ class HomePageState extends State<HomePage> {
           // _userBloc.dispatch(UserChangeWish(postId: post.id));
           // post.isWish = !post.isWish;
           _postBloc.dispatch(SearchWish(postId: post.id, wish: bWish));
+
+          if (bWish) {
+            Fluttertoast.showToast(
+              msg: "찜 목록에 추가하였습니다.",
+              toastLength: Toast.LENGTH_SHORT,
+              fontSize: screenAwareSize(10.0, context),
+            );
+          } else {
+            Fluttertoast.showToast(
+              msg: "찜 목록에서 제거하였습니다.",
+              toastLength: Toast.LENGTH_SHORT,
+              fontSize: screenAwareSize(10.0, context),
+            );
+          }
         },
         issaved: wish);
   }
