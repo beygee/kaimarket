@@ -69,19 +69,20 @@ class PostCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 width: screenAwareSize(
                                     small ? 150.0 : 150, context),
                                 child: Text(
                                   post.title,
-                                  maxLines: 2,
+                                  maxLines: small ? 1 : 2,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: true,
                                   style: TextStyle(
@@ -92,30 +93,7 @@ class PostCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              small
-                                  ? Container()
-                                  : GestureDetector(
-                                      onTap: onTapHeart,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                          left: screenAwareSize(15.0, context),
-                                          bottom:
-                                              screenAwareSize(15.0, context),
-                                        ),
-                                        child: issaved
-                                            ? Icon(
-                                                Icons.favorite,
-                                                color: Colors.amber[200],
-                                              )
-                                            : Icon(Icons.favorite_border,
-                                                color: Colors.amber[200]),
-                                      )),
-                            ],
-                          ),
-                          SizedBox(height: screenAwareSize(3.0, context)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
+                              SizedBox(height: screenAwareSize(5.0, context)),
                               Container(
                                 width: screenAwareSize(
                                     small ? 100.0 : 150, context),
@@ -131,7 +109,23 @@ class PostCard extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          )
+                          ),
+                          small
+                              ? Container()
+                              : GestureDetector(
+                                  onTap: onTapHeart,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                      screenAwareSize(5.0, context),
+                                    ),
+                                    child: issaved
+                                        ? Icon(
+                                            Icons.favorite,
+                                            color: Colors.amber[200],
+                                          )
+                                        : Icon(Icons.favorite_border,
+                                            color: Colors.amber[200]),
+                                  ))
                         ],
                       ),
                       Row(
