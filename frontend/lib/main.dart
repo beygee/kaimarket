@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<SocketBloc>(builder: (context) => SocketBloc()),
+        BlocProvider<PostBloc>(builder: (context) => PostBloc()),
         BlocProvider<UserBloc>(builder: (context) => UserBloc()),
       ],
       child: LifecycleWatcher(),

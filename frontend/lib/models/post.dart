@@ -15,6 +15,8 @@ class Post extends Equatable {
   int chat;
   String created;
   String updated;
+  bool isWish;
+  bool isSold;
 
   List<Map<String, String>> images = [];
   User user;
@@ -40,6 +42,8 @@ class Post extends Equatable {
     this.chat = 0,
     this.created,
     this.updated,
+    this.isWish,
+    this.isSold,
 
     //
     this.images,
@@ -74,6 +78,8 @@ class Post extends Equatable {
         created = json['created'],
         updated = json['updated'],
         isBook = json['isBook'],
+        isSold = json['isWish'],
+        isWish = json['isSold'],
         bookMajor = json['bookMajor'],
         bookAuthor = json['bookAuther'],
         bookPublisher = json['bookPublisher'],

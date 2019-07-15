@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/base_height.dart';
@@ -7,10 +6,6 @@ import 'package:week_3/home/category_button.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/post/post_card.dart';
 import 'package:week_3/models/category.dart';
-import 'package:dio/dio.dart';
-import 'package:provider/provider.dart';
-import 'package:week_3/models/post.dart';
-import 'package:week_3/bloc/post_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -21,19 +16,21 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final PostBloc _postBloc = PostBloc();
+  PostBloc _postBloc;
 
   int selectedCategory = 0;
   TextEditingController searchController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _postBloc = BlocProvider.of<PostBloc>(context);
+    _postBloc.dispatch(PostFetch());
+  }
 
   @override
   void dispose() {
     searchController.dispose();
     super.dispose();
-  }
-
-  HomePageState() {
-    _postBloc.dispatch(PostFetch());
   }
 
   @override
