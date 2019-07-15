@@ -24,7 +24,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         var res = await dio.getUri(getUri('/api/me'));
 
         if (res.statusCode == 200) {
+          log.i(res.data);
           User user = User.fromJson(res.data);
+
           yield UserLoaded(
             id: user.id,
             name: user.name,

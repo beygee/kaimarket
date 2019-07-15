@@ -21,44 +21,9 @@ class PostError extends PostState {
 
 class PostLoaded extends PostState {
   final List<Post> posts;
-  PostLoaded({
-    this.posts,
-  }) : super([posts]);
 
-  PostLoaded copyWith({
-    List<Post> posts,
-  }) {
-    return PostLoaded(
-      posts: posts ?? this.posts,
-    );
-  }
+  PostLoaded({this.posts}) : super([posts]);
 
   @override
-  String toString() {
-    return super.toString();
-  }
-}
-
-class PostSearched extends PostState {
-  final List<Post> searchedPosts;
-  PostSearched({
-    this.searchedPosts,
-  }) : super([searchedPosts]);
-
-  @override
-  String toString() {
-    return super.toString();
-  }
-}
-
-class PostSelectedCategory extends PostState {
-  final List<Post> categoryPosts;
-  PostSelectedCategory({
-    this.categoryPosts,
-  }) : super([categoryPosts]);
-
-  @override
-  String toString() {
-    return super.toString();
-  }
+  String toString() => "PostLoaded";
 }
