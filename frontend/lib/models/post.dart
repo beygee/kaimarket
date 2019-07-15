@@ -65,6 +65,36 @@ class Post extends Equatable {
   @override
   String toString() => 'Post { _id: $title }';
 
+  Post.copyWith(Post p) {
+    id = p.id;
+    title = p.title;
+
+    content = p.content;
+    price = p.price;
+    view = p.view;
+    wish = p.wish;
+    chat = p.chat;
+    created = p.created;
+    updated = p.updated;
+    isWish = p.isWish;
+    isSold = p.isSold;
+
+    images = p.images;
+    user = p.user;
+    locationLat = p.locationLat;
+    locationLng = p.locationLng;
+    category = p.category;
+
+    //도서 변수
+    isBook = p.isBook;
+    bookMajor = p.bookMajor;
+    bookAuthor = p.bookAuthor;
+    bookPublisher = p.bookPublisher;
+    bookPubDate = p.bookPubDate;
+    bookImage = p.bookImage;
+    bookPrice = p.bookPrice;
+  }
+
   Post.fromJson(Map<String, dynamic> json)
       : id = json['_id'],
         title = json['title'],
@@ -78,8 +108,8 @@ class Post extends Equatable {
         created = json['created'],
         updated = json['updated'],
         isBook = json['isBook'],
-        isSold = json['isWish'],
-        isWish = json['isSold'],
+        isWish = json['isWish'],
+        isSold = json['isSold'],
         bookMajor = json['bookMajor'],
         bookAuthor = json['bookAuther'],
         bookPublisher = json['bookPublisher'],

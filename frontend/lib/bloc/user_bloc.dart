@@ -43,9 +43,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         yield UserUninitialized();
       }
       if (event is UserChangeWish) {
-        log.i(getUri('/api/posts/').toString() + event.getPostId() + "/wish");
         var res = await dio.post(
             getUri('/api/posts/').toString() + event.getPostId() + "/wish");
+        final currentstate = (currentState as UserLoaded);
+
+        yield UserLoaded(
+            name: currentstate.name,
+            id: currentstate.id,
+            wish: currentstate.wish,
+            sales: currentstate.sales,
+            chats: currentstate.chats);
       }
       if (event is UserGetWish && currentState is UserLoaded) {
         var res = await dio.getUri(getUri('/api/me/wish'));

@@ -7,6 +7,7 @@ import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
 
 class ChatViewPage extends StatefulWidget {
   final Chat chat;
@@ -36,55 +37,45 @@ class _ChatViewPageState extends State<ChatViewPage> {
   List<Widget> response;
   List<Message> existMessages = [];
   // test용
-  var docs = [
-    {'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
-    {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}
-  ];
+  // var docs = [
+  //   {'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
+  //   {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}
+  // ];
 
   Future initShow() async {
     var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
-    log.i("뭐해?");
     existMessages = Chat.fromJson(dbChats.data).messages;
 
     if (existMessages.length > 0) {
       // me 계산하기
+      for (int i = 0; i < (existMessages.length - 1) / 2; i++) {
+        Message tempMessage = existMessages[i];
+        existMessages[i] = existMessages[existMessages.length - 1 - i];
+        existMessages[existMessages.length - 1 - i] = tempMessage;
+      }
+    
+      // showTime 계산하기
+      existMessages[0].showTime = true;
+      Message compareMessage = existMessages[0];
+      if (existMessages.length != 1) {
+        for (int i = 1; i < existMessages.length; i++) {
+          if ((existMessages[i].from == compareMessage.from) && (minute(existMessages[i].time) == minute(compareMessage.time))) {
+            existMessages[i].showTime = false;
+          } else {
+            existMessages[i].showTime = true;
+            compareMessage = existMessages[i];
+          }
+        }
+      }
+    }
+    // reverse
+    setState(() {
       for (int i = 0; i < existMessages.length; i++) {
         if (loggedUserId == existMessages[i].from) {
           existMessages[i].me = true;
         } else {
           existMessages[i].me = false;
         }
-      }
-      // showTime 계산하기
-      existMessages[0].showTime = true;
-      if (existMessages.length != 1) {
-        int i;
-        for (i = 0; i < existMessages.length - 1; i++) {
-          for (int j = i; j < existMessages.length - i; j++) {
-            if (existMessages[i].from == existMessages[j + 1].from &&
-                existMessages[i].time == existMessages[j + 1].time)
-              existMessages[j + 1].showTime = false;
-            else {
-              i = j + 1;
-              existMessages[i].showTime = true;
-              break;
-            }
-          }
-        }
-        if (existMessages[i].from == existMessages[i - 1].from &&
-            existMessages[i].time == existMessages[i - 1].time)
-          existMessages[i].showTime = false;
-        else {
-          existMessages[i].showTime = true;
-        }
-      }
-    }
-    // reverse
-    setState(() {
-      for (int i = 0; i < (existMessages.length - 1) / 2; i++) {
-        Message tempMessage = existMessages[i];
-        existMessages[i] = existMessages[existMessages.length - 1 - i];
-        existMessages[existMessages.length - 1 - i] = tempMessage;
       }
     });
 
@@ -94,6 +85,10 @@ class _ChatViewPageState extends State<ChatViewPage> {
         curve: Curves.easeOut,
         duration: const Duration(milliseconds: 300));
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
+  }
+
+  String minute(String time) {
+    return DateFormat("yyyy-MM-dd hh:mm").format(convertDateFromString(time));
   }
 
   @override
@@ -120,28 +115,34 @@ class _ChatViewPageState extends State<ChatViewPage> {
   void updateMessage(data) {
     log.i(data);
     bool showTime = true;
+    var prevMessage;
     // 서버에서 받은 메세지
     var currentMessage = {
       "from": data['from'],
       "text": data['text'],
       "time": data['time']
     };
-    var prevMessage = existMessages[0];
-    if (prevMessage.from == currentMessage['from'] &&
-        prevMessage.time == currentMessage['time']) showTime = false;
-
+    log.i (existMessages.length);
+    if (existMessages.length > 0){
+      prevMessage = existMessages[0];
+      if (prevMessage.from == currentMessage['from'] &&
+          minute(prevMessage.time) == minute(currentMessage['time']))
+        showTime = false;
+    }
+    
     setState(() {
-      existMessages.remove(prevMessage);
-      // log.i(existMessages.length);
-      existMessages.insert(
-          0,
-          Message(
-            text: prevMessage.text,
-            from: prevMessage.from,
-            time: prevMessage.time,
-            me: prevMessage.me,
-            showTime: showTime,
-          ));
+      if (existMessages.length > 0){
+        existMessages.remove(prevMessage);
+        existMessages.insert(
+            0,
+            Message(
+              text: prevMessage.text,
+              from: prevMessage.from,
+              time: prevMessage.time,
+              me: prevMessage.me,
+              showTime: showTime,
+            ));
+      }
       existMessages.insert(
           0,
           Message(
@@ -248,7 +249,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
             ],
           ),
           Text(
-            widget.chat.post.price.toString() + '원',
+            getMoneyFormat(widget.chat.post.price) + '원',
             style: _postFont,
           ),
         ],
@@ -406,15 +407,11 @@ class MessageBubble extends StatelessWidget {
       this.showTime = true})
       : super(key: key);
 
-  // bool me = true;
-
   // time format 바꿔주기
   //time = new DateFormat("hh:mm a").format(time);
 
   @override
   Widget build(BuildContext context) {
-    // me = true;
-    // showTime = true;
     return Container(
       // width: 320.0,
       padding: EdgeInsets.only(top: screenAwareSize(10.0, context)),
@@ -423,9 +420,8 @@ class MessageBubble extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
           if (me && showTime)
-            new Text(
-              parseDate(time),
-              //new DateFormat("hh:mm a").format(time),
+            Text(
+              DateFormat("hh:mm a").format(convertDateFromString(time)),
               style: _timeFont,
             ),
           Column(
@@ -469,8 +465,8 @@ class MessageBubble extends StatelessWidget {
             ],
           ),
           if (!me && showTime)
-            new Text(
-              parseDate(time),
+            Text(
+              DateFormat("hh:mm a").format(convertDateFromString(time)),
               style: _timeFont,
             ),
         ],
@@ -478,11 +474,11 @@ class MessageBubble extends StatelessWidget {
       // updatePrev_time(time);
     );
   }
+}
 
-  String parseDate(String date) {
-    final dateTime = DateTime.parse(date);
-    return date;
-  }
+DateTime convertDateFromString(String strDate) {
+  DateTime todayDate = DateTime.parse(strDate);
+  return todayDate.add(Duration(hours: 9));
 }
 
 class RightTriangle extends CustomPainter {

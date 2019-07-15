@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/post.dart';
-import 'package:week_3/utils/dio.dart';
+import 'package:week_3/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
@@ -20,7 +20,7 @@ class PostCard extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            height: screenAwareSize(100.0, context),
+            height: screenAwareSize(110.0, context),
             padding: EdgeInsets.symmetric(
                 horizontal: 10.0, vertical: screenAwareSize(5.0, context)),
             child: Row(
@@ -31,14 +31,14 @@ class PostCard extends StatelessWidget {
                       ? CachedNetworkImage(
                           imageUrl: post.bookImage,
                           width: screenAwareSize(100.0, context),
-                          height: screenAwareSize(90.0, context),
+                          height: screenAwareSize(100.0, context),
                           fit: BoxFit.cover,
                         )
                       : CachedNetworkImage(
                           imageUrl:
                               getUri('').toString() + post.images[0]['url'],
                           width: screenAwareSize(100.0, context),
-                          height: screenAwareSize(90.0, context),
+                          height: screenAwareSize(100.0, context),
                           fit: BoxFit.cover,
                         ),
                 ),
@@ -66,6 +66,7 @@ class PostCard extends StatelessWidget {
                         children: <Widget>[
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Container(
                                 width: screenAwareSize(150, context),
@@ -81,18 +82,23 @@ class PostCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              GestureDetector(
+                              InkResponse(
                                   onTap: onTapHeart,
-                                  child: issaved
-                                      ? Icon(
-                                          Icons.favorite,
-                                          color: Colors.amber[200],
-                                        )
-                                      : Icon(Icons.favorite_border,
-                                          color: Colors.amber[200])),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical:
+                                            screenAwareSize(10.0, context)),
+                                    child: issaved
+                                        ? Icon(
+                                            Icons.favorite,
+                                            color: Colors.amber[200],
+                                          )
+                                        : Icon(Icons.favorite_border,
+                                            color: Colors.amber[200]),
+                                  )),
                             ],
                           ),
-                          SizedBox(height: screenAwareSize(5.0, context)),
+                          SizedBox(height: screenAwareSize(3.0, context)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -105,7 +111,7 @@ class PostCard extends StatelessWidget {
                                   softWrap: true,
                                   style: TextStyle(
                                     color: Colors.grey[500],
-                                    fontSize: screenAwareSize(10.0, context),
+                                    fontSize: screenAwareSize(9.0, context),
                                   ),
                                 ),
                               ),
@@ -124,9 +130,10 @@ class PostCard extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            post.price.toString() + "원",
+                            getMoneyFormat(post.price) + "원",
                             style: TextStyle(
                               color: Colors.grey[600],
+                              fontWeight: FontWeight.bold,
                               fontSize: screenAwareSize(11.0, context),
                             ),
                           ),

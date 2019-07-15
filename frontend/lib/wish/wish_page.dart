@@ -60,6 +60,7 @@ class WishPageState extends State<WishPage> {
             );
           }
           if (state is UserLoaded) {
+            log.i('UserLoaded');
             if (state.wish == null) {
               return Column(
                 children: <Widget>[
@@ -106,7 +107,7 @@ class WishPageState extends State<WishPage> {
   }
 
   Widget _buildRow(context, Post post) {
-    bool wish = post.isWish;
+    bool wish = true;
 
     return PostCard(
         post: post,
@@ -114,10 +115,8 @@ class WishPageState extends State<WishPage> {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PostViewPage(postId: post.id)));
         },
-        onTapHeart: () {
+        onTapHeart: () async {
           _userBloc.dispatch(UserChangeWish(postId: post.id));
-          post.isWish = !post.isWish;
-          // _postBloc.dispatch(SearchWish(searchpost: post));
         },
         issaved: wish);
   }

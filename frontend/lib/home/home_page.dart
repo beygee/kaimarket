@@ -52,47 +52,48 @@ class HomePageState extends State<HomePage> {
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
               BlocBuilder(
-                  bloc: _postBloc,
-                  builder: (BuildContext context, PostState state) {
-                    if (state is PostUninitialized) {
+                bloc: _postBloc,
+                builder: (BuildContext context, PostState state) {
+                  if (state is PostUninitialized) {
+                    return Expanded(
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            child: Center(
+                              child: SpinKitChasingDots(
+                                size: 30.0,
+                                color: ThemeColor.primary,
+                              ),
+                            ),
+                          ),
+                          SizedBox(height: screenAwareSize(50.0, context))
+                        ],
+                      ),
+                    );
+                  }
+                  if (state is PostError) {
+                    return Center(
+                      child: Text('포스트를 불러오는데 실패했습니다.'),
+                    );
+                  }
+                  if (state is PostLoaded) {
+                    if (state.posts.isEmpty) {
                       return Expanded(
                         child: Column(
                           children: <Widget>[
                             Expanded(
-                              child: Center(
-                                child: SpinKitChasingDots(
-                                  size: 30.0,
-                                  color: ThemeColor.primary,
-                                ),
-                              ),
+                              child: Center(child: Text("게시글이 없어요!")),
                             ),
                             SizedBox(height: screenAwareSize(50.0, context))
                           ],
                         ),
                       );
                     }
-                    if (state is PostError) {
-                      return Center(
-                        child: Text('포스트를 불러오는데 실패했습니다.'),
-                      );
-                    }
-                    if (state is PostLoaded) {
-                      if (state.posts.isEmpty) {
-                        return Expanded(
-                          child: Column(
-                            children: <Widget>[
-                              Expanded(
-                                child: Center(child: Text("게시글이 없어요!")),
-                              ),
-                              SizedBox(height: screenAwareSize(50.0, context))
-                            ],
-                          ),
-                        );
-                      }
-                      return Expanded(
-                          child: _buildSuggestions(context, state.posts));
-                    }
-                  }),
+                    return Expanded(
+                        child: _buildSuggestions(context, state.posts));
+                  }
+                },
+              ),
             ],
           );
         },
@@ -168,6 +169,7 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildSuggestions(context, posts) {
     return RefreshIndicator(
+      displacement: 20.0,
       onRefresh: () async {
         _searchPosts();
       },
@@ -194,10 +196,16 @@ class HomePageState extends State<HomePage> {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PostViewPage(postId: post.id)));
         },
-        onTapHeart: () {
-          _userBloc.dispatch(UserChangeWish(postId: post.id));
-          post.isWish = !post.isWish;
-          _postBloc.dispatch(SearchWish(searchpost: post));
+        onTapHeart: () async {
+          //서버 통신....
+          var res = await dio.postUri(getUri('/api/posts/${post.id}/wish'));
+          log.i(res.data);
+
+          bool bWish = res.data['wish'];
+
+          // _userBloc.dispatch(UserChangeWish(postId: post.id));
+          // post.isWish = !post.isWish;
+          _postBloc.dispatch(SearchWish(postId: post.id, wish: bWish));
         },
         issaved: wish);
   }

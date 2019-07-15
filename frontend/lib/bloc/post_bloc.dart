@@ -31,18 +31,19 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         yield PostLoaded(posts: posts);
       }
 
-      if (currentState is PostLoaded){
-      List<Post> postlist = (currentState as PostLoaded).posts;
-        if (event is SearchWish){
-          for (int i = 0 ; i < postlist.length; i++){
-            if (postlist[i].id == event.searchpost.id){
-              log.i(postlist[i].isWish);
-              postlist[i] = event.searchpost;
-              log.i(postlist[i].isWish);
-            }
-          }
-          yield PostLoaded(posts: (currentState as PostLoaded).posts);
-        }
+      if (event is SearchWish && currentState is PostLoaded) {
+        List<Post> list = (currentState as PostLoaded).posts;
+        String postId = (event as SearchWish).postId;
+        bool wish = (event as SearchWish).wish;
+
+        list = list.map((p) {
+          if (p.id != postId) return p;
+          var post = Post.copyWith(p);
+          post.isWish = wish;
+          return post;
+        }).toList();
+
+        yield PostLoaded(posts: list);
       }
     } catch (_) {
       print(_);

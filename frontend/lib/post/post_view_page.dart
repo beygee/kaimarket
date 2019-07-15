@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:week_3/models/chat.dart';
 import 'package:week_3/post/google_map_fixed.dart';
+import 'package:week_3/post/post_card.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/utils.dart';
 import 'dart:math' as math;
@@ -12,6 +14,8 @@ import 'package:week_3/utils/dio.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:week_3/post/post_shimmer_card.dart';
+import 'package:week_3/chat/chat_view_page.dart';
 
 class PostViewPage extends StatefulWidget {
   final String postId;
@@ -26,6 +30,7 @@ class _PostViewPageState extends State<PostViewPage> {
   static const double horizontalPadding = 16.0;
 
   Post post;
+  List<Post> relatedPosts;
   ScrollController scrollController;
   GlobalKey<LoadingWrapperState> _loadingWrapperKey =
       GlobalKey<LoadingWrapperState>();
@@ -48,10 +53,20 @@ class _PostViewPageState extends State<PostViewPage> {
 
   void initPost() async {
     var res = await dio.getUri(getUri('/api/posts/${widget.postId}'));
+    Post p = Post.fromJson(res.data);
+    relatedPosts = res.data['relatedPosts']
+        .map((p) {
+          return Post.fromJson(p);
+        })
+        .toList()
+        .cast<Post>();
+    await Future.delayed(Duration(milliseconds: 250));
     if (res.statusCode == 200) {
-      setState(() {
-        post = Post.fromJson(res.data);
-      });
+      if (mounted) {
+        setState(() {
+          post = p;
+        });
+      }
     }
   }
 
@@ -64,9 +79,7 @@ class _PostViewPageState extends State<PostViewPage> {
   @override
   Widget build(BuildContext context) {
     if (post == null) {
-      return Scaffold(
-        body: Container(),
-      );
+      return PostShimmerCard();
     }
     return LoadingWrapper(
       key: _loadingWrapperKey,
@@ -89,6 +102,8 @@ class _PostViewPageState extends State<PostViewPage> {
                     _buildLocation(),
                     _buildDivider(),
                     _buildUserInfo(context),
+                    _buildDivider(),
+                    _buildRelatedPosts(context),
                     SizedBox(height: screenAwareSize(70.0, context)),
                   ],
                 ),
@@ -127,6 +142,37 @@ class _PostViewPageState extends State<PostViewPage> {
     );
   }
 
+  Widget _buildRelatedPosts(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SizedBox(height: screenAwareSize(10.0, context)),
+        Padding(
+          padding: EdgeInsets.symmetric(
+              horizontal: screenAwareSize(16.0, context),
+              vertical: screenAwareSize(5.0, context)),
+          child: Text(
+            "같은 카테고리 상품",
+            style: TextStyle(
+              color: Colors.grey[500],
+            ),
+          ),
+        ),
+        SizedBox(height: screenAwareSize(15.0, context)),
+        for (int i = 0; i < relatedPosts.length; i++)
+          PostCard(
+            post: relatedPosts[i],
+            issaved: relatedPosts[i].isWish,
+            onTap: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (context) =>
+                      PostViewPage(postId: relatedPosts[i].id)));
+            },
+          )
+      ],
+    );
+  }
+
   Widget _buildBottomTab() {
     return Positioned(
       bottom: 0.0,
@@ -148,10 +194,12 @@ class _PostViewPageState extends State<PostViewPage> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  Icon(
-                    Icons.favorite_border,
-                    color: ThemeColor.primary,
-                  ),
+                  post.isWish
+                      ? Icon(
+                          Icons.favorite,
+                          color: Colors.amber[200],
+                        )
+                      : Icon(Icons.favorite_border, color: Colors.amber[200]),
                   SizedBox(width: 5.0),
                   Text('찜', style: TextStyle(color: ThemeColor.primary)),
                 ],
@@ -198,7 +246,9 @@ class _PostViewPageState extends State<PostViewPage> {
       });
 
       if (res.statusCode == 200) {
-        log.i(res.data);
+        Chat chat = Chat.fromJson(res.data);
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ChatViewPage(chat: chat)));
       }
     });
   }
@@ -248,7 +298,7 @@ class _PostViewPageState extends State<PostViewPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  post.price.toString() + " 원",
+                  getMoneyFormat(post.price) + " 원",
                   style: TextStyle(
                     fontSize: screenAwareSize(18.0, context),
                     fontWeight: FontWeight.bold,
@@ -506,10 +556,11 @@ class _PostViewPageState extends State<PostViewPage> {
           ),
           SizedBox(height: screenAwareSize(10.0, context)),
           GoogleMapfixed(
-              picked: LatLng(
-            post.locationLat,
-            post.locationLng,
-          ))
+            picked: LatLng(
+              post.locationLat,
+              post.locationLng,
+            ),
+          )
         ],
       ),
     );

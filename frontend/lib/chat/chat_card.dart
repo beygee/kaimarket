@@ -3,19 +3,17 @@ import 'package:week_3/chat/chat_view_page.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/chat.dart';
-import 'package:week_3/chat/chat_page.dart';
+import 'package:week_3/utils/base_height.dart';
+import 'package:intl/intl.dart';
 
 class ChatCard extends StatelessWidget {
   final Chat chat;
   final String loggedUserId;
+  final VoidCallback onPressed;
 
-  ChatCard({this.chat, this.loggedUserId});
+  ChatCard({this.chat, this.loggedUserId, this.onPressed});
 
   final _profileImage = 'assets/images/logo.jpg';
-  // var _userName = chat.buyer.name;
-  final _recentMsg = '언제 시간 되시나요?';
-  final _time = '오후 3:39';
-  final _noneReadNum = '1';
 
   final _userNameFont = TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
   final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);
@@ -29,10 +27,7 @@ class ChatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
-        onTap: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => ChatViewPage(chat: chat)));
-        },
+        onTap: onPressed,
         child: Container(
           padding: _paddingFormat,
           child: new Row(
@@ -77,40 +72,56 @@ class ChatCard extends StatelessWidget {
         child: new Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Text(loggedUserId == chat.buyer.id ? chat.seller.name: chat.buyer.name, style: _userNameFont),
+        new Text(
+            loggedUserId == chat.buyer.id ? chat.seller.name : chat.buyer.name,
+            style: _userNameFont),
         SizedBox(
           height: screenAwareSize(5.0, context),
         ),
-        new Text(_recentMsg, style: _chatFont),
+        new Text(chat.recentMessage.text, style: _chatFont),
       ],
     ));
   }
 
-  Widget _circleNum() {
+  Widget _circleNum(String strnum, context) {
     return new Container(
-      width: 15,
-      height: 15,
+      width: screenAwareSize(15.0, context),
+      height: screenAwareSize(15.0, context),
       decoration: new BoxDecoration(
         color: Colors.amber[700],
         shape: BoxShape.circle,
       ),
       child: Center(
-        child: new Text(_noneReadNum, style: _numFont),
+        child: new Text(strnum, style: _numFont),
       ),
     );
   }
 
   Widget _chatRight(context) {
+    int num = loggedUserId == chat.buyer.id
+        ? chat.buyerNonReadCount
+        : chat.sellerNonReadCount;
     return new Container(
         child: new Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        new Text(_time, style: _timeFont),
+        if (chat.recentMessage.time == null) new Text(" ", style: _timeFont),
+        if (chat.recentMessage.time != null)
+          new Text(hourMinute(chat.recentMessage.time), style: _timeFont),
         SizedBox(
           height: screenAwareSize(10.0, context),
         ),
-        _circleNum(),
+        if (num == 0)
+          SizedBox(
+            width: screenAwareSize(15.0, context),
+            height: screenAwareSize(15.0, context),
+          ),
+        if (num != 0) _circleNum(num.toString(), context),
       ],
     ));
+  }
+
+  String hourMinute(String time) {
+    return DateFormat("hh:mm a").format(convertDateFromString(time));
   }
 }

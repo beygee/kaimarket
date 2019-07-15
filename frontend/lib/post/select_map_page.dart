@@ -30,31 +30,34 @@ class SelectMapPageState extends State<SelectMapPage> {
       builder: (context, loading) {
         return Stack(children: <Widget>[
           Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              title: Text(
-                '선호 지역 선택',
-                style: TextStyle(fontSize: 16.0),
-              ),
-              actions: <Widget>[
-                Material(
-                  color: Colors.transparent,
-                  child: InkResponse(
-                    onTap: _onTapComplete,
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Text("완료"),
+            appBar: PreferredSize(
+              preferredSize: Size.fromHeight(56),
+              child: Builder(
+                builder: (context) {
+                  return AppBar(
+                    backgroundColor: Colors.white,
+                    title: Text(
+                      '선호 지역 선택',
+                      style: TextStyle(fontSize: 16.0),
                     ),
-                  ),
-                ),
-              ],
+                    actions: <Widget>[
+                      Material(
+                        color: Colors.transparent,
+                        child: InkResponse(
+                          onTap: () => _onTapComplete(context),
+                          child: Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text("완료"),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
-            body: SingleChildScrollView(
-              child: Column(children: <Widget>[
-                GoogleMapPage(
-                  onTap: _onTapLagLng,
-                ),
-              ]),
+            body: GoogleMapPage(
+              onTap: _onTapLagLng,
             ),
           ),
           loading
@@ -81,8 +84,11 @@ class SelectMapPageState extends State<SelectMapPage> {
   }
 
   //데이터 작성 완료
-  _onTapComplete() {
+  _onTapComplete(context) {
     _loadingWrapperKey.currentState.loadFuture(() async {
+      if (widget.post.locationLat == null) {
+        showSnackBar(context, "선호 지역을 선택해주세요.");
+      }
       final res = await dio
           .postUri(getUri('/api/posts'), data: {'data': widget.post.toJson()});
 
