@@ -53,16 +53,51 @@ class _ChatViewPageState extends State<ChatViewPage> {
   void initState() {
     super.initState();
     _socketBloc = BlocProvider.of<SocketBloc>(context);
-    _socketBloc.dispatch(SocketChatEnter(onMessage: (data){
+    _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async{
       log.i("메시지 : $data");
+      await uploadMessage(data);
+      log.i("오잉");
     }));
     initShow();
   }
-
+  
   @override
   void dispose() {
     _socketBloc.dispatch(SocketChatLeave());
     super.dispose();
+  }
+
+  Future uploadMessage(data) {
+    scrollController.animateTo(0.0,
+        //scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300));
+    //scrollController.jumpTo(scrollController.position.maxScrollExtent);
+  
+    bool showTime = true;
+    // 서버에서 받은 메세지로 currentMessage에 넣어주기
+    var currentMessage = {"from": data['from'], "text": data['text'], "time": data['time']};
+    log.i(data['from']);
+    var prevMessage = existMessages[0];
+    if (prevMessage.from == currentMessage['from'] && prevMessage.time == currentMessage['time'])
+      showTime = false;
+
+    setState(() {
+      existMessages.remove(prevMessage);
+      existMessages.insert(0, {
+        "text": prevMessage.text,
+        "from": prevMessage.from,
+        "time": prevMessage.time,
+        "showTime": showTime,
+      });
+        existMessages.insert(0, {
+          "text": messageController.text,
+          "from": currentMessage['from'],
+          "time": currentMessage['time'],
+          "showTime": true,
+        });
+      });
+
   }
 
   Future callback(socket) async {
@@ -73,48 +108,18 @@ class _ChatViewPageState extends State<ChatViewPage> {
         {
           'chatId': widget.chat.id,
           "text": messageController.text,
-      //    "from": widget.user.id,
+          "from": widget.chat.buyer.id,
+          "to": widget.chat.buyer.id,
+          // "to": widget.user.id,
+          // "from": widget.user.id
         }
       ]);
     
       messageController.clear();
-      scrollController.animateTo(0.0,
-          //scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300));
-      //scrollController.jumpTo(scrollController.position.maxScrollExtent);
-
-      // server에서 ok 하면 socket으로 받아오기
-      // await socket.on("ok")
-      
-      bool showTime = true;
-      // 서버에서 받은 메세지로 currentMessage에 넣어주기
-      var currentMessage = existMessages[1];
-      var prevMessage = existMessages[0];
-      if (prevMessage.from == currentMessage.from && prevMessage.time == currentMessage.time)
-        showTime = false;
-
-      setState(() {
-        existMessages.remove(prevMessage);
-        existMessages.insert(0, {
-          "text": prevMessage.text,
-          "from": prevMessage.from,
-          "time": prevMessage.time,
-          "showTime": showTime,
-        });
-         existMessages.insert(0, {
-           "text": messageController.text,
-           "from": currentMessage.from,
-           "time": currentMessage.time,
-           "showTime": true,
-         });
-       });
-
-      
     }
   }
 
-  Future uploadMessage() async {}
+
 
   Widget _buildItem(context) {
     return Container(
@@ -262,13 +267,13 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   shrinkWrap: true,
                   children: <Widget>[
                     //...existMessages
-                    ...docs
-                        .map((doc) => MessageBubble(
-                              from: doc['from'],
-                              text: doc['text'],
-                              time: doc['time'],
-                            ))
-                        .toList(),
+                    // ...docs
+                    //     .map((doc) => MessageBubble(
+                    //           from: docs['from'],
+                    //           text: docs['text'],
+                    //           time: docs['time'],
+                    //         ))
+                    //     .toList(),
                     new MessageBubble(
                       from: 'diuni',
                       text: 'heello 내 이름은 지윤팍팍 아임 지�� 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
