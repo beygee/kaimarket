@@ -40,7 +40,7 @@ class HomePageState extends State<HomePage> {
               _buildSearchInput(context),
               _buildCategoryList(context),
               SizedBox(height: screenAwareSize(10.0, context)),
-              BlocBuilder(
+              BlocBuilder( 
                   bloc: _postBloc,
                   builder: (BuildContext context, PostState state) {
                     if (state is PostUninitialized) {
