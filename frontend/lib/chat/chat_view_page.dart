@@ -105,18 +105,18 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     setState(() {
       existMessages.remove(prevMessage);
-      existMessages.insert(0, {
-        "text": prevMessage.text,
-        "from": prevMessage.from,
-        "time": prevMessage.time,
-      //  "me": prevMessage.me,
-        "showTime": showTime,
-      });
+      existMessages.insert(0, Message(
+        text: prevMessage.text,
+        from: prevMessage.from,
+        time: prevMessage.time,
+        me: prevMessage.me,
+        showTime: showTime,
+      ));
       existMessages.insert(0, Message(
         text: messageController.text,
         from: currentMessage['from'],
         time: currentMessage['time'],
-        //me: currentMessage['from'] == loggedUserId,
+        me: currentMessage['from'] == loggedUserId,
         showTime: true,
       ));
       log.i("wowowwww");
@@ -288,10 +288,11 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   children: <Widget>[
                     ...existMessages
                     // ...docs
-                         .map((existMessage) => MessageBubble(
-                              from: existMessage['from'],
-                              text: existMessage['text'],
-                              time: existMessage['time'],
+                         .map((message) => MessageBubble(
+                              from: message.from,
+                              text: message.text,
+                              time: message.time,
+                              me: message.me,
                             ))
                         .toList(),
                     new MessageBubble(
@@ -352,13 +353,14 @@ class MessageBubble extends StatelessWidget {
   final String from;
   final String text;
   String time;
+  bool me;
 
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
   final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
 
-  MessageBubble({Key key, this.from, this.text, this.time, this.me}) : super(key: key);
+  MessageBubble({Key key, this.from, this.text, this.time, me: true}) : super(key: key);
 
-  bool me = true;
+ // bool me = true;
 
   // time format 바꿔주기
   //time = new DateFormat("hh:mm a").format(time);
