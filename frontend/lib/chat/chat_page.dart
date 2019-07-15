@@ -5,6 +5,7 @@ import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:week_3/chat/chat_view_page.dart';
 
 class ChatPage extends StatelessWidget {
   @override
@@ -51,8 +52,22 @@ class ChatListsState extends State<ChatLists> {
       body: new ListView(
         children: <Widget>[
           for (int i = 0; i < chats.length; i++)
-            ChatCard(chat: chats[i], loggedUserId: loggedUserId),
-          SizedBox(height: screenAwareSize(60.0, context),)
+            ChatCard(
+              chat: chats[i],
+              loggedUserId: loggedUserId,
+              onPressed: () {
+                setState(() {
+                  chats[i].buyerNonReadCount = 0;
+                  chats[i].sellerNonReadCount = 0;
+                });
+
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ChatViewPage(chat: chats[i])));
+              },
+            ),
+          SizedBox(
+            height: screenAwareSize(60.0, context),
+          )
         ],
       ),
     );
