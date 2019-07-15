@@ -46,3 +46,22 @@ class UserAddPurchase extends UserEvent {
     return "AddPurchase";
   }
 }
+
+class UserGetWish extends UserEvent{
+  @override
+  String toString() {
+    return "UserGetWish";
+  }
+}
+
+class SearchWishInUser extends UserEvent {
+  final bool wish;
+  String postId;
+
+  SearchWishInUser({this.postId, this.wish});
+
+  @override
+  String toString() {
+    return "searchWish";
+  }
+}

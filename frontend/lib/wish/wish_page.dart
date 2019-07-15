@@ -3,6 +3,11 @@ import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/post/post_card.dart';
+import 'package:week_3/bloc/user_bloc.dart';
+import 'package:bloc/bloc.dart';
+import 'package:week_3/bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class WishPage extends StatefulWidget {
   @override
@@ -10,39 +15,111 @@ class WishPage extends StatefulWidget {
 }
 
 class WishPageState extends State<WishPage> {
-  List<Post> wishes = List<Post>();
+  UserBloc _userBloc;
+  PostBloc _postBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _postBloc = BlocProvider.of<PostBloc>(context);
+    _userBloc = BlocProvider.of<UserBloc>(context);
+    _userBloc.dispatch(UserGetWish());
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // body: _buildSuggestions(),
+      body: _buildSuggestions(),
     );
   }
 
   Widget _buildSuggestions() {
-    return SafeArea(
-      child: ListView.separated(
-        padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
-        physics: BouncingScrollPhysics(),
-        // wishes에 있는 개수만큼 찍게끔 설정해야함.
-        // itemCount: wishes.length,
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int idx) {
-          return _buildRow(context);
-        },
-        separatorBuilder: (BuildContext context, int i) {
-          return Divider();
-        },
-      ),
-    );
+    return BlocBuilder(
+        bloc: _userBloc,
+        builder: (BuildContext context, UserState state) {
+          if (state is UserUninitialized) {
+            return Expanded(
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Center(
+                      child: SpinKitChasingDots(
+                        size: 30.0,
+                        color: Colors.amber[200],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenAwareSize(50.0, context))
+                ],
+              ),
+            );
+          }
+          if (state is UserError) {
+            return Center(
+              child: Text('포스트를 불러오는데 실패했습니다.'),
+            );
+          }
+          if (state is UserLoaded) {
+            log.i('UserLoaded');
+            if (state.wish == null) {
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Center(
+                      child: SpinKitChasingDots(
+                        size: 30.0,
+                        color: Colors.amber[200],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenAwareSize(50.0, context))
+                ],
+              );
+            }
+            if (state.wish.isEmpty) {
+              return Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Expanded(
+                      child: Center(child: Text("게시글이 없어요!")),
+                    ),
+                    SizedBox(height: screenAwareSize(50.0, context))
+                  ],
+                ),
+              );
+            }
+            return 
+            SafeArea(
+              child: ListView.separated(
+                padding:
+                    EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
+                physics: BouncingScrollPhysics(),
+                itemCount: state.wish.length,
+                itemBuilder: (BuildContext context, int idx) {
+                  return _buildRow(context, state.wish[idx]);
+                },
+                separatorBuilder: (BuildContext context, int i) {
+                  return Divider();
+                },
+              ),
+            );
+          }
+        });
   }
 
-  Widget _buildRow(context) {
+  Widget _buildRow(context, Post post) {
+    bool wish = true;
+
     return PostCard(
-      onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PostViewPage()));
-      },
-    );
+        post: post,
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PostViewPage(postId: post.id)));
+        },
+        onTapHeart: () async {
+          _userBloc.dispatch(UserChangeWish(postId: post.id));
+          _userBloc.dispatch(SearchWishInUser(postId: post.id, wish: true));
+        },
+        issaved: wish);
   }
 }

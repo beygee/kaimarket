@@ -39,11 +39,3 @@ class UserLoaded extends UserState {
     return "UserLoaded";
   }
 }
-
-class UserChangedWish extends UserState{
-
-  @override
-  String toString() {
-    return "UserChangedWish";
-  }
-}
