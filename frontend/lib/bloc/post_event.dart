@@ -30,8 +30,10 @@ class PostDelete extends PostEvent {
 class PostSelectCategory extends PostEvent{
   final int selectedcategory;
 
+  getSelectedCategory() => this.selectedcategory;
+
   PostSelectCategory({
-    this.selectedcategory
+    @required this.selectedcategory
   });
 
   @override
@@ -46,7 +48,7 @@ class PostSearch extends PostEvent{
   getData()=> this.searchdata;
 
   PostSearch({
-    this.searchdata
+    @required this.searchdata
   });
 
   @override

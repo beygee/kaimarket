@@ -16,27 +16,26 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   @override
   Stream<UserState> mapEventToState(UserEvent event) async* {
-    try {
-      if (event is UserInit && currentState is UserUninitialized) {
-        //유저를 초기화해준다.
-  // d
-
-        // final posts = await _getAllPost();
-        // // yield UserLoaded(wish: posts[0], sell: posts[1], purchased: posts[2]);
-        // // ******* userload 할 때 initialize 해주기
-        // wishList = posts[0];
-        // purchasedList = posts[2];
-      }
-      if (event is UserAddOrRemoveWish) {
-        //   final wishes = await _addOrRemoveWish(item);
-        //    yield UserAddedOrRemovedWish(wish: wishes);
-        return;
-      }
-      if (event is UserAddPurchase) {
-        //    final purchases = await _addPurchase(item);
-        //   yield UserAddedPurchase(purchase: purchases);
-        return;
-      }
+    try{
+    if (event is UserInit && currentState is UserUninitialized) {
+      //유저를 초기화해준다.
+      // final posts = await _getAllPost();
+      // yield UserLoaded(wish: posts[0], sell: posts[1], purchased: posts[2]);
+      // // ******* userload 할 때 initialize 해주기
+      // wishList = posts[0];
+      // purchasedList = posts[2];
+      // return;
+    }
+    if (event is UserAddOrRemoveWish) {
+      final wishes = await _addOrRemoveWish(event.getData());
+      yield UserAddedOrRemovedWish(wish: wishes);
+      return;
+    }
+    if (event is UserAddPurchase) {
+      final purchases = await _addPurchase(event.getData());
+      yield UserAddedPurchase(purchase: purchases);
+      return;
+    }
     } catch (_) {
       print(_);
       yield UserError();

@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:week_3/layout/default.dart';
 import 'package:week_3/login/valid/valid_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'kakao_button.dart';
 
 class LoginPage extends StatefulWidget {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
@@ -111,9 +112,9 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () => _loginWithNaver(context),
         ),
         SizedBox(height: 10.0),
-        LoginButton(
+        KakaoLoginButton(
           text: "카카오톡과 연결하기",
-          icon: IconData(0xe901, fontFamily: 'login'),
+          icon: IconData(0xe900, fontFamily: 'kakao'),
           color: Color(0xffffe535),
           onPressed: () => _loginWithKakao(context),
         ),

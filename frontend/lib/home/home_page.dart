@@ -63,6 +63,7 @@ class HomePageState extends State<HomePage> {
                           child: _buildSuggestions(context, state.posts));
                     }
                     if (state is PostSearched) {
+                      log.i("검색");
                       if (state.searchedPosts.isEmpty) {
                         return Center(
                           child: Text('검색된 게시글이 없어요!'),
@@ -73,12 +74,15 @@ class HomePageState extends State<HomePage> {
                       );
                     }
                     if (state is PostSelectedCategory){
+                      log.i("카테고리선택");
+                      log.i(state.categoryPosts);
                       if (state.categoryPosts.isEmpty){
                         return Center(
                           child: Text('해당 카테고리의 게시글이 없어요!'),
                         );
                       }
                       return Expanded(
+
                         child: _buildSuggestions(context, state.categoryPosts),
                       );
                     }
@@ -104,8 +108,8 @@ class HomePageState extends State<HomePage> {
         controller: myController,
         decoration: InputDecoration(
           suffixIcon: GestureDetector(
-            onTap: () =>
-                _postBloc.dispatch(PostSearch(searchdata: myController.text)),
+            onTap: () async =>
+                await _postBloc.dispatch(PostSearch(searchdata: myController.text)),
             child: Icon(Icons.search),
           ),
           hintText: "상품을 검색해보세요",
@@ -135,6 +139,7 @@ class HomePageState extends State<HomePage> {
             onPressed: () {
               setState(() {
                 selectedCategory = idx;
+                _postBloc.dispatch(PostSelectCategory(selectedcategory: selectedCategory));
               });
             },
           );
