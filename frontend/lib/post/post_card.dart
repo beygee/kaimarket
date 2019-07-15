@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/dio.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
   final VoidCallback onTap;
@@ -23,20 +24,34 @@ class PostCard extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: post.isBook
-                        ? Image.network(
-                            post.bookImage,
-                            width: screenAwareSize(100.0, context),
-                            height: screenAwareSize(90.0, context),
-                            fit: BoxFit.cover,
-                          )
-                        : Image.network(
-                            getUri('').toString() + post.images[0]['thumb'],
-                            width: screenAwareSize(100.0, context),
-                            height: screenAwareSize(90.0, context),
-                            fit: BoxFit.cover,
-                          )),
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: post.isBook
+                      ? CachedNetworkImage(
+                          imageUrl: post.bookImage,
+                          width: screenAwareSize(100.0, context),
+                          height: screenAwareSize(90.0, context),
+                          fit: BoxFit.cover,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl:
+                              getUri('').toString() + post.images[0]['url'],
+                          width: screenAwareSize(100.0, context),
+                          height: screenAwareSize(90.0, context),
+                          fit: BoxFit.cover,
+                        ),
+                ),
+                //  Image.network(
+                //     ,
+                //     width: screenAwareSize(100.0, context),
+                //     height: screenAwareSize(90.0, context),
+                //     fit: BoxFit.cover,
+                //   )
+                // : Image.network(
+                //     getUri('').toString() + post.images[0]['thumb'],
+                //     width: screenAwareSize(100.0, context),
+                //     height: screenAwareSize(90.0, context),
+                //     fit: BoxFit.cover,
+                //   )),
                 SizedBox(width: 15.0),
                 Expanded(
                   child: Column(
