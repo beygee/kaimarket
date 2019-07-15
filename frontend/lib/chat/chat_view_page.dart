@@ -194,7 +194,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
                 _itemMiddle(context),
               ]),
             ),
-            SizedBox(width: 5.0,),
+            SizedBox(
+              width: 5.0,
+            ),
             _itemRight(context),
           ],
         ),
@@ -206,19 +208,19 @@ class _ChatViewPageState extends State<ChatViewPage> {
     return new ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: widget.chat.post.isBook
-        ? CachedNetworkImage(
-            imageUrl: widget.chat.post.bookImage,
-            width: screenAwareSize(60.0, context),
-            height: screenAwareSize(60.0, context),
-            fit: BoxFit.cover,
-          )
-        : CachedNetworkImage(
-            imageUrl:
-                getUri('').toString() + widget.chat.post.images[0]['url'],
-            width: screenAwareSize(60.0, context),
-            height: screenAwareSize(60.0, context),
-            fit: BoxFit.cover,
-          ),
+          ? CachedNetworkImage(
+              imageUrl: widget.chat.post.bookImage,
+              width: screenAwareSize(60.0, context),
+              height: screenAwareSize(60.0, context),
+              fit: BoxFit.cover,
+            )
+          : CachedNetworkImage(
+              imageUrl:
+                  getUri('').toString() + widget.chat.post.images[0]['url'],
+              width: screenAwareSize(60.0, context),
+              height: screenAwareSize(60.0, context),
+              fit: BoxFit.cover,
+            ),
     );
   }
 
@@ -422,7 +424,7 @@ class MessageBubble extends StatelessWidget {
         children: <Widget>[
           if (me && showTime)
             new Text(
-              time,
+              parseDate(time),
               //new DateFormat("hh:mm a").format(time),
               style: _timeFont,
             ),
@@ -468,13 +470,18 @@ class MessageBubble extends StatelessWidget {
           ),
           if (!me && showTime)
             new Text(
-              time,
+              parseDate(time),
               style: _timeFont,
             ),
         ],
       ),
       // updatePrev_time(time);
     );
+  }
+
+  String parseDate(String date) {
+    final dateTime = DateTime.parse(date);
+    return date;
   }
 }
 
