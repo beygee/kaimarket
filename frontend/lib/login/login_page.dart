@@ -70,17 +70,17 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _buildImage(context){
+  Widget _buildImage(context) {
     return new Container(
-      width: 180,
-      height: 180,
+      width: screenAwareSize(180.0, context),
+      height: screenAwareSize(180.0, context),
       decoration: new BoxDecoration(
-          border: Border.all(color: Colors.grey[400], width: 1.0),
-          shape: BoxShape.circle,
-          image: new DecorationImage(
+        border: Border.all(color: Colors.grey[400], width: 1.0),
+        shape: BoxShape.circle,
+        image: new DecorationImage(
             fit: BoxFit.fill,
             image: ExactAssetImage('assets/images/neopjuk.png')),
-          ),
+      ),
     );
   }
 
@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
     return Text(
       "카이스트 학생 상품 소식을\n누구보다 빠르게 접해보세요",
       style: TextStyle(
-        fontSize: 23.0,
+        fontSize: screenAwareSize(20.0, context),
         fontWeight: FontWeight.bold,
       ),
       softWrap: true,
@@ -112,14 +112,14 @@ class _LoginPageState extends State<LoginPage> {
         //   color: Color(0xff3488f1),
         //   onPressed: () => _loginWithGoogle(context),
         // ),
-        SizedBox(height: 2.0),
+        SizedBox(height: screenAwareSize(5.0, context)),
         LoginButton(
           text: "페이스북과 연결하기",
           icon: FontAwesomeIcons.facebookF,
           color: Color(0xff3a5c93),
           onPressed: () => _loginWithFacebook(context),
         ),
-        SizedBox(height: 2.0),
+        SizedBox(height: screenAwareSize(5.0, context)),
         LoginButton(
           text: "네이버와 연결하기",
           icon: IconData(0xe600, fontFamily: 'custom'),
@@ -127,14 +127,14 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xff1ec800),
           onPressed: () => _loginWithNaver(context),
         ),
-        SizedBox(height: 2.0),
+        SizedBox(height: screenAwareSize(5.0, context)),
         KakaoLoginButton(
           text: "카카오톡과 연결하기",
           icon: IconData(0xe605, fontFamily: 'custom'),
           color: Color(0xffffe535),
           onPressed: () => _loginWithKakao(context),
         ),
-        SizedBox(height: 18.0),
+        SizedBox(height: screenAwareSize(15.0, context)),
         Text(
           "SNS 로그인 후 카이스트 학생 인증을 하게 됩니다.",
           style: TextStyle(
