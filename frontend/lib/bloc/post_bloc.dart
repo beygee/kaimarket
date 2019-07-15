@@ -24,7 +24,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       return;
     }
     if (event is PostSearch){
-      final searchedPosts = await _getSearchedPost();
+      final searchedPosts = await _getSearchedPost(event.getData());
       yield PostSearched(searchedPosts: searchedPosts);
       return;
     }
@@ -33,9 +33,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       yield PostError();
     }
   }
-
-  // bool _hasReachedMax(PostState state) =>
-  //   state is PostLoaded && state.hasReachdedMax;
 
   Future<List<Post>> _getAllPost() async{
     var response = await dio.getUri(getUri('/api/posts'));
@@ -55,18 +52,17 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       Post post = Post.fromJson(iterator);
       list.add(post);
     }
-    
     return list;
   }
 
-  Future<List<Post>> _getSearchedPost() async{
-    var response = await dio.getUri(getUri('/api/posts'));
+  Future<List<Post>> _getSearchedPost(String searchdata) async{
+    var response = await dio.getUri(getUri('/api/posts?q=$searchdata'));
+    log.i(response);
     List<Post> list = List<Post>();
     for (var iterator in response.data){
       Post post = Post.fromJson(iterator);
       list.add(post);
     }
-    
     return list;
   }
 }
