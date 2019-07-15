@@ -8,7 +8,6 @@ import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
-import 'package:date_format/date_format.dart';
 
 class ChatViewPage extends StatefulWidget {
   final Chat chat;
@@ -57,32 +56,57 @@ class _ChatViewPageState extends State<ChatViewPage> {
         }
       }
       // showTime 계산하기
-      existMessages[0].showTime = true;
-      if (existMessages.length != 1) {
-        int i;
-        for (i = 0; i < existMessages.length - 1; i++) {
-          for (int j = i; j < existMessages.length - i; j++) {
-            if (existMessages[i].from == existMessages[j + 1].from &&
-                minute(existMessages[i].time) ==
-                    minute(existMessages[j + 1].time)) {
-              existMessages[j + 1].showTime = false;
-            } else {
-              i = j + 1;
-              existMessages[i].showTime = true;
-              break;
-            }
-          }
-        }
-        if (existMessages[i].from == existMessages[i - 1].from &&
-            minute(existMessages[i].time) == minute(existMessages[i - 1].time))
-          existMessages[i].showTime = false;
-        else {
-          existMessages[i].showTime = true;
-        }
-      }
+      // existMessages[0].showTime = true;
+      // if (existMessages.length != 1) {
+      //   int i;
+      //   for (i = 0; i < existMessages.length - 1; i++) {
+      //     for (int j = i; j < existMessages.length - i; j++) {
+      //       if ((existMessages[i].from == existMessages[j + 1].from) && (minute(existMessages[i].time) == minute(existMessages[j + 1].time))) {
+      //         existMessages[j + 1].showTime = false;
+      //       } else {
+      //         i = j + 1;
+      //         existMessages[i].showTime = true;
+      //         break;
+      //       }
+      //     }
+      //   }
+      //   if (existMessages[i].from == existMessages[i - 1].from &&
+      //       minute(existMessages[i].time) == minute(existMessages[i - 1].time))
+      //     existMessages[i].showTime = false;
+      //   else {
+      //     existMessages[i].showTime = true;
+      //   }
+      // }
+
+      // showTime 계산하기
+       existMessages[existMessages.length-1].showTime = true;
+       if (existMessages.length != 1) {
+         int i;
+         for (i = existMessages.length-1; i > 0; i--) {
+           for (int j = i; j > 0; j--) {
+            //  log.i(i);
+             if ((existMessages[i].from == existMessages[j - 1].from) && (minute(existMessages[i].time) == minute(existMessages[j - 1].time))) {
+               existMessages[j - 1].showTime = false;
+             } else {
+               i = j - 1;
+               existMessages[i].showTime = true;
+               break;
+             }
+           }
+         }
+         if (existMessages[i].from == existMessages[i + 1].from &&
+             minute(existMessages[i].time) == minute(existMessages[i + 1].time))
+           existMessages[i].showTime = false;
+         else {
+           existMessages[i].showTime = true;
+         }
+       }
     }
     // reverse
     setState(() {
+      for (int i = 0; i < (existMessages.length) - 1; i++){
+        log.i(existMessages[i].text, existMessages[i].showTime);
+      }
       for (int i = 0; i < (existMessages.length - 1) / 2; i++) {
         Message tempMessage = existMessages[i];
         existMessages[i] = existMessages[existMessages.length - 1 - i];
@@ -136,7 +160,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
     if (prevMessage.from == currentMessage['from'] &&
         minute(prevMessage.time) == minute(currentMessage['time']))
       showTime = false;
-
+    
     setState(() {
       existMessages.remove(prevMessage);
       // log.i(existMessages.length);
