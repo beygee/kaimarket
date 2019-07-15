@@ -76,9 +76,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: login
+    - family: kakao
       fonts:
-        - asset: assets/fonts/ic_kakao_.ttf
+        - asset: assets/fonts/icon_kakao.ttf
 
     - family: naver
       fonts:
