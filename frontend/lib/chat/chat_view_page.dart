@@ -53,7 +53,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
   void initState() {
     super.initState();
     _socketBloc = BlocProvider.of<SocketBloc>(context);
-    _socketBloc.dispatch(SocketChatEnter());
+    _socketBloc.dispatch(SocketChatEnter(onMessage: (data){
+      log.i("메시지 : $data");
+    }));
     initShow();
   }
 
