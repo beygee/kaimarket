@@ -84,12 +84,14 @@ class _ChatViewPageState extends State<ChatViewPage> {
       } 
     }
     // reverse 
-    
-    for (int i = 0; i < (existMessages.length -1)/2; i++){
+    setState(() {
+      for (int i = 0; i < (existMessages.length -1)/2; i++){
       Message tempMessage = existMessages[i];
       existMessages[i] = existMessages[existMessages.length-1-i];
       existMessages[existMessages.length-1-i] = tempMessage;
     }
+    });
+    
 
     scrollController.animateTo(
       //0.0,
@@ -285,9 +287,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
         ),
         controller: messageController,
         maxLines: 1,
-        // textAlignVertical: TextAlignVertical.center,
-        // keyboardType: TextInputType.multiline,
-        autofocus: true,
         style: TextStyle(fontSize: 14.0),
         scrollPadding: EdgeInsets.all(2.0),
       ),
