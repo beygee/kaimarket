@@ -76,16 +76,23 @@ class _ChatViewPageState extends State<ChatViewPage> {
       //    "from": widget.user.id,
         }
       ]);
+    
+      messageController.clear();
+      scrollController.animateTo(0.0,
+          //scrollController.position.maxScrollExtent,
+          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 300));
+      //scrollController.jumpTo(scrollController.position.maxScrollExtent);
+
       // server에서 ok 하면 socket으로 받아오기
       // await socket.on("ok")
+      
       bool showTime = true;
       // 서버에서 받은 메세지로 currentMessage에 넣어주기
       var currentMessage = existMessages[1];
       var prevMessage = existMessages[0];
       if (prevMessage.from == currentMessage.from && prevMessage.time == currentMessage.time)
         showTime = false;
-
-      // 소켓으로 서버에서 메세지 받기
 
       setState(() {
         existMessages.remove(prevMessage);
@@ -103,12 +110,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
          });
        });
 
-      messageController.clear();
-      scrollController.animateTo(0.0,
-          //scrollController.position.maxScrollExtent,
-          curve: Curves.easeOut,
-          duration: const Duration(milliseconds: 300));
-      //scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      
     }
   }
 
