@@ -187,7 +187,7 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildRow(context, Post post) {
     bool wish = post.isWish;
-    
+
     return PostCard(
         post: post,
         onTap: () {
@@ -201,6 +201,4 @@ class HomePageState extends State<HomePage> {
         },
         issaved: wish);
   }
-
-
 }

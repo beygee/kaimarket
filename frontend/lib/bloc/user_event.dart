@@ -46,3 +46,10 @@ class UserAddPurchase extends UserEvent {
     return "AddPurchase";
   }
 }
+
+class UserGetWish extends UserEvent{
+  @override
+  String toString() {
+    return "UserGetWish";
+  }
+}
