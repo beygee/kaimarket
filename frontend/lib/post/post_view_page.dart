@@ -388,7 +388,7 @@ class _PostViewPageState extends State<PostViewPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            post.price.toString() + " 원",
+            getMoneyFormat(post.price) + " 원",
             style: TextStyle(
               fontSize: screenAwareSize(18.0, context),
               fontWeight: FontWeight.bold,
@@ -505,9 +505,8 @@ class _PostViewPageState extends State<PostViewPage> {
                 shape: BoxShape.circle,
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  //image:  NetworkImage(
-                  //  "url"
-                  image: ExactAssetImage('assets/images/logo.jpg'),
+                  image:
+                      ExactAssetImage(getRandomAvatarUrlByPostId(post.user.id)),
                 ),
               ),
             ),

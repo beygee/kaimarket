@@ -62,7 +62,10 @@ class ChatCard extends StatelessWidget {
             fit: BoxFit.fill,
             //image: new NetworkImage(
             //  "url"
-            image: ExactAssetImage(_profileImage),
+            image: ExactAssetImage(getRandomAvatarUrlByPostId(
+                loggedUserId == chat.buyer.id
+                    ? chat.seller.id
+                    : chat.buyer.id)),
           )),
     );
   }

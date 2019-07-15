@@ -6,6 +6,8 @@ import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:week_3/login/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:week_3/bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -13,6 +15,17 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
+  UserBloc _userBloc;
+  String loggedUserId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _userBloc = BlocProvider.of<UserBloc>(context);
+    final UserLoaded user = _userBloc.currentState;
+    loggedUserId = user.id;
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -49,12 +62,12 @@ class _MyPageState extends State<MyPage> {
   List<Widget> _buildProfile(context) {
     return [
       CircleAvatar(
-        child: Text("K"),
+        backgroundImage: AssetImage(getRandomAvatarUrlByPostId(loggedUserId)),
         radius: screenAwareSize(40.0, context),
       ),
       SizedBox(height: screenAwareSize(10.0, context)),
       Text(
-        "Diuni",
+        (_userBloc.currentState as UserLoaded).name,
         style: TextStyle(
             color: Colors.grey[600], fontSize: screenAwareSize(16.0, context)),
       ),
@@ -62,32 +75,32 @@ class _MyPageState extends State<MyPage> {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          SizedBox(
-            width: 120.0,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)),
-              elevation: 0.0,
-              hoverColor: ThemeColor.primary,
-              highlightColor: ThemeColor.primary,
-              focusColor: ThemeColor.primary,
-              focusElevation: 0.0,
-              highlightElevation: 0.0,
-              hoverElevation: 0.0,
-              splashColor: ThemeColor.primary,
-              color: Colors.transparent,
-              onPressed: () {},
-              child: Text(
-                "키워드 알림",
-                style: TextStyle(
-                  color: Colors.grey[500],
-                  fontSize: screenAwareSize(12.0, context),
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
-          SizedBox(width: 20.0),
+          // SizedBox(
+          //   width: 120.0,
+          //   child: RaisedButton(
+          //     shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(10.0)),
+          //     elevation: 0.0,
+          //     hoverColor: ThemeColor.primary,
+          //     highlightColor: ThemeColor.primary,
+          //     focusColor: ThemeColor.primary,
+          //     focusElevation: 0.0,
+          //     highlightElevation: 0.0,
+          //     hoverElevation: 0.0,
+          //     splashColor: ThemeColor.primary,
+          //     color: Colors.transparent,
+          //     onPressed: () {},
+          //     child: Text(
+          //       "키워드 알림",
+          //       style: TextStyle(
+          //         color: Colors.grey[500],
+          //         fontSize: screenAwareSize(12.0, context),
+          //       ),
+          //       textAlign: TextAlign.center,
+          //     ),
+          //   ),
+          // ),
+          // SizedBox(width: 20.0),
           SizedBox(
             width: 120.0,
             child: RaisedButton(
