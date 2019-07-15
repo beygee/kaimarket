@@ -13,6 +13,7 @@ import 'package:week_3/models/post.dart';
 import 'package:week_3/bloc/post_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -44,8 +45,20 @@ class HomePageState extends State<HomePage> {
                   bloc: _postBloc,
                   builder: (BuildContext context, PostState state) {
                     if (state is PostUninitialized) {
-                      return Center(
-                        child: CircularProgressIndicator(),
+                      return Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: Center(
+                                child: SpinKitChasingDots(
+                                  size: 30.0,
+                                  color: ThemeColor.primary,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenAwareSize(50.0, context))
+                          ],
+                        ),
                       );
                     }
                     if (state is PostError) {

@@ -7,5 +7,6 @@ router.get('/', ctrl.getPosts)
 router.get('/:id', ctrl.getPost)
 
 router.post("/", ctrl.createPost)
+router.post('/:id/view', ctrl.increaseView)
 
 module.exports = router

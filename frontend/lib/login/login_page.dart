@@ -106,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(height: 10.0),
         LoginButton(
           text: "네이버와 연결하기",
-          icon: IconData(0xe910, fontFamily: 'naver'),
+          icon: IconData(0xe600, fontFamily: 'custom'),
           // color: Color(0xff00cf63),
           color: Color(0xff1ec800),
           onPressed: () => _loginWithNaver(context),
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
         SizedBox(height: 10.0),
         KakaoLoginButton(
           text: "카카오톡과 연결하기",
-          icon: IconData(0xe900, fontFamily: 'kakao'),
+          icon: IconData(0xe605, fontFamily: 'custom'),
           color: Color(0xffffe535),
           onPressed: () => _loginWithKakao(context),
         ),

@@ -99,7 +99,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
       "text": data['text'],
       "time": data['time']
     };
-    log.i(data['from']);
     var prevMessage = existMessages[0];
     if (prevMessage.from == currentMessage['from'] &&
         prevMessage.time == currentMessage['time']) showTime = false;
