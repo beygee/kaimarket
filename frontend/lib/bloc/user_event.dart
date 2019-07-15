@@ -12,3 +12,17 @@ class UserInit extends UserEvent {
     return "Init";
   }
 }
+
+class UserAddOrRemoveWish extends UserEvent {
+  @override
+  String toString() {
+    return "AddOrRemoveWish";
+  }
+}
+
+class UserAddPurchase extends UserEvent {
+  @override
+  String toString() {
+    return "AddPurchase";
+  }
+}

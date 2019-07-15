@@ -37,16 +37,22 @@ class _ChatViewPageState extends State<ChatViewPage> {
   var prev_time = "";
   var prev_user = "user.id";
   List<Widget> response;
-  var docs = [
-    {"text": "hi", "userId": "user_id", "time": "오후 10:15"},
-    {"text": "hhhhhhi", "userId": "user_id", "time": "오후 10:15"}
-  ];
+  var existMessages = [];
+  var docs = [{'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
+              {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}];
+
+  Future initShow() async {
+    var dbChats = await dio.getUri(getUri('/api/chats'));
+    var existMessages = Chat.fromJson(dbChats.data).messages;
+  }
 
   @override
   void initState() {
     super.initState();
     _socketBloc = BlocProvider.of<SocketBloc>(context);
     _socketBloc.dispatch(SocketChatEnter());
+    initShow();
+    // existMessages에 있는 거 db에서 불러오고 띄워주기
   }
 
   @override
@@ -73,13 +79,13 @@ class _ChatViewPageState extends State<ChatViewPage> {
           "from": widget.chat.buyer.id,
         }
       ]);
-      // setState(() {
-      //   docs.insert(0, {
-      //     "text": messageController.text,
-      //     "userId": "user_id",
-      //     "time": time
-      //   });
-      // });
+      setState(() {
+         existMessages.insert(0, {
+           "text": messageController.text,
+          "userId": "user_id",
+           "time": time
+         });
+       });
 
       // db에 저장은 소켓이 해준대 ~!
       // prev_user = "user.id";
@@ -242,19 +248,19 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   children: <Widget>[
                     // db에서 가져오기
                     // Response<Message> response = await dio.get<Message>("message", ??).toList();
-                    ...docs
-                        .map((doc) => Message(
+                    ...existMessages
+                        .map((doc) => MessageBubble(
                               from: doc['from'],
                               text: doc['text'],
                               time: doc['time'],
                             ))
                         .toList(),
-                    new Message(
+                    new MessageBubble(
                       from: 'diuni',
                       text: 'heello 내 이름은 지윤팍팍 아임 지�� 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
                       time: '오후 3:39',
                     ),
-                    new Message(
+                    new MessageBubble(
                       from: 'diuni',
                       text: '짧은 거',
                       time: '오후 4:00',
@@ -301,7 +307,7 @@ class SendButton extends StatelessWidget {
   }
 }
 
-class Message extends StatelessWidget {
+class MessageBubble extends StatelessWidget {
   final String from;
   final String text;
   final String time;
@@ -311,7 +317,7 @@ class Message extends StatelessWidget {
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
   final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
 
-  Message({Key key, this.from, this.text, this.time}) : super(key: key);
+  MessageBubble({Key key, this.from, this.text, this.time}) : super(key: key);
 
   bool me = true;
 
