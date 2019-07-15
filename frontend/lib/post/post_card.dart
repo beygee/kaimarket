@@ -94,13 +94,21 @@ class PostCard extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(height: screenAwareSize(5.0, context)),
+                              if (post.isBook) ...[
+                                Text("수업명: " + post.bookMajor,
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: screenAwareSize(9.0, context),
+                                    )),
+                                SizedBox(height: screenAwareSize(2.0, context))
+                              ],
                               Container(
                                 width: screenAwareSize(
                                     small ? 100.0 : 150, context),
                                 child: Text(
                                   post.content,
                                   overflow: TextOverflow.ellipsis,
-                                  maxLines: small ? 2 : 3,
+                                  maxLines: post.isBook ? 1 : small ? 2 : 3,
                                   softWrap: true,
                                   style: TextStyle(
                                     color: Colors.grey[500],

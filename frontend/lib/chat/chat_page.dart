@@ -32,7 +32,7 @@ class ChatListsState extends State<ChatLists> {
   Future fetchList() async {
     var res = await dio.getUri(getUri('/api/chats'));
     if (res.statusCode == 200) {
-      // log.i(res.data);
+      log.i(res.data);
       if (mounted) {
         setState(() {
           chats = res.data
@@ -76,7 +76,11 @@ class ChatListsState extends State<ChatLists> {
         },
         itemCount: chats.length,
         separatorBuilder: (context, idx) {
-          return Divider();
+          return Container(
+            height: 1.0,
+            width: double.infinity,
+            color: Colors.grey[200],
+          );
         },
       ),
     );
