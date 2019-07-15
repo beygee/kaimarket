@@ -39,9 +39,11 @@ class _LoginPageState extends State<LoginPage> {
                       width: 340.0,
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: screenAwareSize(100.0, context)),
+                          SizedBox(height: screenAwareSize(70.0, context)),
+                          _buildImage(context),
+                          SizedBox(height: screenAwareSize(20.0, context)),
                           _buildHeader(context),
-                          SizedBox(height: screenAwareSize(50.0, context)),
+                          SizedBox(height: screenAwareSize(20.0, context)),
                           _buildButtons(context),
                         ],
                       ),
@@ -68,11 +70,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _buildImage(context){
+    return new Container(
+      width: 200,
+      height: 200,
+      decoration: new BoxDecoration(
+          border: Border.all(color: Colors.grey[400], width: 1.0),
+          shape: BoxShape.circle,
+          image: new DecorationImage(
+            fit: BoxFit.fill,
+            image: ExactAssetImage('assets/images/neopjuk.png')),
+          ),
+    );
+  }
+
   Widget _buildHeader(context) {
     return Text(
-      "카이스트 학생\n상품 소식을 누구보다\n빠르게 접해보세요",
+      "카이스트 학생 상품 소식을\n누구보다 빠르게 접해보세요",
       style: TextStyle(
-        fontSize: 32.0,
+        fontSize: 23.0,
         fontWeight: FontWeight.bold,
       ),
       softWrap: true,
@@ -85,7 +101,7 @@ class _LoginPageState extends State<LoginPage> {
       children: <Widget>[
         LoginButton(
           text: "게스트 로그인",
-          icon: FontAwesomeIcons.user,
+          icon: FontAwesomeIcons.userAlt,
           color: Color(0xffaaaaaa),
           onPressed: () => _loginWithGuest(context),
         ),
@@ -96,14 +112,14 @@ class _LoginPageState extends State<LoginPage> {
         //   color: Color(0xff3488f1),
         //   onPressed: () => _loginWithGoogle(context),
         // ),
-        SizedBox(height: 10.0),
+        SizedBox(height: 0.0),
         LoginButton(
           text: "페이스북과 연결하기",
           icon: FontAwesomeIcons.facebookF,
           color: Color(0xff3a5c93),
           onPressed: () => _loginWithFacebook(context),
         ),
-        SizedBox(height: 10.0),
+        SizedBox(height: 0.0),
         LoginButton(
           text: "네이버와 연결하기",
           icon: IconData(0xe600, fontFamily: 'custom'),
@@ -111,14 +127,14 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xff1ec800),
           onPressed: () => _loginWithNaver(context),
         ),
-        SizedBox(height: 10.0),
+        SizedBox(height: 0.0),
         KakaoLoginButton(
           text: "카카오톡과 연결하기",
           icon: IconData(0xe605, fontFamily: 'custom'),
           color: Color(0xffffe535),
           onPressed: () => _loginWithKakao(context),
         ),
-        SizedBox(height: 30.0),
+        SizedBox(height: 20.0),
         Text(
           "SNS 로그인 후 카이스트 학생 인증을 하게 됩니다.",
           style: TextStyle(

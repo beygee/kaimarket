@@ -29,6 +29,9 @@ class WishPageState extends State<WishPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Wish"),
+      ),
       body: _buildSuggestions(),
     );
   }
