@@ -9,8 +9,14 @@ class PostCard extends StatelessWidget {
   final VoidCallback onTapHeart;
   final Post post;
   final bool issaved;
+  final bool small;
 
-  PostCard({@required this.post, this.onTap, this.onTapHeart, this.issaved});
+  PostCard(
+      {@required this.post,
+      this.onTap,
+      this.onTapHeart,
+      this.issaved,
+      this.small = false});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,7 @@ class PostCard extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            height: screenAwareSize(110.0, context),
+            height: screenAwareSize(small ? 80.0 : 110.0, context),
             padding: EdgeInsets.symmetric(
                 horizontal: 10.0, vertical: screenAwareSize(5.0, context)),
             child: Row(
@@ -30,15 +36,17 @@ class PostCard extends StatelessWidget {
                   child: post.isBook
                       ? CachedNetworkImage(
                           imageUrl: post.bookImage,
-                          width: screenAwareSize(100.0, context),
-                          height: screenAwareSize(100.0, context),
+                          width: screenAwareSize(small ? 70.0 : 100.0, context),
+                          height:
+                              screenAwareSize(small ? 70.0 : 100.0, context),
                           fit: BoxFit.cover,
                         )
                       : CachedNetworkImage(
                           imageUrl:
                               getUri('').toString() + post.images[0]['url'],
-                          width: screenAwareSize(100.0, context),
-                          height: screenAwareSize(100.0, context),
+                          width: screenAwareSize(small ? 70.0 : 100.0, context),
+                          height:
+                              screenAwareSize(small ? 70.0 : 100.0, context),
                           fit: BoxFit.cover,
                         ),
                 ),
@@ -54,60 +62,45 @@ class PostCard extends StatelessWidget {
                 //     height: screenAwareSize(90.0, context),
                 //     fit: BoxFit.cover,
                 //   )),
-                SizedBox(width: 15.0),
+                SizedBox(width: small ? 10.0 : 15.0),
                 Expanded(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               Container(
-                                width: screenAwareSize(150, context),
+                                width: screenAwareSize(
+                                    small ? 150.0 : 150, context),
                                 child: Text(
                                   post.title,
-                                  maxLines: 2,
+                                  maxLines: small ? 1 : 2,
                                   overflow: TextOverflow.ellipsis,
                                   softWrap: true,
                                   style: TextStyle(
                                     color: Colors.grey[600],
-                                    fontSize: screenAwareSize(14.0, context),
+                                    fontSize: screenAwareSize(
+                                        small ? 12.0 : 14.0, context),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
-                              InkResponse(
-                                  onTap: onTapHeart,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical:
-                                            screenAwareSize(10.0, context)),
-                                    child: issaved
-                                        ? Icon(
-                                            Icons.favorite,
-                                            color: Colors.amber[200],
-                                          )
-                                        : Icon(Icons.favorite_border,
-                                            color: Colors.amber[200]),
-                                  )),
-                            ],
-                          ),
-                          SizedBox(height: screenAwareSize(3.0, context)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
+                              SizedBox(height: screenAwareSize(5.0, context)),
                               Container(
-                                width: screenAwareSize(150, context),
+                                width: screenAwareSize(
+                                    small ? 100.0 : 150, context),
                                 child: Text(
                                   post.content,
                                   overflow: TextOverflow.ellipsis,
-                                  maxLines: 3,
+                                  maxLines: small ? 2 : 3,
                                   softWrap: true,
                                   style: TextStyle(
                                     color: Colors.grey[500],
@@ -116,7 +109,23 @@ class PostCard extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          )
+                          ),
+                          small
+                              ? Container()
+                              : GestureDetector(
+                                  onTap: onTapHeart,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                      screenAwareSize(5.0, context),
+                                    ),
+                                    child: issaved
+                                        ? Icon(
+                                            Icons.favorite,
+                                            color: Colors.amber[200],
+                                          )
+                                        : Icon(Icons.favorite_border,
+                                            color: Colors.amber[200]),
+                                  ))
                         ],
                       ),
                       Row(

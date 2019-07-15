@@ -49,26 +49,35 @@ class ChatListsState extends State<ChatLists> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: new ListView(
-        children: <Widget>[
-          for (int i = 0; i < chats.length; i++)
-            ChatCard(
-              chat: chats[i],
-              loggedUserId: loggedUserId,
-              onPressed: () {
-                setState(() {
-                  chats[i].buyerNonReadCount = 0;
-                  chats[i].sellerNonReadCount = 0;
-                });
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text(
+          "채팅방 목록",
+          style: TextStyle(fontSize: 16.0),
+        ),
+      ),
+      body: ListView.separated(
+        physics: BouncingScrollPhysics(),
+        padding: EdgeInsets.only(bottom: screenAwareSize(60.0, context)),
+        itemBuilder: (context, i) {
+          return ChatCard(
+            chat: chats[i],
+            loggedUserId: loggedUserId,
+            onPressed: () {
+              setState(() {
+                chats[i].buyerNonReadCount = 0;
+                chats[i].sellerNonReadCount = 0;
+              });
 
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatViewPage(chat: chats[i])));
-              },
-            ),
-          SizedBox(
-            height: screenAwareSize(60.0, context),
-          )
-        ],
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => ChatViewPage(chat: chats[i])));
+            },
+          );
+        },
+        itemCount: chats.length,
+        separatorBuilder: (context, idx) {
+          return Divider();
+        },
       ),
     );
   }

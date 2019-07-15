@@ -80,7 +80,7 @@ class SellOverlay extends StatelessWidget {
                             child: SellButton(
                               text: "다른 물품",
                               fontSize: 8,
-                              icon: FontAwesomeIcons.thLarge,
+                              icon: IconData(0xe60d, fontFamily: 'custom'),
                               iconSize: 14.0,
                               padding: 8.0,
                               onPressed: () {

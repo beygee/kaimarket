@@ -226,7 +226,7 @@ class _PostViewPageState extends State<PostViewPage> {
                         size: screenAwareSize(14.0, context),
                       ),
                       SizedBox(width: 10.0),
-                      Text('톡으로 연락하기'),
+                      Text('채팅으로 연락하기', style: TextStyle(color: Colors.white)),
                     ],
                   ),
                 ),
@@ -258,7 +258,7 @@ class _PostViewPageState extends State<PostViewPage> {
     for (int i = 0; i < post.images.length; i++) {
       images.add(
         CachedNetworkImage(
-          imageUrl: getUri('').toString() + post.images[i]['url'],
+          imageUrl: getUri('').toString() + post.images[i]['thumb'],
           fit: BoxFit.cover,
         ),
       );
