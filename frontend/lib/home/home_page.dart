@@ -50,7 +50,7 @@ class HomePageState extends State<HomePage> {
                     }
                     if (state is PostError) {
                       return Center(
-                        child: Text('Failed to get posts'),
+                        child: Text('포스트를 불러오는데 실패했습니다.'),
                       );
                     }
                     if (state is PostLoaded) {
@@ -62,6 +62,26 @@ class HomePageState extends State<HomePage> {
                       return Expanded(
                           child: _buildSuggestions(context, state.posts));
                     }
+                    if (state is PostSearched) {
+                      if (state.searchedPosts.isEmpty) {
+                        return Center(
+                          child: Text('검색된 게시글이 없어요!'),
+                        );
+                      }
+                      return Expanded(
+                        child: _buildSuggestions(context, state.searchedPosts),
+                      );
+                    }
+                    if (state is PostSelectedCategory){
+                      if (state.categoryPosts.isEmpty){
+                        return Center(
+                          child: Text('해당 카테고리의 게시글이 없어요!'),
+                        );
+                      }
+                      return Expanded(
+                        child: _buildSuggestions(context, state.categoryPosts),
+                      );
+                    }
                   }),
             ],
           );
@@ -71,7 +91,6 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildSearchInput(context) {
-
     final myController = TextEditingController();
 
     return Padding(
@@ -85,7 +104,8 @@ class HomePageState extends State<HomePage> {
         controller: myController,
         decoration: InputDecoration(
           suffixIcon: GestureDetector(
-            onTap: ()=>_postBloc.dispatch(PostSearch(searchdata: myController.text)),
+            onTap: () =>
+                _postBloc.dispatch(PostSearch(searchdata: myController.text)),
             child: Icon(Icons.search),
           ),
           hintText: "상품을 검색해보세요",

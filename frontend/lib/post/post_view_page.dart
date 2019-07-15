@@ -412,14 +412,14 @@ class _PostViewPageState extends State<PostViewPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'gkdl',
+                  post.user.name,
                   style: TextStyle(
                     fontSize: screenAwareSize(14.0, context),
                     color: Colors.grey[800],
                   ),
                 ),
                 Text(
-                  "판매내역 3",
+                  "판매내역 : "+post.user.sales.length.toString(),
                   style: TextStyle(
                     fontSize: screenAwareSize(10.0, context),
                     color: Colors.grey[400],
