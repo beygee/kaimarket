@@ -25,18 +25,6 @@ class User {
         name = json['name'],
         email = json['email'] {
     try {
-      purchases = json['purchases'].length > 0
-          ? json['purchases']
-              .where((p) {
-                return p is! String;
-              })
-              .map((p) {
-                return Post.fromJson(p);
-              })
-              .toList()
-              .cast<Post>()
-          : <Post>[];
-
       sales = json['sales'].length > 0
           ? json['sales']
               .where((p) {
@@ -49,35 +37,35 @@ class User {
               .cast<Post>()
           : <Post>[];
 
-      salesCount = json['salesCount'];
+      // salesCount = json['salesCount'];
 
-      wish = json['wish'].length > 0
-          ? json['wish']
-              .where((p) {
-                return p is! String;
-              })
-              .map((p) {
-                return Post.fromJson(p);
-              })
-              .toList()
-              .cast<Post>()
-          : <Post>[];
+      // wish = json['wish'].length > 0
+      //     ? json['wish']
+      //         .where((p) {
+      //           return p is! String;
+      //         })
+      //         .map((p) {
+      //           return Post.fromJson(p);
+      //         })
+      //         .toList()
+      //         .cast<Post>()
+      //     : <Post>[];
 
-      chats = json['chats'].length > 0
-          ? json['chats']
-              .where((p) {
-                return p is! String;
-              })
-              .map((p) {
-                return Chat.fromJson(p);
-              })
-              .toList()
-              .cast<Chat>()
-          : <Chat>[];
+      // chats = json['chats'].length > 0
+      //     ? json['chats']
+      //         .where((p) {
+      //           return p is! String;
+      //         })
+      //         .map((p) {
+      //           return Chat.fromJson(p);
+      //         })
+      //         .toList()
+      //         .cast<Chat>()
+      //     : <Chat>[];
 
-      keywords = json['keywords'].length > 0
-          ? json['keywords'].cast<String>()
-          : <String>[];
+      // keywords = json['keywords'].length > 0
+      //     ? json['keywords'].cast<String>()
+      //     : <String>[];
     } catch (e) {
       log.e(e);
     }

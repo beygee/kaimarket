@@ -17,14 +17,13 @@ class PostUninitialized extends PostState {
 class PostError extends PostState {
   @override
   String toString() => 'PostError';
-
 }
 
 class PostLoaded extends PostState {
   final List<Post> posts;
   PostLoaded({
     this.posts,
-  }) : super([PostState]);
+  }) : super([posts]);
 
   PostLoaded copyWith({
     List<Post> posts,
@@ -40,11 +39,11 @@ class PostLoaded extends PostState {
   }
 }
 
-class PostSearched extends PostState{
+class PostSearched extends PostState {
   final List<Post> searchedPosts;
   PostSearched({
     this.searchedPosts,
-  }) : super([PostState]);
+  }) : super([searchedPosts]);
 
   @override
   String toString() {
@@ -52,7 +51,7 @@ class PostSearched extends PostState{
   }
 }
 
-class PostSelectedCategory extends PostState{
+class PostSelectedCategory extends PostState {
   final List<Post> categoryPosts;
   PostSelectedCategory({
     this.categoryPosts,

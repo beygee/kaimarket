@@ -14,14 +14,19 @@ class UserInit extends UserEvent {
   }
 }
 
+class UserDelete extends UserEvent {
+  @override
+  String toString() {
+    return "Delete";
+  }
+}
+
 class UserAddOrRemoveWish extends UserEvent {
   final Post item;
-  
+
   getData() => this.item;
 
-  UserAddOrRemoveWish({
-    this.item
-  });
+  UserAddOrRemoveWish({this.item});
 
   @override
   String toString() {
@@ -31,13 +36,11 @@ class UserAddOrRemoveWish extends UserEvent {
 
 class UserAddPurchase extends UserEvent {
   final Post item;
-  
+
   getData() => this.item;
 
-  UserAddPurchase({
-    this.item
-  });
-  
+  UserAddPurchase({this.item});
+
   @override
   String toString() {
     return "AddPurchase";
