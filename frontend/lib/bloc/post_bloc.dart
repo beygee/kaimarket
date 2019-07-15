@@ -16,17 +16,17 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (event is PostInit) {
       final posts = await _getAllPost();
       yield PostLoaded(posts: posts);
-      return;
     }
     if (event is PostSelectCategory){
-      final categoryPosts = await _getCategoryPost();
+      List<Post> categoryPosts;
+      categoryPosts = await _getCategoryPost(event.getSelectedCategory().toString());
+      log.i(categoryPosts);
+      log.i(event.getSelectedCategory().toString());
       yield PostSelectedCategory(categoryPosts: categoryPosts);
-      return;
     }
     if (event is PostSearch){
-      final searchedPosts = await _getSearchedPost(event.getData());
+      final searchedPosts = await _getSearchedPost(event.getData().toString());
       yield PostSearched(searchedPosts: searchedPosts);
-      return;
     }
     } catch (_) {
       print(_);
@@ -45,8 +45,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     return list;
   }
 
-  Future<List<Post>> _getCategoryPost() async{
-    var response = await dio.getUri(getUri('/api/posts'));
+  Future<List<Post>> _getCategoryPost(String selectedCategory) async{
+    var response = await dio.getUri(getUri('/api/posts',{'category':selectedCategory}));
     List<Post> list = List<Post>();
     for (var iterator in response.data){
       Post post = Post.fromJson(iterator);
@@ -56,8 +56,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Future<List<Post>> _getSearchedPost(String searchdata) async{
-    var response = await dio.getUri(getUri('/api/posts?q=$searchdata'));
-    log.i(response);
+    var response = await dio.getUri(getUri('/api/posts',{'q':searchdata}));
     List<Post> list = List<Post>();
     for (var iterator in response.data){
       Post post = Post.fromJson(iterator);
