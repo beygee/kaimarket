@@ -30,7 +30,9 @@ class WishPageState extends State<WishPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Wish"),
+        title: Text("위시 리스트", 
+          style: TextStyle(fontSize: 16.0)),
+        backgroundColor: Colors.white,
       ),
       body: _buildSuggestions(),
     );
@@ -91,8 +93,7 @@ class WishPageState extends State<WishPage> {
                 ),
               );
             }
-            return 
-            SafeArea(
+            return SafeArea(
               child: ListView.separated(
                 padding:
                     EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
