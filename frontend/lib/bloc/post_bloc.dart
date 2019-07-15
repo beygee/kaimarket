@@ -16,9 +16,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         final searchText = (event as PostFetch).searchText;
         final selectedCategory = (event as PostFetch).selectedCategory;
 
-        log.i(searchText);
-        log.i(selectedCategory);
-
         //데이터 받아오기
         var res = await dio.getUri(getUri('/api/posts',
             {'q': searchText, 'category': selectedCategory.toString()}));
