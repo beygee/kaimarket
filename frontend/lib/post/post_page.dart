@@ -26,6 +26,7 @@ class PostPageState extends State<PostPage> {
   int selectedCategory = 0;
   List<Map<String, String>> imageUrls = [];
 
+  
   @override
   void dispose() {
     priceController.dispose();
@@ -260,9 +261,7 @@ class PostPageState extends State<PostPage> {
       child: Wrap(
         spacing: screenAwareSize(10.0, context),
         runSpacing: screenAwareSize(10.0, context),
-        children: <Widget>[
-          ...list
-        ],
+        children: <Widget>[...list],
       ),
     );
   }
