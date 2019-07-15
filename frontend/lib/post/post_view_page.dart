@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:week_3/models/chat.dart';
 import 'package:week_3/post/google_map_fixed.dart';
 import 'package:week_3/post/post_card.dart';
 import 'package:week_3/styles/theme.dart';
@@ -14,6 +15,7 @@ import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:week_3/post/post_shimmer_card.dart';
+import 'package:week_3/chat/chat_view_page.dart';
 
 class PostViewPage extends StatefulWidget {
   final String postId;
@@ -244,7 +246,9 @@ class _PostViewPageState extends State<PostViewPage> {
       });
 
       if (res.statusCode == 200) {
-        log.i(res.data);
+        Chat chat = Chat.fromJson(res.data);
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ChatViewPage(chat: chat)));
       }
     });
   }
