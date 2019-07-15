@@ -4,6 +4,8 @@ import './bloc.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/user.dart';
+import 'package:week_3/bloc/user_event.dart';
+import 'package:week_3/utils/dio.dart';
 
 class UserBloc extends Bloc<UserEvent, UserState> {
   @override
@@ -38,6 +40,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
       if (event is UserDelete && currentState is UserLoaded) {
         yield UserUninitialized();
+      }
+      if (event is UserChangeWish){
+        log.i(getUri('/api/users/').toString() + event.getPostId( ) +"/wish");
+        var saved = await dio.post(getUri('/api/users/').toString() + event.getPostId( ) +"/wish");
+        yield UserChangedWish();
       }
     } catch (_) {
       print(_);

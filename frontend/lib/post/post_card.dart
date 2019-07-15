@@ -5,9 +5,11 @@ import 'package:week_3/utils/dio.dart';
 
 class PostCard extends StatelessWidget {
   final VoidCallback onTap;
+  final VoidCallback onTapHeart;
   final Post post;
+  final bool issaved;
 
-  PostCard({@required this.post, this.onTap});
+  PostCard({@required this.post, this.onTap, this.onTapHeart, this.issaved});
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +67,14 @@ class PostCard extends StatelessWidget {
                                 ),
                               ),
                               GestureDetector(
-                                onTap: () {},
-                                child: Icon(Icons.favorite),
-                              ),
+                                  onTap: onTapHeart,
+                                  child: issaved
+                                      ? Icon(
+                                          Icons.favorite,
+                                          color: Colors.amber[200],
+                                        )
+                                      : Icon(Icons.favorite_border,
+                                          color: Colors.amber[200])),
                             ],
                           ),
                           SizedBox(height: screenAwareSize(5.0, context)),

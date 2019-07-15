@@ -48,33 +48,36 @@ class GoogleMapfixed extends StatelessWidget {
               onMapCreated: _onMapCreated,
               mapType: MapType.normal,
               markers: _markers,
-              gestureRecognizers: Set()
-                ..add(
-                    Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-                ..add(Factory<VerticalDragGestureRecognizer>(
-                    () => VerticalDragGestureRecognizer()))
-                ..add(Factory<ScaleGestureRecognizer>(
-                    () => ScaleGestureRecognizer()))
-                ..add(Factory<TapGestureRecognizer>(
-                    () => TapGestureRecognizer())),
-              zoomGesturesEnabled: true,
-              scrollGesturesEnabled: true,
-              tiltGesturesEnabled: true,
+
+              // 제스쳐 주고싶으면 풀기
+              // gestureRecognizers: Set()
+              //   ..add(
+              //       Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
+              //   ..add(Factory<VerticalDragGestureRecognizer>(
+              //       () => VerticalDragGestureRecognizer()))
+              //   ..add(Factory<ScaleGestureRecognizer>(
+              //       () => ScaleGestureRecognizer()))
+              //   ..add(Factory<TapGestureRecognizer>(
+              //       () => TapGestureRecognizer())),
+              // zoomGesturesEnabled: true,
+              // scrollGesturesEnabled: true,
+              // tiltGesturesEnabled: true,
               initialCameraPosition: CameraPosition(
                   target: LatLng(picked.latitude, picked.longitude),
                   zoom: 15.0),
             ),
-            Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topRight,
-                child: IconButton(
-                  onPressed: () => moveToDefault(),
-                  icon: Icon(Icons.refresh, size: 36.0),
-                  color: Colors.black,
-                ),
-              ),
-            )
+            //리프레시버튼
+            // Padding(
+            //   padding: EdgeInsets.all(16.0),
+            //   child: Align(
+            //     alignment: Alignment.topRight,
+            //     child: IconButton(
+            //       onPressed: () => moveToDefault(),
+            //       icon: Icon(Icons.refresh, size: 36.0),
+            //       color: Colors.black,
+            //     ),
+            //   ),
+            // )
           ],
         ));
   }

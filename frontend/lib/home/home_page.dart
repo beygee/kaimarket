@@ -13,6 +13,7 @@ import 'package:week_3/models/post.dart';
 import 'package:week_3/bloc/post_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:week_3/bloc/user_bloc.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,8 +22,11 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   final PostBloc _postBloc = PostBloc();
+  final UserBloc _userBloc = UserBloc();
 
   int selectedCategory = 0;
+
+  bool saved = false;
 
   HomePageState() {
     _postBloc.dispatch(PostInit());
@@ -168,13 +172,17 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRow(context, post) {
+  Widget _buildRow(context, Post post) {
     return PostCard(
       post: post,
       onTap: () {
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => PostViewPage(post: post)));
       },
+      onTapHeart: () {
+        _userBloc.dispatch(UserChangeWish(postId: post.id));
+      },
+      issaved: saved
     );
   }
 }

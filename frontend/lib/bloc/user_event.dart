@@ -21,16 +21,16 @@ class UserDelete extends UserEvent {
   }
 }
 
-class UserAddOrRemoveWish extends UserEvent {
-  final Post item;
+class UserChangeWish extends UserEvent {
+  final String postId;
 
-  getData() => this.item;
+  getPostId() => this.postId;
 
-  UserAddOrRemoveWish({this.item});
+  UserChangeWish({this.postId});
 
   @override
   String toString() {
-    return "AddOrRemoveWish";
+    return "UserChangeWish";
   }
 }
 
