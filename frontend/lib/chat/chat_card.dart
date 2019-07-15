@@ -35,14 +35,10 @@ class ChatCard extends StatelessWidget {
             children: <Widget>[
               Row(children: <Widget>[
                 _chatLeft(),
-                SizedBox(
-                  width: 30,
-                ),
+                SizedBox(width: 10),
                 _chatMiddle(context),
               ]),
-              SizedBox(
-                width: 40,
-              ),
+              SizedBox(width: 40),
               _chatRight(context),
             ],
           ),
@@ -53,8 +49,8 @@ class ChatCard extends StatelessWidget {
 
   Widget _chatLeft() {
     return new Container(
-      width: 62,
-      height: 62,
+      width: 50,
+      height: 50,
       decoration: new BoxDecoration(
           border: Border.all(color: Colors.grey[400], width: 1.0),
           shape: BoxShape.circle,

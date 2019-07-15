@@ -317,6 +317,17 @@ class _PostViewPageState extends State<PostViewPage> {
                   ),
                 ),
                 SizedBox(height: screenAwareSize(10.0, context)),
+                // Text(
+                //   "Aasdas",
+                //   style: TextStyle(
+                //     fontSize: screenAwareSize(
+                //       14.0,
+                //       context,
+                //     ),
+                //     color: Colors.grey[800],
+                //   ),
+                // ),
+                // SizedBox(height: screenAwareSize(10.0, context)),
                 Row(
                   children: <Widget>[
                     Icon(
