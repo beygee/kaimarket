@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:week_3/post/post_card.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_naver_login/flutter_naver_login.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:week_3/login/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:week_3/models/post.dart';
+import 'package:week_3/post/post_view_page.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   UserBloc _userBloc;
   String loggedUserId = '';
+  List<Post> posts = [];
 
   @override
   void initState() {
@@ -24,6 +26,23 @@ class _MyPageState extends State<MyPage> {
     _userBloc = BlocProvider.of<UserBloc>(context);
     final UserLoaded user = _userBloc.currentState;
     loggedUserId = user.id;
+    fetchList();
+  }
+
+  Future fetchList() async {
+    var res = await dio.getUri(getUri('/api/me/sales'));
+    if (res.statusCode == 200) {
+      if (mounted) {
+        setState(() {
+          posts = res.data
+              .map((post) {
+                return Post.fromJson(post);
+              })
+              .toList()
+              .cast<Post>();
+        });
+      }
+    }
   }
 
   @override
@@ -186,7 +205,24 @@ class _MyPageState extends State<MyPage> {
 
   Widget _buildTabPane(context) {
     return Expanded(
-      child: Container(),
+      child: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: <Widget>[
+              for (int i = 0; i < posts.length; i++)
+                PostCard(
+                  post: posts[i],
+                  issaved: false,
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => PostViewPage(postId: posts[i].id)));
+                  },
+                  small: true
+                )
+            ],
+          ),
+        ),
+      ),
     );
   }
 
