@@ -34,3 +34,27 @@ class UserLoaded extends UserState {
     return super.toString();
   }
 }
+
+class UserAddedOrRemovedWish extends UserState{
+  final List<Post> wish;
+  UserAddedOrRemovedWish({
+    this.wish,
+  }) : super([UserState]);
+
+  @override
+  String toString() {
+    return super.toString();
+  }
+}
+
+class UserAddedPurchase extends UserState{
+  final List<Post> purchase;
+  UserAddedPurchase({
+    this.purchase,
+  }) : super([UserState]);
+
+  @override
+  String toString() {
+    return super.toString();
+  }
+}

@@ -8,12 +8,25 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   @override
   UserState get initialState => UserUninitialized();
 
+  // final _wishListController = StreamController<List<Post>>();
+  // get _wishListStream => _wishListController.stream;
+
   @override
   Stream<UserState> mapEventToState(UserEvent event) async* {
     try{
     if (event is UserInit) {
       final posts = await _getAllPost();
       yield UserLoaded(wish: posts[0], sell: posts[1], purchased: posts[2]);
+      return;
+    }
+    if (event is UserAddOrRemoveWish) {
+   //   final wishes = await _addOrRemoveWish(item);
+  //    yield UserAddedOrRemovedWish(wish: wishes);
+      return;
+    }
+    if (event is UserAddPurchase) {
+      final purchases = await _addPurchase();
+      yield UserAddedPurchase(purchase: purchases);
       return;
     }
     } catch (_) {
@@ -44,5 +57,26 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     }
     
     return lists;
+  }
+
+  Future<List<Post>> _addOrRemoveWish(Post item) async{
+    // ?? /api/wishes 뭐 이런거 아닌가,,,
+    var wishRes = await dio.getUri(getUri('/api/posts'));
+    List<Post> wishList = List<Post>();
+    for (var iterator in wishRes.data){
+      Post post = Post.fromJson(iterator);
+      wishList.add(post);
+    }
+    if (wishList.contains(item)){
+      wishList.remove(item);
+    }
+    else {
+      wishList.add(item);
+    }
+    // _wishListController.sink.add(wishList);
+  }
+
+  Future<List<Post>> _addPurchase() async{
+
   }
 }
