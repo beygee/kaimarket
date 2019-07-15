@@ -41,6 +41,7 @@ class UserLoaded extends UserState {
 }
 
 class UserChangedWish extends UserState{
+
   @override
   String toString() {
     return "UserChangedWish";

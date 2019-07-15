@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/models/chat.dart';
+import 'package:intl/intl.dart';
 
 class ChatViewPage extends StatefulWidget {
   final Chat chat;
@@ -40,7 +41,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
   var prev_time = "";
   var prev_user = "user.id";
   List<Widget> response;
-  var existMessages = [];
+  List<Message> existMessages = [];
   // test용
   var docs = [
     {'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
@@ -49,9 +50,40 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   Future initShow() async {
     var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
-    var existMessages = Chat.fromJson(dbChats.data).messages;
+    log.i(dbChats);
+    existMessages = Chat.fromJson(dbChats.data).messages;
     // showTime 계산해서 넣어주기
-    // for (int i = 0; i < existMessages.length; i++)
+    if (existMessages.length > 0){
+      for(int i = 0; i < existMessages.length; i++){
+        if (loggedUserId == existMessages[i].from){
+            existMessages[i].me = true;
+        }
+        else{
+          existMessages[i].me = false;
+        }
+      }
+      existMessages[0].showTime = true;
+      if (existMessages.length != 1){
+        int i;
+        for (i = 0; i < existMessages.length - 1; i++){
+          for (int j = i; j < existMessages.length - i; j++){
+            if (existMessages[i].from == existMessages[j+1].from && existMessages[i].time == existMessages[j+1].time)
+              existMessages[j+1].showTime = false;
+            else {
+              i = j+1;
+              existMessages[i].showTime = true;
+              log.i(i);
+              break;
+            }
+          }  
+        }
+        if (existMessages[i].from == existMessages[i-1].from && existMessages[i].time == existMessages[i-1].time)
+          existMessages[i].showTime = false;
+        else {
+          existMessages[i].showTime = true;
+        }
+      } 
+    }
   }
 
   @override
@@ -64,7 +96,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     _socketBloc = BlocProvider.of<SocketBloc>(context);
     _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async {
-      updateMessage(data);
+     updateMessage(data);
+          
     }));
     initShow();
   }
@@ -84,7 +117,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
 
     bool showTime = true;
-    // 서버에서 받은 메세지로 currentMessage에 넣어주기
+    // 서버에서 받은 메세지
     var currentMessage = {
       "from": data['from'],
       "text": data['text'],
@@ -96,18 +129,21 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     setState(() {
       existMessages.remove(prevMessage);
-      existMessages.insert(0, {
-        "text": prevMessage.text,
-        "from": prevMessage.from,
-        "time": prevMessage.time,
-        "showTime": showTime,
-      });
-      existMessages.insert(0, {
-        "text": messageController.text,
-        "from": currentMessage['from'],
-        "time": currentMessage['time'],
-        "showTime": true,
-      });
+      existMessages.insert(0, Message(
+        text: prevMessage.text,
+        from: prevMessage.from,
+        time: prevMessage.time,
+        me: prevMessage.me,
+        showTime: showTime,
+      ));
+      existMessages.insert(0, Message(
+        text: messageController.text,
+        from: currentMessage['from'],
+        time: currentMessage['time'],
+        me: currentMessage['from'] == loggedUserId,
+        showTime: true,
+      ));
+      log.i("wowowwww");
     });
   }
 
@@ -125,7 +161,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
               : widget.chat.buyer.id,
         }
       ]);
-
       messageController.clear();
     }
   }
@@ -275,23 +310,26 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   reverse: true,
                   shrinkWrap: true,
                   children: <Widget>[
-                    //...existMessages
+                    ...existMessages
                     // ...docs
-                    //     .map((doc) => MessageBubble(
-                    //           from: docs['from'],
-                    //           text: docs['text'],
-                    //           time: docs['time'],
-                    //         ))
-                    //     .toList(),
+                         .map((message) => MessageBubble(
+                              from: message.from,
+                              text: message.text,
+                              time: message.time,
+                              me: message.me,
+                            ))
+                        .toList(),
                     new MessageBubble(
                       from: 'diuni',
                       text: 'heello 내 이름은 지윤팍팍 아임 지�� 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
                       time: '오후 3:39',
+                      me: true,
                     ),
                     new MessageBubble(
                       from: 'diuni',
                       text: '짧은 거',
                       time: '오후 4:00',
+                      me: false,
                     ),
                   ],
                 ),
@@ -339,20 +377,23 @@ class MessageBubble extends StatelessWidget {
   final String from;
   final String text;
   String time;
+  bool me;
+  bool showTime;
 
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
   final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
 
-  MessageBubble({Key key, this.from, this.text, this.time}) : super(key: key);
-
-  bool me = true;
-  // me = (from == widget.user.id);
+  MessageBubble({Key key, this.from, this.text, this.time, this.me = true, this.showTime = true}) : super(key: key);
+  
+ // bool me = true;
 
   // time format 바꿔주기
   //time = new DateFormat("hh:mm a").format(time);
 
   @override
   Widget build(BuildContext context) {
+    // me = true;
+    // showTime = true;
     return Container(
       // width: 320.0,
       padding: EdgeInsets.only(top: screenAwareSize(10.0, context)),
@@ -360,9 +401,10 @@ class MessageBubble extends StatelessWidget {
         mainAxisAlignment: me ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: <Widget>[
-          if (me)
+          if (me && showTime)
             new Text(
-              time,
+              time, 
+              //new DateFormat("hh:mm a").format(time),
               style: _timeFont,
             ),
           Column(
@@ -405,7 +447,7 @@ class MessageBubble extends StatelessWidget {
               ),
             ],
           ),
-          if (!me)
+          if (!me && showTime)
             new Text(
               time,
               style: _timeFont,

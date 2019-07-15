@@ -12,23 +12,22 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   @override
   Stream<PostState> mapEventToState(PostEvent event) async* {
     try {
-      if (event is PostInit) {
-        final posts = await _getAllPost();
-        yield PostLoaded(posts: posts);
-      }
-      if (event is PostSelectCategory) {
-        log.i("불러오기");
+      if (event is PostFetch) {
+        final searchText = (event as PostFetch).searchText;
+        final selectedCategory = (event as PostFetch).selectedCategory;
 
-        List<Post> categoryPosts =
-            await _getCategoryPost(event.getSelectedCategory().toString());
-        log.i(event.getSelectedCategory().toString());
-        yield PostSelectedCategory(categoryPosts: categoryPosts);
-        return;
-      }
-      if (event is PostSearch) {
-        final searchedPosts =
-            await _getSearchedPost(event.getData().toString());
-        yield PostSearched(searchedPosts: searchedPosts);
+        //데이터 받아오기
+        var res = await dio.getUri(getUri('/api/posts',
+            {'q': searchText, 'category': selectedCategory.toString()}));
+
+        List<Post> posts = res.data
+            .map((p) {
+              return Post.fromJson(p);
+            })
+            .toList()
+            .cast<Post>();
+
+        yield PostLoaded(posts: posts);
       }
     } catch (_) {
       print(_);

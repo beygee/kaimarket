@@ -6,16 +6,20 @@ abstract class PostEvent extends Equatable {
   PostEvent([List props = const []]) : super(props);
 }
 
-class PostInit extends PostEvent {
+class PostFetch extends PostEvent {
+  final int selectedCategory;
+  final String searchText;
+
+  PostFetch({this.selectedCategory = 0, this.searchText = ''});
   @override
   String toString() {
-    return "Init";
+    return "Fetch";
   }
 }
 
 class PostInsert extends PostEvent {
   @override
-  String toString(){
+  String toString() {
     return "Insert";
   }
 }
@@ -24,35 +28,5 @@ class PostDelete extends PostEvent {
   @override
   String toString() {
     return "Delete";
-  }
-}
-
-class PostSelectCategory extends PostEvent{
-  final int selectedcategory;
-
-  getSelectedCategory() => this.selectedcategory;
-
-  PostSelectCategory({
-    @required this.selectedcategory
-  });
-
-  @override
-  String toString() {
-    return "SelectCategory";
-  }
-}
-
-class PostSearch extends PostEvent{
-  final String searchdata;
-
-  getData()=> this.searchdata;
-
-  PostSearch({
-    @required this.searchdata
-  });
-
-  @override
-  String toString() {
-    return "Search";
   }
 }

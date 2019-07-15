@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:week_3/post/post_view_page.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/base_height.dart';
@@ -7,13 +6,11 @@ import 'package:week_3/home/category_button.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/post/post_card.dart';
 import 'package:week_3/models/category.dart';
-import 'package:dio/dio.dart';
-import 'package:provider/provider.dart';
-import 'package:week_3/models/post.dart';
-import 'package:week_3/bloc/post_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/user_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:week_3/models/post.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,15 +18,23 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final PostBloc _postBloc = PostBloc();
-  final UserBloc _userBloc = UserBloc();
+  PostBloc _postBloc;
+  UserBloc _userBloc;
 
   int selectedCategory = 0;
+  TextEditingController searchController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _postBloc = BlocProvider.of<PostBloc>(context);
+    _postBloc.dispatch(PostFetch());
+    _userBloc = BlocProvider.of<UserBloc>(context);
+  }
 
-  bool saved = false;
-
-  HomePageState() {
-    _postBloc.dispatch(PostInit());
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -48,8 +53,20 @@ class HomePageState extends State<HomePage> {
                   bloc: _postBloc,
                   builder: (BuildContext context, PostState state) {
                     if (state is PostUninitialized) {
-                      return Center(
-                        child: CircularProgressIndicator(),
+                      return Expanded(
+                        child: Column(
+                          children: <Widget>[
+                            Expanded(
+                              child: Center(
+                                child: SpinKitChasingDots(
+                                  size: 30.0,
+                                  color: ThemeColor.primary,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenAwareSize(50.0, context))
+                          ],
+                        ),
                       );
                     }
                     if (state is PostError) {
@@ -59,34 +76,19 @@ class HomePageState extends State<HomePage> {
                     }
                     if (state is PostLoaded) {
                       if (state.posts.isEmpty) {
-                        return Center(
-                          child: Text('게시글이 없어요!'),
+                        return Expanded(
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                child: Center(child: Text("게시글이 없어요!")),
+                              ),
+                              SizedBox(height: screenAwareSize(50.0, context))
+                            ],
+                          ),
                         );
                       }
                       return Expanded(
                           child: _buildSuggestions(context, state.posts));
-                    }
-                    if (state is PostSearched) {
-                      log.i("검색");
-                      if (state.searchedPosts.isEmpty) {
-                        return Center(
-                          child: Text('검색된 게시글이 없어요!'),
-                        );
-                      }
-                      return Expanded(
-                        child: _buildSuggestions(context, state.searchedPosts),
-                      );
-                    }
-                    if (state is PostSelectedCategory) {
-                      log.i("카테고리선택: $selectedCategory");
-                      if (state.categoryPosts.isEmpty) {
-                        return Center(
-                          child: Text('해당 카테고리의 게시글이 없어요!'),
-                        );
-                      }
-                      return Expanded(
-                        child: _buildSuggestions(context, state.categoryPosts),
-                      );
                     }
                   }),
             ],
@@ -97,8 +99,6 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildSearchInput(context) {
-    final myController = TextEditingController();
-
     return Padding(
       padding: EdgeInsets.only(
         left: 10.0,
@@ -107,11 +107,11 @@ class HomePageState extends State<HomePage> {
         bottom: screenAwareSize(10.0, context),
       ),
       child: TextField(
-        controller: myController,
+        onSubmitted: (_) => _searchPosts(),
+        controller: searchController,
         decoration: InputDecoration(
           suffixIcon: GestureDetector(
-            onTap: () async => await _postBloc
-                .dispatch(PostSearch(searchdata: myController.text)),
+            onTap: () => _searchPosts(),
             child: Icon(Icons.search),
           ),
           hintText: "상품을 검색해보세요",
@@ -125,6 +125,11 @@ class HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _searchPosts() {
+    _postBloc.dispatch(PostFetch(
+        searchText: searchController.text, selectedCategory: selectedCategory));
   }
 
   Widget _buildCategoryList(context) {
@@ -141,8 +146,9 @@ class HomePageState extends State<HomePage> {
             onPressed: () {
               setState(() {
                 selectedCategory = idx;
-                _postBloc.dispatch(
-                    PostSelectCategory(selectedcategory: selectedCategory));
+                _postBloc.dispatch(PostFetch(
+                    selectedCategory: selectedCategory,
+                    searchText: searchController.text));
               });
             },
           );
@@ -173,16 +179,19 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildRow(context, Post post) {
+    bool wish = post.isWish;
+    
     return PostCard(
-      post: post,
-      onTap: () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => PostViewPage(post: post)));
-      },
-      onTapHeart: () {
-        _userBloc.dispatch(UserChangeWish(postId: post.id));
-      },
-      issaved: saved
-    );
+        post: post,
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => PostViewPage(post: post)));
+        },
+        onTapHeart: () {
+          _userBloc.dispatch(UserChangeWish(postId: post.id));
+        },
+        issaved: wish);
   }
+
+
 }

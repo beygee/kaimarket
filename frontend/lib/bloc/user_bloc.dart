@@ -26,7 +26,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         var res = await dio.getUri(getUri('/api/me'));
 
         if (res.statusCode == 200) {
+          log.i(res.data);
           User user = User.fromJson(res.data);
+
           yield UserLoaded(
             id: user.id,
             name: user.name,
@@ -43,7 +45,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
       if (event is UserChangeWish){
         log.i(getUri('/api/users/').toString() + event.getPostId( ) +"/wish");
-        var saved = await dio.post(getUri('/api/users/').toString() + event.getPostId( ) +"/wish");
+        var res = await dio.post(getUri('/api/posts/').toString() + event.getPostId( ) +"/wish");
         yield UserChangedWish();
       }
     } catch (_) {

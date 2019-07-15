@@ -7,10 +7,71 @@ ctrl.getProfile = async ctx => {
   if (user) {
     //인증 검사
     const fetchedUser = await User.findById(mongoose.Types.ObjectId(user.id))
+      .populate("chats")
+      .populate("wish")
+      .populate("sales")
     ctx.body = fetchedUser
   } else {
     ctx.error(401, "NO VALID", { code: 1 })
   }
+}
+
+ctrl.getWish = async ctx => {
+  const { User } = ctx.db
+  const { user } = ctx
+  const fetchedUser = await User.aggregate([
+    { $match: { _id: user.id } },
+    {
+      $lookup: {
+        from: "posts",
+        localField: "wish",
+        foreignField: "_id",
+        as: "wishObjects"
+      }
+    },
+    { $unwind: "$wishObjects" },
+    { $sort: { "wishObjects.created": -1 } },
+    { $group: { _id: "$_id", sales: { $push: "$wishObjects" } } }
+  ])
+  ctx.body = fetchedUser[0].sales
+}
+ctrl.getSales = async ctx => {
+  const { User } = ctx.db
+  const { user } = ctx
+  const fetchedUser = await User.aggregate([
+    { $match: { _id: user.id } },
+    {
+      $lookup: {
+        from: "posts",
+        localField: "sales",
+        foreignField: "_id",
+        as: "salesObjects"
+      }
+    },
+    { $unwind: "$salesObjects" },
+    { $sort: { "salesObjects.created": -1 } },
+    { $group: { _id: "$_id", sales: { $push: "$salesObjects" } } }
+  ])
+  ctx.body = fetchedUser[0].sales
+}
+ctrl.getChats = async ctx => {
+  // const { User } = ctx.db
+  // const { user } = ctx
+  // const fetchedUser = await User.aggregate([
+  //   { $match: { _id: user.id } },
+  //   {
+  //     $lookup: {
+  //       from: "posts",
+  //       localField: "sales",
+  //       foreignField: "_id",
+  //       as: "salesObjects"
+  //     }
+  //   },
+  //   { $unwind: "$salesObjects" },
+  //   { $sort: { "salesObjects.created": -1 } },
+  //   { $group: { _id: "$_id", sales: { $push: "$salesObjects" } } }
+  // ])
+  // ctx.body = fetchedUser[0].sales
 }
 
 //앱 로그인 시, 로그인 토큰과 기기 토큰을 묶음.

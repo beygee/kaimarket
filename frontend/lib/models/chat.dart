@@ -29,6 +29,10 @@ class Message {
   String text;
   String time;
   bool showTime;
+  bool me;
+
+  Message({this.from, this.text, this.time, this.showTime, this.me});
+  
 
   Message.fromJson(Map<String, dynamic> json)
       : from = json['from'],

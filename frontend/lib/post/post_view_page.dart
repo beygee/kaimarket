@@ -11,6 +11,7 @@ import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/dio.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class PostViewPage extends StatefulWidget {
   final Post post;
@@ -195,13 +196,15 @@ class _PostViewPageState extends State<PostViewPage> {
     });
   }
 
-  List<Image> _getImages() {
-    List<Image> images = List<Image>();
+  List<CachedNetworkImage> _getImages() {
+    List<CachedNetworkImage> images = List<CachedNetworkImage>();
     for (int i = 0; i < post.images.length; i++) {
-      images.add(Image.network(
-        getUri('').toString() + post.images[i]['thumb'],
-        fit: BoxFit.cover,
-      ));
+      images.add(
+        CachedNetworkImage(
+          imageUrl: getUri('').toString() + post.images[i]['url'],
+          fit: BoxFit.cover,
+        ),
+      );
     }
     return images;
   }
@@ -306,7 +309,12 @@ class _PostViewPageState extends State<PostViewPage> {
             ),
           ),
         ),
-        Image.network(post.bookImage),
+        CachedNetworkImage(
+          imageUrl: post.bookImage,
+          width: screenAwareSize(100.0, context),
+          height: screenAwareSize(90.0, context),
+          fit: BoxFit.cover,
+        ),
         SizedBox(
           width: screenAwareSize(7, context),
         )
