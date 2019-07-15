@@ -7,6 +7,9 @@ import 'package:week_3/utils/dio.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   @override
   UserState get initialState => UserUninitialized();
+  // ********** init 으로 user의 wishlist, purchaselist 갖고 있기
+  List<Post> wishList = [];
+  List<Post> purchasedList = [];
 
   // final _wishListController = StreamController<List<Post>>();
   // get _wishListStream => _wishListController.stream;
@@ -17,15 +20,18 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     if (event is UserInit) {
       final posts = await _getAllPost();
       yield UserLoaded(wish: posts[0], sell: posts[1], purchased: posts[2]);
+      // ******* userload 할 때 initialize 해주기
+      wishList = posts[0];
+      purchasedList = posts[2];
       return;
     }
     if (event is UserAddOrRemoveWish) {
-   //   final wishes = await _addOrRemoveWish(item);
-  //    yield UserAddedOrRemovedWish(wish: wishes);
+      final wishes = await _addOrRemoveWish(event.getData());
+      yield UserAddedOrRemovedWish(wish: wishes);
       return;
     }
     if (event is UserAddPurchase) {
-      final purchases = await _addPurchase();
+      final purchases = await _addPurchase(event.getData());
       yield UserAddedPurchase(purchase: purchases);
       return;
     }
@@ -59,14 +65,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     return lists;
   }
 
+  
   Future<List<Post>> _addOrRemoveWish(Post item) async{
     // ?? /api/wishes 뭐 이런거 아닌가,,,
-    var wishRes = await dio.getUri(getUri('/api/posts'));
-    List<Post> wishList = List<Post>();
-    for (var iterator in wishRes.data){
-      Post post = Post.fromJson(iterator);
-      wishList.add(post);
-    }
+    // var wishRes = await dio.getUri(getUri('/api/posts'));
+    // List<Post> wishList = List<Post>();
+    // for (var iterator in wishRes.data){
+    //   Post post = Post.fromJson(iterator);
+    //   wishList.add(post);
+    // }
     if (wishList.contains(item)){
       wishList.remove(item);
     }
@@ -74,9 +81,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       wishList.add(item);
     }
     // _wishListController.sink.add(wishList);
+    // ****db에 업데이트******
   }
 
-  Future<List<Post>> _addPurchase() async{
-
+  Future<List<Post>> _addPurchase(Post item) async{
+    purchasedList.add(item);
+    // ****db에 업데이트******
   }
 }

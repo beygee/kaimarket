@@ -16,17 +16,16 @@ class PostViewPage extends StatefulWidget {
   PostViewPage({@required this.post});
 
   @override
-  _PostViewPageState createState() => _PostViewPageState(post: post);
+  _PostViewPageState createState() => _PostViewPageState();
 }
 
 class _PostViewPageState extends State<PostViewPage> {
-  Post post;
-
-  _PostViewPageState({@required this.post});
-
   static const double horizontalPadding = 16.0;
 
+  Post get post => widget.post;
   ScrollController scrollController;
+  GlobalKey<LoadingWrapperState> _loadingWrapperKey =
+      GlobalKey<LoadingWrapperState>();
 
   @override
   void initState() {
@@ -49,32 +48,37 @@ class _PostViewPageState extends State<PostViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          SingleChildScrollView(
-            controller: scrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                _buildImageCarousel(),
-                SizedBox(height: screenAwareSize(10.0, context)),
-                post.isBook
-                    ? _buildBookPostHeader(context)
-                    : _buildPostHeader(context),
-                _buildDivider(),
-                _buildPostContent(context),
-                _buildLocation(),
-                _buildDivider(),
-                _buildUserInfo(context),
-                SizedBox(height: screenAwareSize(70.0, context)),
-              ],
-            ),
+    return LoadingWrapper(
+      key: _loadingWrapperKey,
+      builder: (context, loading) {
+        return Scaffold(
+          body: Stack(
+            children: <Widget>[
+              SingleChildScrollView(
+                controller: scrollController,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _buildImageCarousel(),
+                    SizedBox(height: screenAwareSize(10.0, context)),
+                    post.isBook
+                        ? _buildBookPostHeader(context)
+                        : _buildPostHeader(context),
+                    _buildDivider(),
+                    _buildPostContent(context),
+                    _buildLocation(),
+                    _buildDivider(),
+                    _buildUserInfo(context),
+                    SizedBox(height: screenAwareSize(70.0, context)),
+                  ],
+                ),
+              ),
+              _buildAppBar(),
+              _buildBottomTab(),
+            ],
           ),
-          _buildAppBar(),
-          _buildBottomTab(),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -140,7 +144,7 @@ class _PostViewPageState extends State<PostViewPage> {
                 splashColor: Theme.of(context).primaryColorLight,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
-                onPressed: () {},
+                onPressed: _onPressChatSeller,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 60.0,
@@ -163,6 +167,19 @@ class _PostViewPageState extends State<PostViewPage> {
         ),
       ),
     );
+  }
+
+  void _onPressChatSeller() {
+    _loadingWrapperKey.currentState.loadFuture(() async {
+      var res = await dio.postUri(getUri('/api/chats'), data: {
+        'postId': post.id,
+        'sellerId': post.user.id,
+      });
+
+      if (res.statusCode == 200) {
+        log.i(res.data);
+      }
+    });
   }
 
   List<Image> _getImages() {
@@ -431,7 +448,7 @@ class _PostViewPageState extends State<PostViewPage> {
                   ),
                 ),
                 Text(
-                  "판매내역 : ",
+                  "판매내역 : " ,
                   style: TextStyle(
                     fontSize: screenAwareSize(10.0, context),
                     color: Colors.grey[400],

@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -21,6 +23,10 @@ class SocketDelete extends SocketEvent {
 }
 
 class SocketChatEnter extends SocketEvent {
+  final ValueChanged<dynamic> onMessage;
+  
+  SocketChatEnter({@required this.onMessage});
+
   @override
   String toString() {
     return "SocketChatEnter";

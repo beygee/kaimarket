@@ -52,9 +52,7 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
       //소켓 이벤트 붙이기
       final socket = (currentState as SocketLoaded).socket;
       final manager = (currentState as SocketLoaded).manager;
-      await socket.on("message", (data) {
-        log.i(data);
-      });
+      await socket.on("message", event.onMessage);
       yield SocketChatLoaded(manager: manager, socket: socket);
     } else if (event is SocketChatLeave && currentState is SocketChatLoaded) {
       //소켓 이벤트 빼버리기

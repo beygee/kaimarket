@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:week_3/models/post.dart';
 
 @immutable
 abstract class UserEvent extends Equatable {
@@ -14,6 +15,14 @@ class UserInit extends UserEvent {
 }
 
 class UserAddOrRemoveWish extends UserEvent {
+  final Post item;
+  
+  getData() => this.item;
+
+  UserAddOrRemoveWish({
+    this.item
+  });
+
   @override
   String toString() {
     return "AddOrRemoveWish";
@@ -21,6 +30,14 @@ class UserAddOrRemoveWish extends UserEvent {
 }
 
 class UserAddPurchase extends UserEvent {
+  final Post item;
+  
+  getData() => this.item;
+
+  UserAddPurchase({
+    this.item
+  });
+  
   @override
   String toString() {
     return "AddPurchase";

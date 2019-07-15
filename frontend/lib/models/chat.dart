@@ -17,19 +17,19 @@ class Chat {
     messages = json['messages'].length > 0
         ? json['messages'].map((message) {
             return Message.fromJson(message);
-          }).toList()
+          }).toList().cast<Message>()
         : <Message>[];
   }
 }
 
 class Message {
-  User from;
+  String from;
   String text;
   String time;
   bool showTime;
 
   Message.fromJson(Map<String, dynamic> json)
-      : from = User.fromJson(json['from']),
+      : from = json['from'],
         text = json['text'],
         time = json['time'],
         showTime = json['showTime'];
