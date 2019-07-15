@@ -32,18 +32,14 @@ class PostDelete extends PostEvent {
   }
 }
 
-class SearchWish extends PostEvent{
+class SearchWish extends PostEvent {
+  final bool wish;
+  String postId;
 
-  Post searchpost;
-
-  getPost() => this.searchpost;
-
-  SearchWish({
-    this.searchpost
-  });
+  SearchWish({this.postId, this.wish});
 
   @override
-  String toString(){
+  String toString() {
     return "searchWish";
   }
 }

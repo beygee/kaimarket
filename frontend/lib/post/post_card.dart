@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/post.dart';
-import 'package:week_3/utils/dio.dart';
+import 'package:week_3/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PostCard extends StatelessWidget {
@@ -81,15 +81,20 @@ class PostCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              GestureDetector(
+                              InkResponse(
                                   onTap: onTapHeart,
-                                  child: issaved
-                                      ? Icon(
-                                          Icons.favorite,
-                                          color: Colors.amber[200],
-                                        )
-                                      : Icon(Icons.favorite_border,
-                                          color: Colors.amber[200])),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical:
+                                            screenAwareSize(5.0, context)),
+                                    child: issaved
+                                        ? Icon(
+                                            Icons.favorite,
+                                            color: Colors.amber[200],
+                                          )
+                                        : Icon(Icons.favorite_border,
+                                            color: Colors.amber[200]),
+                                  )),
                             ],
                           ),
                           SizedBox(height: screenAwareSize(5.0, context)),

@@ -187,20 +187,24 @@ class HomePageState extends State<HomePage> {
 
   Widget _buildRow(context, Post post) {
     bool wish = post.isWish;
-    
+
     return PostCard(
         post: post,
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => PostViewPage(postId: post.id)));
         },
-        onTapHeart: () {
-          _userBloc.dispatch(UserChangeWish(postId: post.id));
-          post.isWish = !post.isWish;
-          _postBloc.dispatch(SearchWish(searchpost: post));
+        onTapHeart: () async {
+          //서버 통신....
+          var res = await dio.postUri(getUri('/api/posts/${post.id}/wish'));
+          log.i(res.data);
+
+          bool bWish = res.data['wish'];
+
+          // _userBloc.dispatch(UserChangeWish(postId: post.id));
+          // post.isWish = !post.isWish;
+          _postBloc.dispatch(SearchWish(postId: post.id, wish: bWish));
         },
         issaved: wish);
   }
-
-
 }
