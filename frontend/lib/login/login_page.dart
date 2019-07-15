@@ -39,11 +39,11 @@ class _LoginPageState extends State<LoginPage> {
                       width: 340.0,
                       child: Column(
                         children: <Widget>[
-                          SizedBox(height: screenAwareSize(70.0, context)),
+                          SizedBox(height: screenAwareSize(75.0, context)),
                           _buildImage(context),
                           SizedBox(height: screenAwareSize(20.0, context)),
                           _buildHeader(context),
-                          SizedBox(height: screenAwareSize(20.0, context)),
+                          SizedBox(height: screenAwareSize(25.0, context)),
                           _buildButtons(context),
                         ],
                       ),
@@ -72,8 +72,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildImage(context){
     return new Container(
-      width: 200,
-      height: 200,
+      width: 180,
+      height: 180,
       decoration: new BoxDecoration(
           border: Border.all(color: Colors.grey[400], width: 1.0),
           shape: BoxShape.circle,
@@ -112,14 +112,14 @@ class _LoginPageState extends State<LoginPage> {
         //   color: Color(0xff3488f1),
         //   onPressed: () => _loginWithGoogle(context),
         // ),
-        SizedBox(height: 0.0),
+        SizedBox(height: 2.0),
         LoginButton(
           text: "페이스북과 연결하기",
           icon: FontAwesomeIcons.facebookF,
           color: Color(0xff3a5c93),
           onPressed: () => _loginWithFacebook(context),
         ),
-        SizedBox(height: 0.0),
+        SizedBox(height: 2.0),
         LoginButton(
           text: "네이버와 연결하기",
           icon: IconData(0xe600, fontFamily: 'custom'),
@@ -127,14 +127,14 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xff1ec800),
           onPressed: () => _loginWithNaver(context),
         ),
-        SizedBox(height: 0.0),
+        SizedBox(height: 2.0),
         KakaoLoginButton(
           text: "카카오톡과 연결하기",
           icon: IconData(0xe605, fontFamily: 'custom'),
           color: Color(0xffffe535),
           onPressed: () => _loginWithKakao(context),
         ),
-        SizedBox(height: 20.0),
+        SizedBox(height: 18.0),
         Text(
           "SNS 로그인 후 카이스트 학생 인증을 하게 됩니다.",
           style: TextStyle(
