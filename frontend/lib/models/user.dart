@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:week_3/utils/utils.dart';
+import 'package:equatable/equatable.dart';
 
 //   purchases: [{ type: Schema.Types.ObjectId, ref: "post" }], //구매내역
 //   sales: [{ type: Schema.Types.ObjectId, ref: "post" }], //판매내역
@@ -9,7 +10,7 @@ import 'package:week_3/utils/utils.dart';
 //   wish: [{ type: Schema.Types.ObjectId, ref: "post" }],
 //   keywords: [String]
 
-class User {
+class User extends Equatable {
   String id;
   String name;
   String email;
@@ -19,6 +20,18 @@ class User {
   List<String> keywords;
   List<Chat> chats;
   int salesCount = 0;
+
+  User.copyWith(User p) {
+    id = p.id;
+    name = p.name;
+    email = p.email;
+    purchases = p.purchases;
+    sales = p.sales;
+    wish = p.wish;
+    keywords = p.keywords;
+    chats = p.chats;
+    salesCount = p.salesCount;
+  }
 
   User.fromJson(Map<String, dynamic> json)
       : id = json['_id'],
