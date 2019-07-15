@@ -139,7 +139,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
     });
     scrollController.animateTo(
       //0.0,
-        scrollController.position.maxScrollExtent,
+       scrollController.position.minScrollExtent,
         curve: Curves.easeOut,
         duration: const Duration(milliseconds: 300));
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
