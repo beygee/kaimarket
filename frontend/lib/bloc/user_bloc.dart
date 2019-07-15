@@ -26,13 +26,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       return;
     }
     if (event is UserAddOrRemoveWish) {
-   //   final wishes = await _addOrRemoveWish(item);
-  //    yield UserAddedOrRemovedWish(wish: wishes);
+      final wishes = await _addOrRemoveWish(event.getData());
+      yield UserAddedOrRemovedWish(wish: wishes);
       return;
     }
     if (event is UserAddPurchase) {
-  //    final purchases = await _addPurchase(item);
-   //   yield UserAddedPurchase(purchase: purchases);
+      final purchases = await _addPurchase(event.getData());
+      yield UserAddedPurchase(purchase: purchases);
       return;
     }
     } catch (_) {
