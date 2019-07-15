@@ -140,7 +140,7 @@ class _PostViewPageState extends State<PostViewPage> {
                 splashColor: Theme.of(context).primaryColorLight,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
-                onPressed: () {},
+                onPressed: _onPressChatSeller,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 60.0,
@@ -163,6 +163,10 @@ class _PostViewPageState extends State<PostViewPage> {
         ),
       ),
     );
+  }
+
+  void _onPressChatSeller() {
+    log.i(widget.post.user.id);
   }
 
   List<Image> _getImages() {
