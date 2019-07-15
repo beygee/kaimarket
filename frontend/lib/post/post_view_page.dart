@@ -14,9 +14,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class PostViewPage extends StatefulWidget {
-  final Post post;
+  final String postId;
 
-  PostViewPage({@required this.post});
+  PostViewPage({@required this.postId});
 
   @override
   _PostViewPageState createState() => _PostViewPageState();
@@ -25,7 +25,7 @@ class PostViewPage extends StatefulWidget {
 class _PostViewPageState extends State<PostViewPage> {
   static const double horizontalPadding = 16.0;
 
-  Post get post => widget.post;
+  Post post;
   ScrollController scrollController;
   GlobalKey<LoadingWrapperState> _loadingWrapperKey =
       GlobalKey<LoadingWrapperState>();
@@ -36,20 +36,23 @@ class _PostViewPageState extends State<PostViewPage> {
   @override
   void initState() {
     super.initState();
+
+    initPost();
+
     scrollController = ScrollController();
 
     _userBloc = BlocProvider.of<UserBloc>(context);
     final UserLoaded user = _userBloc.currentState;
     loggedUserId = user.id;
-
-    //조회수 증가
-    increaseView();
-    widget.post.view++;
   }
 
-  //조회수 증가
-  void increaseView() async {
-    await dio.postUri(getUri('/api/posts/${widget.post.id}/view'));
+  void initPost() async {
+    var res = await dio.getUri(getUri('/api/posts/${widget.postId}'));
+    if (res.statusCode == 200) {
+      setState(() {
+        post = Post.fromJson(res.data);
+      });
+    }
   }
 
   @override
@@ -60,6 +63,11 @@ class _PostViewPageState extends State<PostViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (post == null) {
+      return Scaffold(
+        body: Container(),
+      );
+    }
     return LoadingWrapper(
       key: _loadingWrapperKey,
       builder: (context, loading) {
@@ -107,7 +115,7 @@ class _PostViewPageState extends State<PostViewPage> {
             title: Opacity(
                 opacity: opacityTween,
                 child: Text(
-                  widget.post.title,
+                  post.title,
                   style: TextStyle(fontSize: 16.0),
                 )),
             backgroundColor: Colors.white.withOpacity(opacityTween),
@@ -156,9 +164,8 @@ class _PostViewPageState extends State<PostViewPage> {
                 splashColor: Theme.of(context).primaryColorLight,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
-                onPressed: loggedUserId == widget.post.user.id
-                    ? null
-                    : _onPressChatSeller,
+                onPressed:
+                    loggedUserId == post.user.id ? null : _onPressChatSeller,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 60.0,
