@@ -14,6 +14,8 @@ class Chat {
         seller = User.fromJson(json['seller']),
         buyer = User.fromJson(json['buyer']),
         post = Post.fromJson(json['post']) {
+          
+
     messages = json['messages'].length > 0
         ? json['messages'].map((message) {
             return Message.fromJson(message);

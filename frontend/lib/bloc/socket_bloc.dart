@@ -27,16 +27,17 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
           "http://" + hostUrl + '/test1',
           query: {'auth_token': token}));
 
-      // await socket.on("message", (data) {
-      //   log.i(data);
-      // });
+      //채팅방 나가 있어도 메시지를 전달받게 함.
+      await socket.on("global_message", (data) {
+        // log.i(data);
+      });
 
       socket.on('error', (e) {
         log.e(e);
       });
 
       await socket.onConnect((data) {
-        log.i('연결');
+        log.i('소켓 연결');
       });
 
       await socket.connect();

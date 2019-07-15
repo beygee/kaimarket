@@ -27,39 +27,15 @@ class UserLoaded extends UserState {
   final List<Chat> chats;
 
   UserLoaded({
-    this.id,
-    this.name,
-    this.wish,
-    this.sales,
-    this.chats,
+    @required this.id,
+    @required this.name,
+    @required this.wish,
+    @required this.sales,
+    @required this.chats,
   }) : super([id, name, wish, sales, chats]);
 
   @override
   String toString() {
-    return super.toString();
-  }
-}
-
-class UserAddedOrRemovedWish extends UserState {
-  final List<Post> wish;
-  UserAddedOrRemovedWish({
-    this.wish,
-  }) : super([UserState]);
-
-  @override
-  String toString() {
-    return super.toString();
-  }
-}
-
-class UserAddedPurchase extends UserState {
-  final List<Post> purchase;
-  UserAddedPurchase({
-    this.purchase,
-  }) : super([UserState]);
-
-  @override
-  String toString() {
-    return super.toString();
+    return "UserLoaded";
   }
 }
