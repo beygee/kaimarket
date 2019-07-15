@@ -140,7 +140,7 @@ class _PostViewPageState extends State<PostViewPage> {
                 splashColor: Theme.of(context).primaryColorLight,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
-                onPressed: () {},
+                onPressed: _onPressChatSeller,
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 60.0,
@@ -163,6 +163,10 @@ class _PostViewPageState extends State<PostViewPage> {
         ),
       ),
     );
+  }
+
+  void _onPressChatSeller() {
+    log.i(widget.post.user.id);
   }
 
   List<Image> _getImages() {
@@ -424,14 +428,14 @@ class _PostViewPageState extends State<PostViewPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'gkdl',
+                  post.user.name,
                   style: TextStyle(
                     fontSize: screenAwareSize(14.0, context),
                     color: Colors.grey[800],
                   ),
                 ),
                 Text(
-                  "판매내역 3",
+                  "판매내역 : " + post.user.salesCount.toString() + '개',
                   style: TextStyle(
                     fontSize: screenAwareSize(10.0, context),
                     color: Colors.grey[400],

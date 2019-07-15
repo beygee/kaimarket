@@ -88,6 +88,7 @@ class Post extends Equatable {
         .cast<Map<String, String>>();
 
     category = CategoryList[json['category']['id']];
+    user = User.fromJson(json['user']);
   }
 
   //책으로부터 정보 받아오기

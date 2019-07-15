@@ -28,6 +28,12 @@ class PostDelete extends PostEvent {
 }
 
 class PostSelectCategory extends PostEvent{
+  final int selectedcategory;
+
+  PostSelectCategory({
+    this.selectedcategory
+  });
+
   @override
   String toString() {
     return "SelectCategory";

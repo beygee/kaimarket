@@ -3,12 +3,17 @@ import 'package:week_3/utils/utils.dart';
 
 class LoginButton extends StatelessWidget {
   final Color color;
+  final Color iconColor;
   final String text;
   final IconData icon;
   final VoidCallback onPressed;
 
   LoginButton(
-      {@required this.color, @required this.text, this.icon, this.onPressed});
+      {@required this.color,
+      this.iconColor,
+      @required this.text,
+      this.icon,
+      this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +33,20 @@ class LoginButton extends StatelessWidget {
               alignment: Alignment.center,
               children: <Widget>[
                 Positioned(
-                  left: 3.0,
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 16.0,
+                  left: 0.0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.all(screenAwareSize(5.0, context)),
+                      child: Icon(
+                        icon,
+                        color: iconColor ?? color,
+                        size: screenAwareSize(14.0, context),
+                      ),
+                    ),
                   ),
                 ),
                 Text(
