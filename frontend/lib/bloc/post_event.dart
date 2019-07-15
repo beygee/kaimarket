@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:week_3/models/post.dart';
 
 @immutable
 abstract class PostEvent extends Equatable {
@@ -28,5 +29,21 @@ class PostDelete extends PostEvent {
   @override
   String toString() {
     return "Delete";
+  }
+}
+
+class SearchWish extends PostEvent{
+
+  Post searchpost;
+
+  getPost() => this.searchpost;
+
+  SearchWish({
+    this.searchpost
+  });
+
+  @override
+  String toString(){
+    return "searchWish";
   }
 }

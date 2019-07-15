@@ -12,7 +12,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   @override
   Stream<PostState> mapEventToState(PostEvent event) async* {
-    print(currentState);
     try {
       if (event is PostFetch) {
         yield PostUninitialized();
@@ -30,6 +29,20 @@ class PostBloc extends Bloc<PostEvent, PostState> {
             .toList()
             .cast<Post>();
         yield PostLoaded(posts: posts);
+      }
+
+      if (currentState is PostLoaded){
+      List<Post> postlist = (currentState as PostLoaded).posts;
+        if (event is SearchWish){
+          for (int i = 0 ; i < postlist.length; i++){
+            if (postlist[i].id == event.searchpost.id){
+              log.i(postlist[i].isWish);
+              postlist[i] = event.searchpost;
+              log.i(postlist[i].isWish);
+            }
+          }
+          yield PostLoaded(posts: (currentState as PostLoaded).posts);
+        }
       }
     } catch (_) {
       print(_);

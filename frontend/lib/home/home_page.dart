@@ -19,11 +19,8 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   PostBloc _postBloc;
-<<<<<<< HEAD
   UserBloc _userBloc;
 
-=======
->>>>>>> 67ef6fdc9d88bbb58f9af25c008728a7da032f33
   int selectedCategory = 0;
 
   TextEditingController searchController = TextEditingController();
@@ -199,6 +196,8 @@ class HomePageState extends State<HomePage> {
         },
         onTapHeart: () {
           _userBloc.dispatch(UserChangeWish(postId: post.id));
+          post.isWish = !post.isWish;
+          _postBloc.dispatch(SearchWish(searchpost: post));
         },
         issaved: wish);
   }
