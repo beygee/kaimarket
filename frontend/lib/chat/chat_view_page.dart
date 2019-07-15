@@ -40,7 +40,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
   var prev_time = "";
   var prev_user = "user.id";
   List<Widget> response;
-  var existMessages = [];
+  List<Message> existMessages = [];
   // test용
   var docs = [
     {'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
@@ -49,9 +49,17 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   Future initShow() async {
     var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
-    var existMessages = Chat.fromJson(dbChats.data).messages;
+    log.i(dbChats);
+    existMessages = Chat.fromJson(dbChats.data).messages;
+    log.i(existMessages);
     // showTime 계산해서 넣어주기
-    // for (int i = 0; i < existMessages.length; i++)
+    //  for (int i = 0; i < existMessages.length - 1; i++){
+    //    if (existMessages[i].from == existMessages[i+1].from && )
+
+    //    if (loggedUserId == existMessages[i].from)
+    //     existMessages[i].putIfAbsent('me', () => true); 
+    //  }
+    // loggedUserId == from['from']
   }
 
   @override
@@ -64,7 +72,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     _socketBloc = BlocProvider.of<SocketBloc>(context);
     _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async {
-      updateMessage(data);
+     updateMessage(data);
+          
     }));
     initShow();
   }
@@ -84,7 +93,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
 
     bool showTime = true;
-    // 서버에서 받은 메세지로 currentMessage에 넣어주기
+    // 서버에서 받은 메세지
     var currentMessage = {
       "from": data['from'],
       "text": data['text'],
@@ -101,14 +110,17 @@ class _ChatViewPageState extends State<ChatViewPage> {
         "text": prevMessage.text,
         "from": prevMessage.from,
         "time": prevMessage.time,
+      //  "me": prevMessage.me,
         "showTime": showTime,
       });
-      existMessages.insert(0, {
-        "text": messageController.text,
-        "from": currentMessage['from'],
-        "time": currentMessage['time'],
-        "showTime": true,
-      });
+      existMessages.insert(0, Message(
+        text: messageController.text,
+        from: currentMessage['from'],
+        time: currentMessage['time'],
+        //me: currentMessage['from'] == loggedUserId,
+        showTime: true,
+      ));
+      log.i("wowowwww");
     });
   }
 
@@ -126,7 +138,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
               : widget.chat.buyer.id,
         }
       ]);
-
       messageController.clear();
     }
   }
@@ -276,23 +287,25 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   reverse: true,
                   shrinkWrap: true,
                   children: <Widget>[
-                    //...existMessages
+                    ...existMessages
                     // ...docs
-                    //     .map((doc) => MessageBubble(
-                    //           from: docs['from'],
-                    //           text: docs['text'],
-                    //           time: docs['time'],
-                    //         ))
-                    //     .toList(),
+                         .map((existMessage) => MessageBubble(
+                              from: existMessage['from'],
+                              text: existMessage['text'],
+                              time: existMessage['time'],
+                            ))
+                        .toList(),
                     new MessageBubble(
                       from: 'diuni',
                       text: 'heello 내 이름은 지윤팍팍 아임 지�� 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
                       time: '오후 3:39',
+                      me: true,
                     ),
                     new MessageBubble(
                       from: 'diuni',
                       text: '짧은 거',
                       time: '오후 4:00',
+                      me: false,
                     ),
                   ],
                 ),
@@ -344,10 +357,9 @@ class MessageBubble extends StatelessWidget {
   final _chatFont = const TextStyle(fontSize: 14.0, color: Colors.grey);
   final _timeFont = const TextStyle(fontSize: 10.0, color: Colors.grey);
 
-  MessageBubble({Key key, this.from, this.text, this.time}) : super(key: key);
+  MessageBubble({Key key, this.from, this.text, this.time, this.me}) : super(key: key);
 
   bool me = true;
-  // me = (from == widget.user.id);
 
   // time format 바꿔주기
   //time = new DateFormat("hh:mm a").format(time);
