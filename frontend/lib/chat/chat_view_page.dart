@@ -5,7 +5,6 @@ import 'package:week_3/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:week_3/post/post_view_page.dart';
-import 'package:intl/intl.dart';
 import 'package:week_3/models/chat.dart';
 
 class ChatViewPage extends StatefulWidget {
@@ -20,6 +19,10 @@ class _ChatViewPageState extends State<ChatViewPage> {
   TextEditingController messageController = TextEditingController();
   ScrollController scrollController = ScrollController();
   SocketBloc _socketBloc;
+
+  //로그인한 유저 정보
+  UserBloc _userBloc;
+  String loggedUserId = '';
 
   final _paddingFormat =
       EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
@@ -39,11 +42,13 @@ class _ChatViewPageState extends State<ChatViewPage> {
   List<Widget> response;
   var existMessages = [];
   // test용
-  var docs = [{'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
-              {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}];
+  var docs = [
+    {'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
+    {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}
+  ];
 
   Future initShow() async {
-    var dbChats = await dio.getUri(getUri('/api/chats/'+ widget.chat.id));
+    var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
     var existMessages = Chat.fromJson(dbChats.data).messages;
     // showTime 계산해서 넣어주기
     // for (int i = 0; i < existMessages.length; i++)
@@ -52,6 +57,11 @@ class _ChatViewPageState extends State<ChatViewPage> {
   @override
   void initState() {
     super.initState();
+    //로그인 유저 정보 가져오기.
+    _userBloc = BlocProvider.of<UserBloc>(context);
+    final UserLoaded user = _userBloc.currentState;
+    loggedUserId = user.id;
+    
     _socketBloc = BlocProvider.of<SocketBloc>(context);
     _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async{
       log.i("메시지 : $data");
@@ -114,7 +124,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
           // "from": widget.user.id
         }
       ]);
-    
+
       messageController.clear();
     }
   }

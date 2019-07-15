@@ -15,8 +15,11 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      builder: (context) => SocketBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SocketBloc>(builder: (context) => SocketBloc()),
+        BlocProvider<UserBloc>(builder: (context) => UserBloc()),
+      ],
       child: LifecycleWatcher(),
     );
   }
