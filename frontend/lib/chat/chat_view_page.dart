@@ -72,7 +72,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
             else {
               i = j+1;
               existMessages[i].showTime = true;
-              log.i(i);
               break;
             }
           }  
@@ -96,8 +95,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     _socketBloc = BlocProvider.of<SocketBloc>(context);
     _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async {
-     updateMessage(data);
-          
+     updateMessage(data);      
     }));
     initShow();
   }
@@ -110,12 +108,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   void updateMessage(data) {
     log.i(data);
-    scrollController.animateTo(0.0,
-        //scrollController.position.maxScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 300));
-    //scrollController.jumpTo(scrollController.position.maxScrollExtent);
-
     bool showTime = true;
     // 서버에서 받은 메세지
     var currentMessage = {
@@ -129,6 +121,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
     setState(() {
       existMessages.remove(prevMessage);
+      log.i(existMessages.length);
       existMessages.insert(0, Message(
         text: prevMessage.text,
         from: prevMessage.from,
@@ -137,14 +130,20 @@ class _ChatViewPageState extends State<ChatViewPage> {
         showTime: showTime,
       ));
       existMessages.insert(0, Message(
-        text: messageController.text,
+        text: currentMessage['text'],
         from: currentMessage['from'],
         time: currentMessage['time'],
         me: currentMessage['from'] == loggedUserId,
         showTime: true,
       ));
-      log.i("wowowwww");
     });
+    scrollController.animateTo(
+      //0.0,
+        scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300));
+    //scrollController.jumpTo(scrollController.position.maxScrollExtent);
+
   }
 
   Future callback(socket) async {
@@ -308,7 +307,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
                       vertical: screenAwareSize(10.0, context)),
                   controller: scrollController,
                   reverse: true,
-                  shrinkWrap: true,
+                  //shrinkWrap: true,
                   children: <Widget>[
                     ...existMessages
                     // ...docs
@@ -317,20 +316,21 @@ class _ChatViewPageState extends State<ChatViewPage> {
                               text: message.text,
                               time: message.time,
                               me: message.me,
+                              showTime: message.showTime,
                             ))
                         .toList(),
-                    new MessageBubble(
-                      from: 'diuni',
-                      text: 'heello 내 이름은 지윤팍팍 아임 지�� 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
-                      time: '오후 3:39',
-                      me: true,
-                    ),
-                    new MessageBubble(
-                      from: 'diuni',
-                      text: '짧은 거',
-                      time: '오후 4:00',
-                      me: false,
-                    ),
+                    // new MessageBubble(
+                    //   from: 'diuni',
+                    //   text: 'heello 내 이름은 지윤팍팍 아임 지�� 유 쎄이 지 아 쎄 윤 지 윤 지 윤',
+                    //   time: '오후 3:39',
+                    //   me: true,
+                    // ),
+                    // new MessageBubble(
+                    //   from: 'diuni',
+                    //   text: '짧은 거',
+                    //   time: '오후 4:00',
+                    //   me: false,
+                    // ),
                   ],
                 ),
               ),
