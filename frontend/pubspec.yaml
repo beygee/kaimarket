@@ -78,7 +78,7 @@ flutter:
   fonts:
     - family: custom
       fonts:
-        - asset: assets/fonts/_icon.ttf
+        - asset: assets/fonts/icon_custom.ttf
   #       - asset: assets/fonts/ic_naver_.ttf
   #       - asset: assets/fonts/icon_beauty.ttf 
 
