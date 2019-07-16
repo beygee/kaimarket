@@ -1,5 +1,7 @@
 const ctrl = {}
 const mongoose = require("mongoose")
+const ObjectId = mongoose.Types.ObjectId
+const moment = require("lib/moment")
 
 ctrl.getProfile = async ctx => {
   const { User } = ctx.db
@@ -18,9 +20,12 @@ ctrl.getProfile = async ctx => {
 
 ctrl.getWish = async ctx => {
   const { User } = ctx.db
-  const { user } = ctx
+  const { id: userId } = ctx.user
+
+  const user = await User.findById(userId)
+
   const fetchedUser = await User.aggregate([
-    { $match: { _id: user.id } },
+    { $match: { _id: ObjectId(userId) } },
     {
       $lookup: {
         from: "posts",
@@ -31,15 +36,33 @@ ctrl.getWish = async ctx => {
     },
     { $unwind: "$wishObjects" },
     { $sort: { "wishObjects.created": -1 } },
-    { $group: { _id: "$_id", sales: { $push: "$wishObjects" } } }
+    { $group: { _id: "$_id", wish: { $push: "$wishObjects" } } }
   ])
-  ctx.body = fetchedUser[0].sales
+
+  console.log(fetchedUser)
+
+  if (fetchedUser.length > 0) {
+    const wish = fetchedUser[0].wish.map(p => {
+      return {
+        ...p,
+        created: moment(p.created).fromNow(),
+        updated: moment(p.updated).fromNow(),
+        isWish: user.wish.includes(p._id)
+      }
+    })
+    ctx.body = wish
+  } else {
+    ctx.body = []
+  }
 }
 ctrl.getSales = async ctx => {
   const { User } = ctx.db
-  const { user } = ctx
+  const { id: userId } = ctx.user
+
+  const user = await User.findById(userId)
+
   const fetchedUser = await User.aggregate([
-    { $match: { _id: user.id } },
+    { $match: { _id: ObjectId(userId) } },
     {
       $lookup: {
         from: "posts",
@@ -52,7 +75,15 @@ ctrl.getSales = async ctx => {
     { $sort: { "salesObjects.created": -1 } },
     { $group: { _id: "$_id", sales: { $push: "$salesObjects" } } }
   ])
-  ctx.body = fetchedUser[0].sales
+  const sales = fetchedUser[0].sales.map(p => {
+    return {
+      ...p,
+      created: moment(p.created).fromNow(),
+      updated: moment(p.updated).fromNow(),
+      isWish: user.wish.includes(p._id)
+    }
+  })
+  ctx.body = sales
 }
 ctrl.getChats = async ctx => {
   // const { User } = ctx.db

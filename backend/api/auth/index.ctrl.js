@@ -47,12 +47,14 @@ ctrl.authWithNaver = async (ctx, next) => {
 ctrl.authWithKakao = async (ctx, next) => {
   const { access_token } = ctx.request.body
 
+  console.log(ctx.request.body)
   const header = "Bearer " + access_token
   const body = await request.get("https://kapi.kakao.com/v2/user/me", {
     headers: { Authorization: header }
   })
 
   const data = JSON.parse(body)
+  console.log(data)
   ctx.data = { email: data.kakao_account.email, name: data.properties.nickname }
   return next()
 }

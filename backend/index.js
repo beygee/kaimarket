@@ -36,6 +36,15 @@ const start = async () => {
     return next()
   })
 
+  //DB 복구하기
+  // const posts = await db.Post.find({ user: { $ne: "5d26c168d118a3691c97564a" } })
+  // for (let i = 0; i < posts.length; i++) {
+  //   console.log(posts[i].title)
+  //   posts[i].user = mongoose.Types.ObjectId('5d2d5d8d8bd4fc7e8a0bb957')
+  //   await posts[i].save()
+  // }
+  // console.log(posts.length)
+
   // const chat = new db.Chat({
   //   seller: await db.User.findById(mongoose.Types.ObjectId('5d26db570145306b417f1581')),
   //   buyer: await db.User.findById(mongoose.Types.ObjectId('5d26c168d118a3691c97564a')),

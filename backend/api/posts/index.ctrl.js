@@ -48,14 +48,44 @@ ctrl.getPost = async ctx => {
     .populate("user")
     .populate("category")
 
+  post.view++
+  await post.save()
+
   post = post.toJSON()
+
+  //관련된 카테고리 포스트를 5개 가져온다.
+  let relatedPosts = await Post.find({
+    category: post.category,
+    _id: { $ne: post._id }
+  })
+    .sort({ _id: -1 })
+    .limit(5)
+    .populate("user")
+    .populate("category")
+
+  relatedPosts = relatedPosts.map(p => {
+    p = p.toJSON()
+    return {
+      ...p,
+      created: moment(p.created).fromNow(),
+      updated: moment(p.updated).fromNow(),
+      isWish: user.wish.includes(p._id)
+    }
+  })
+
+  //찜 개수 가져오기
+  const wish = await User.count({
+    wish: { $elemMatch: { $eq: post._id } }
+  })
 
   ctx.body = {
     ...post,
     created: moment(post.created).fromNow(),
     updated: moment(post.updated).fromNow(),
     user: { ...post.user, salesCount: post.user.sales.length },
-    isWish: user.wish.includes(post.id)
+    isWish: user.wish.includes(post._id),
+    relatedPosts,
+    wish
   }
 }
 

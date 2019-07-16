@@ -81,6 +81,13 @@ module.exports = function(server, db) {
 
         const chat = await db.Chat.findById(ObjectId(chatId))
         chat.messages.push({ from, text, time: moment() })
+
+        //읽은 채팅 시간 갱신해준다.
+        if (chat.buyer._id.toString() == userId.toString()) {
+          chat.buyerRead = new Date()
+        } else if (chat.seller._id.toString() == userId.toString()) {
+          chat.sellerRead = new Date()
+        }
         await chat.save()
       })
 
