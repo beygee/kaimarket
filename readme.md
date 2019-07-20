@@ -5,10 +5,12 @@
 ## Stack
 
 ### FrontEnd
+
 Flutter
 Socket.io
 
 ### BackEnd
+
 Node.JS
 Socket.io
 JWT
@@ -16,10 +18,8 @@ MongoDB
 
 ### DEMO
 
-![ab](./images/1.gif){:width="100}
-![ab](./images/2.gif)
-![ab](./images/3.gif)
-![ab](./images/4.gif)
-![ab](./images/5.gif)
-
-<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/1.gif" width="100">
+<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/1.gif" width="200">
+<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/2.gif" width="200">
+<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/3.gif" width="200">
+<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/4.gif" width="200">
+<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/5.gif" width="200">
