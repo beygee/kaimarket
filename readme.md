@@ -16,7 +16,8 @@ MongoDB
 
 ### DEMO
 
-![ab](./images/1.gif)
+[<img src="https://img.youtube.com/vi/<VIDEO ID>/maxresdefault.jpg" width="50%">](https://youtu.be/<VIDEO ID>)
+![ab](./images/1.gif){:width="100}
 ![ab](./images/2.gif)
 ![ab](./images/3.gif)
 ![ab](./images/4.gif)
