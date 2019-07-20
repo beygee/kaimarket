@@ -16,8 +16,8 @@ MongoDB
 
 ### DEMO
 
-![ab](i./images/1.gif)
-![ab](i./images/2.gif)
-![ab](i./images/3.gif)
-![ab](i./images/4.gif)
-![ab](i./images/5.gif)
+![ab](./images/1.gif)
+![ab](./images/2.gif)
+![ab](./images/3.gif)
+![ab](./images/4.gif)
+![ab](./images/5.gif)
