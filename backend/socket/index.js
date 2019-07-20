@@ -79,6 +79,15 @@ module.exports = function(server, db) {
           time: moment().format("YYYY-MM-DD HH:mm")
         })
 
+        // emitToUser(to, "global_message", {
+        //   ...message,
+        //   time: moment().format("YYYY-MM-DD HH:mm")
+        // })
+        // emitToUser(from, "global_message", {
+        //   ...message,
+        //   time: moment().format("YYYY-MM-DD HH:mm")
+        // })
+
         const chat = await db.Chat.findById(ObjectId(chatId))
         chat.messages.push({ from, text, time: moment() })
 

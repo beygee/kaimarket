@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class ValidPage extends StatefulWidget {
   @override
@@ -44,31 +45,45 @@ class _ValidPageState extends State<ValidPage> {
                         horizontal: screenAwareSize(16.0, context),
                         vertical: screenAwareSize(16.0, context)),
                     child: Center(
-                      child: Card(
-                        child: Padding(
-                          padding:
-                              EdgeInsets.all(screenAwareSize(16.0, context)),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text("카이인 인증하기",
-                                  style: TextStyle(
-                                    fontSize: screenAwareSize(20.0, context),
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                              SizedBox(height: screenAwareSize(20.0, context)),
-                              _buildTextFields(),
-                              SizedBox(height: screenAwareSize(20.0, context)),
-                              RaisedButton(
-                                onPressed: () {
-                                  _validUser(context);
-                                },
-                                child: Text('인증'),
-                              )
-                            ],
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Card(
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  screenAwareSize(16.0, context)),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Image.asset(
+                                    'assets/images/kaist_logo.png',
+                                    width: screenAwareSize(100.0, context),
+                                  ),
+                                  SizedBox(
+                                      height: screenAwareSize(20.0, context)),
+                                  Text("카이스트 인증하기",
+                                      style: TextStyle(
+                                        fontSize:
+                                            screenAwareSize(18.0, context),
+                                        fontWeight: FontWeight.bold,
+                                      )),
+                                  SizedBox(
+                                      height: screenAwareSize(20.0, context)),
+                                  _buildTextFields(),
+                                  SizedBox(
+                                      height: screenAwareSize(20.0, context)),
+                                  RaisedButton(
+                                    onPressed: () {
+                                      _validUser(context);
+                                    },
+                                    child: Text('인증'),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
                   );
@@ -104,6 +119,11 @@ class _ValidPageState extends State<ValidPage> {
         if (res.data) {
           //학번 인증 성공
           Navigator.of(context).pushReplacementNamed('/home');
+          Fluttertoast.showToast(
+            msg: "인증이 완료되었습니다.",
+            toastLength: Toast.LENGTH_SHORT,
+            fontSize: screenAwareSize(10.0, context),
+          );
         } else {
           showSnackBar(context, "학번 인증에 실패했습니다.");
         }

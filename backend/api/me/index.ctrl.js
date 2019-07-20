@@ -39,8 +39,6 @@ ctrl.getWish = async ctx => {
     { $group: { _id: "$_id", wish: { $push: "$wishObjects" } } }
   ])
 
-  console.log(fetchedUser)
-
   if (fetchedUser.length > 0) {
     const wish = fetchedUser[0].wish.map(p => {
       return {

@@ -27,7 +27,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
         if (res.statusCode == 200) {
           User user = User.fromJson(res.data);
-          log.i('user init');
           yield UserLoaded(
             id: user.id,
             name: user.name,
@@ -63,8 +62,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             })
             .toList()
             .cast<Post>();
-        log.i(currentstate.name);
-        log.i(posts[0].title);
+        // log.i(currentstate.name);
+        // log.i(posts);
+        // log.i(posts[0].title);
         yield UserLoaded(
             name: currentstate.name,
             id: currentstate.id,

@@ -23,7 +23,7 @@ class _SplashPageState extends State<SplashPage> {
     return Scaffold(
       body: Container(
         child: Center(
-          child: Text("꺆로딩"),
+          child: Container(),
         ),
       ),
     );

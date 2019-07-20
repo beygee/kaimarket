@@ -30,8 +30,7 @@ class WishPageState extends State<WishPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("위시 리스트", 
-          style: TextStyle(fontSize: 16.0)),
+        title: Text("위시 리스트", style: TextStyle(fontSize: 16.0)),
         backgroundColor: Colors.white,
       ),
       body: _buildSuggestions(),
@@ -65,7 +64,6 @@ class WishPageState extends State<WishPage> {
             );
           }
           if (state is UserLoaded) {
-            log.i('UserLoaded');
             if (state.wish == null) {
               return Column(
                 children: <Widget>[
@@ -82,15 +80,13 @@ class WishPageState extends State<WishPage> {
               );
             }
             if (state.wish.isEmpty) {
-              return Expanded(
-                child: Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: Center(child: Text("게시글이 없어요!")),
-                    ),
-                    SizedBox(height: screenAwareSize(50.0, context))
-                  ],
-                ),
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: Center(child: Text("찜 목록이 없어요!")),
+                  ),
+                  SizedBox(height: screenAwareSize(50.0, context))
+                ],
               );
             }
             return SafeArea(

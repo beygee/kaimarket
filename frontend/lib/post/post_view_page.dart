@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:week_3/post/google_map_fixed.dart';
 import 'package:week_3/post/post_card.dart';
@@ -260,6 +261,15 @@ class _PostViewPageState extends State<PostViewPage> {
         CachedNetworkImage(
           imageUrl: getUri('').toString() + post.images[i]['thumb'],
           fit: BoxFit.cover,
+          placeholder: (context, url) => Shimmer.fromColors(
+            baseColor: Colors.grey[200],
+            highlightColor: Colors.grey[300],
+            child: Container(
+              width: double.infinity,
+              height: screenAwareSize(350.0, context),
+              color: Colors.black,
+            ),
+          ),
         ),
       );
     }
