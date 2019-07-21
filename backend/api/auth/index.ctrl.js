@@ -69,11 +69,10 @@ ctrl.authWithGuest = async (ctx, next) => {
 }
 
 ctrl.authToken = async ctx => {
-  const { User } = ctx.db
   const { email, name } = ctx.data
 
   //이메일로 회원가입했는지 구분한다.
-  const user = await User.findOne({ email })
+  const user = await models.User.findOne({ email })
   if (!user) {
     const newUser = new User({ email, name })
     await newUser.save()

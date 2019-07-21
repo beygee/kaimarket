@@ -9,7 +9,9 @@
     "clean": "fuser -k -n tcp 3005",
     "crowl": "cross-env NODE_PATH=./ node crowl/index.js"
   },
-  "nodemonConfig": {"delay": "1500"},
+  "nodemonConfig": {
+    "delay": "1500"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -36,9 +38,11 @@
     "multer": "^1.4.1",
     "multer-s3": "^2.9.0",
     "multer-sharp-s3": "^0.1.0",
+    "mysql2": "^1.6.5",
     "puppeteer": "^1.18.1",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
+    "sequelize": "^5.10.1",
     "sharp": "^0.22.1",
     "socket.io": "^2.0.1",
     "socketio-jwt-auth": "^0.1.0",
