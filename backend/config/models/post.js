@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       categoryId: DataTypes.INTEGER,
       title: DataTypes.STRING,
       content: DataTypes.TEXT,
-      srtipTagContent: DataTypes.STRING,
+      stripTagContent: DataTypes.STRING,
       price: DataTypes.INTEGER,
       view: DataTypes.INTEGER,
       wish: DataTypes.INTEGER,
@@ -25,6 +25,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   )
-  Post.associate = function(models) {}
+  Post.associate = function(models) {
+    Post.belongsTo(models.User, {
+      as: "user",
+      foreignKey: "userId",
+      targetKey: "id"
+    })
+  }
   return Post
 }

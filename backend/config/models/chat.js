@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
       sellerId: DataTypes.INTEGER,
       buyerId: DataTypes.INTEGER,
       postId: DataTypes.INTEGER,
-      buyerRead: DataTypes.DATETIME(6),
-      sellerRead: DataTypes.DATETIME(6)
+      buyerRead: DataTypes.DATE(6),
+      sellerRead: DataTypes.DATE(6)
     },
     {}
   )

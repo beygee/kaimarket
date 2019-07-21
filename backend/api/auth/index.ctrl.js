@@ -1,8 +1,7 @@
-const Router = require("koa-router")
 const request = require("request-promise")
 const { generateToken } = require("lib/token")
 const validHakbun = require("lib/validHakbun")
-const mongoose = require("mongoose")
+const models = require("config/models")
 
 const ctrl = {}
 
@@ -47,14 +46,12 @@ ctrl.authWithNaver = async (ctx, next) => {
 ctrl.authWithKakao = async (ctx, next) => {
   const { access_token } = ctx.request.body
 
-  console.log(ctx.request.body)
   const header = "Bearer " + access_token
   const body = await request.get("https://kapi.kakao.com/v2/user/me", {
     headers: { Authorization: header }
   })
 
   const data = JSON.parse(body)
-  console.log(data)
   ctx.data = { email: data.kakao_account.email, name: data.properties.nickname }
   return next()
 }
@@ -72,34 +69,33 @@ ctrl.authToken = async ctx => {
   const { email, name } = ctx.data
 
   //이메일로 회원가입했는지 구분한다.
-  const user = await models.User.findOne({ email })
+  const user = await models.User.findOne({ where: { email } })
   if (!user) {
-    const newUser = new User({ email, name })
-    await newUser.save()
+    const newUser = await models.User.create({ email, name })
 
     //JWT 토큰
-    const token = await generateToken({ id: newUser._id })
+    const token = await generateToken({ id: newUser.id })
     ctx.set("access_token", token)
     ctx.body = { token, valid: false }
   } else {
     //JWT 토큰
-    const token = await generateToken({ id: user._id })
+    const token = await generateToken({ id: user.id })
     ctx.set("access_token", token)
-    ctx.body = { token, valid: user.valid || false }
+    ctx.body = { token, valid: user.valid }
   }
 }
 
 ctrl.validHakbun = async ctx => {
   const { id, password } = ctx.request.body
-  const { User } = ctx.db
-  const { user } = ctx
+  const { id: userId } = ctx.user
   const result = await validHakbun(id, password)
 
   if (result) {
     //DB에 저장한다.
-    const fetchedUser = await User.findById(mongoose.Types.ObjectId(user.id))
-    fetchedUser.valid = true
-    await fetchedUser.save()
+    const user = await models.User.findOne({ where: { id: userId } })
+    user.hakbun = id
+    user.valid = true
+    await user.save()
   }
   ctx.body = result
 }

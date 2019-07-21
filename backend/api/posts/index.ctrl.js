@@ -1,36 +1,55 @@
 const ctrl = {}
-const mongoose = require("mongoose")
-const ObjectId = mongoose.Types.ObjectId
 const { stripNull } = require("lib/common")
 const moment = require("lib/moment")
+const Sequelize = require("sequelize")
+const models = require("config/models")
 
 ctrl.getPosts = async ctx => {
-  const { Post, Category, User } = ctx.db
-  const { q, category } = ctx.query
-  const { id: userId } = ctx.user
+  // const { Post, Category, User } = ctx.db
+  const { q, category: categoryId } = ctx.query
+  // const { id: userId } = ctx.user
+  const userId = 1
 
-  const fetchedCategory = await Category.findOne({ id: category })
-
-  const user = await User.findById(userId)
-
-  let posts = await Post.find({
-    ...(q ? { title: new RegExp(q) } : {}),
-    ...(category && category != 0
-      ? { category: ObjectId(fetchedCategory._id) }
-      : {})
+  let posts = await models.Post.findAll({
+    where: {
+      ...(q ? { title: new RegExp(q) } : {}),
+      ...(categoryId && categoryId != 0 ? { categoryId } : {})
+    },
+    order: [["createdAt", "desc"]],
+    attributes: {
+      include: [
+        [
+          Sequelize.literal(
+            `(select count(id) from UserWish where userId=${userId} && postId=Post.id)`
+          ),
+          "isWish"
+        ]
+      ]
+    },
+    include: {
+      model: models.User,
+      as: "user",
+      attributes: {
+        include: [
+          [
+            Sequelize.literal(
+              `(select count(id) from UserSale where userId=user.id && postId=Post.id)`
+            ),
+            "salesCount"
+          ]
+        ]
+      }
+    }
   })
-    .sort({ created: -1 })
-    .populate({ path: "user" })
-    .populate("category")
+
+  //세일 개수
 
   posts = posts.map(p => {
     p = p.toJSON()
     return {
       ...p,
-      created: moment(p.created).fromNow(),
-      updated: moment(p.updated).fromNow(),
-      user: { ...p.user, salesCount: p.user.sales.length },
-      isWish: user.wish.includes(p._id)
+      createdAt: moment(p.createdAt).fromNow(),
+      updatedAt: moment(p.updatedAt).fromNow()
     }
   })
 

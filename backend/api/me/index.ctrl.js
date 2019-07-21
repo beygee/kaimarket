@@ -1,18 +1,15 @@
 const ctrl = {}
+const models = require("config/models")
 const mongoose = require("mongoose")
 const ObjectId = mongoose.Types.ObjectId
 const moment = require("lib/moment")
 
 ctrl.getProfile = async ctx => {
-  const { User } = ctx.db
-  const { user } = ctx
-  if (user) {
+  if (ctx.user) {
+    const { id: userId } = ctx.user
     //인증 검사
-    const fetchedUser = await User.findById(mongoose.Types.ObjectId(user.id))
-      .populate("chats")
-      .populate("wish")
-      .populate("sales")
-    ctx.body = fetchedUser
+    const user = await models.User.findOne({ where: { id: userId } })
+    ctx.body = user
   } else {
     ctx.error(401, "NO VALID", { code: 1 })
   }

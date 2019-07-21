@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING
     },
-    {}
+    { timestamps: false }
   )
   Category.associate = function(models) {}
   return Category

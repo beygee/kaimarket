@@ -8,8 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.INTEGER,
       postId: DataTypes.INTEGER,
       text: DataTypes.TEXT,
-      createdAt: DataTypes.DATETIME(6),
-      updatedAt: DataTypes.DATETIME(6)
+      createdAt: DataTypes.DATE(6),
+      updatedAt: DataTypes.DATE(6)
     },
     {}
   )
