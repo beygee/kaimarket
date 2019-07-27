@@ -65,6 +65,7 @@ class _PostViewPageState extends State<PostViewPage> {
         .toList()
         .cast<Post>();
     await Future.delayed(Duration(milliseconds: 250));
+
     if (res.statusCode == 200) {
       if (mounted) {
         setState(() {

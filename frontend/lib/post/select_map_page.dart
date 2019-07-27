@@ -9,16 +9,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SelectMapPage extends StatefulWidget {
   final Post post;
   final bool edit;
-  SelectMapPage({this.post, @required this.edit});
+  SelectMapPage({this.post, this.edit = false});
 
   @override
-  State<StatefulWidget> createState() => SelectMapPageState(edit: edit);
+  State<StatefulWidget> createState() => SelectMapPageState();
 }
 
 class SelectMapPageState extends State<SelectMapPage> {
-  final bool edit;
-
-  SelectMapPageState({@required this.edit});
+  SelectMapPageState();
 
   GlobalKey<LoadingWrapperState> _loadingWrapperKey =
       GlobalKey<LoadingWrapperState>();
@@ -89,32 +87,29 @@ class SelectMapPageState extends State<SelectMapPage> {
   }
 
   //데이터 작성 완료
-  _onTapComplete(context){
+  _onTapComplete(context) {
     _loadingWrapperKey.currentState.loadFuture(() async {
       if (widget.post.locationLat == null) {
         showSnackBar(context, "선호 지역을 선택해주세요.");
       }
 
-      if (edit!=null){
-      await Navigator.of(context).pop();
-      await Navigator.of(context).pop();
+      if (widget.edit) {
+        await dio.postUri(
+          getUri('/api/posts/' + widget.post.id.toString()),
+          data: {'data': widget.post.toJson()},
+        );
 
-      
-        //데이터 새로 페치
-      final postBloc = BlocProvider.of<PostBloc>(context);
-      postBloc.dispatch(PostFetch());
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      } else {
+        await dio.postUri(getUri('/api/posts'),
+            data: {'data': widget.post.toJson()});
+
+        Navigator.popUntil(context, ModalRoute.withName('/home'));
       }
-
-      else{
-        final res = await dio
-          .postUri(getUri('/api/posts'), data: {'data': widget.post.toJson()});
-
-      Navigator.popUntil(context, ModalRoute.withName('/home'));
-
       //데이터 새로 페치
       final postBloc = BlocProvider.of<PostBloc>(context);
-      postBloc.dispatch(PostFetch());
-      }
+      postBloc.dispatch(PostFetch(reload: true));
     });
   }
 }
