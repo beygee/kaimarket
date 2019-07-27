@@ -226,6 +226,7 @@ class _PostViewPageState extends State<PostViewPage> {
                               );
                             },
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Icon(
                             Icons.edit,
@@ -272,6 +273,7 @@ class _PostViewPageState extends State<PostViewPage> {
                               });
                         },
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Icon(
                             Icons.remove,
@@ -284,52 +286,54 @@ class _PostViewPageState extends State<PostViewPage> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: FlatButton(
-                      onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: new Text("판매완료"),
-                                  content: new Text("판매 완료 상태로 변경합니다."),
-                                  actions: <Widget>[
-                                    new FlatButton(
-                                      child: new Text("No"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    new FlatButton(
-                                      child: new Text("Yes"),
-                                      onPressed: () async {
-                                        post.isSold = !post.isSold;
-                                        var res = await dio.postUri(getUri('/api/posts/'+post.id.toString()+'/sold'));
-                                        log.i(res.data);
-                                        Navigator.of(context).pop();
-                                        // 이후 postview 페이지 reload
-                                        final postBloc =
-                                            BlocProvider.of<PostBloc>(context);
-                                        postBloc.dispatch(PostFetch());
-                                      },
-                                    )
-                                  ],
-                                );
-                              });
-                        },
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.check,
-                            color: Colors.grey,
-                            size: screenAwareSize(14.0, context),
-                          ),
-                          SizedBox(width: 7.0),
-                          Text('판매완료', style: TextStyle(color: Colors.grey)),
-                        ],
+                  if (!post.isSold)
+                    Expanded(
+                      child: FlatButton(
+                        onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: new Text("판매완료"),
+                                    content: new Text("판매 완료 상태로 변경합니다."),
+                                    actions: <Widget>[
+                                      new FlatButton(
+                                        child: new Text("No"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      new FlatButton(
+                                        child: new Text("Yes"),
+                                        onPressed: () async {
+                                          post.isSold = !post.isSold;
+                                          var res = await dio.postUri(getUri('/api/posts/'+post.id.toString()+'/sold'));
+                                          log.i(res.data);
+                                          Navigator.of(context).pop();
+                                          // 이후 postview 페이지 reload
+                                          final postBloc =
+                                              BlocProvider.of<PostBloc>(context);
+                                          postBloc.dispatch(PostFetch());
+                                        },
+                                      )
+                                    ],
+                                  );
+                                });
+                          },
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Icon(
+                              Icons.check,
+                              color: Colors.grey,
+                              size: screenAwareSize(14.0, context),
+                            ),
+                            SizedBox(width: 7.0),
+                            Text('판매완료', style: TextStyle(color: Colors.grey)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                 ])));
   }
 
