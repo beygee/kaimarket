@@ -302,12 +302,13 @@ class PostPageState extends State<PostPage> {
       }).toList());
 
       setState(() {
-        imageUrls = imageUrls + imageData.map((json) {
-          return {
-            'thumb': json['thumb'].toString(),
-            'url': json['url'].toString(),
-          };
-        }).toList();
+        imageUrls = imageUrls +
+            imageData.map((json) {
+              return {
+                'thumb': json['thumb'].toString(),
+                'url': json['url'].toString(),
+              };
+            }).toList();
       });
     } catch (e) {
       log.e(e);
@@ -337,21 +338,26 @@ class PostPageState extends State<PostPage> {
     }
 
     //포스트를 만들어 전달한다.
-    if (widget.post == null) widget.post = Post();
+    // if (widget.post == null) widget.post = Post();
 
-    widget.post.title = titleController.text;
-    widget.post.price = int.parse(priceController.text);
-    widget.post.content = contentController.text;
-    widget.post.images = imageUrls;
-    widget.post.category = CategoryList[selectedCategory];
-
-    
+    // widget.post.title = titleController.text;
+    // widget.post.price = int.parse(priceController.text);
+    // widget.post.content = contentController.text;
+    // widget.post.images = imageUrls;
+    // widget.post.category = CategoryList[selectedCategory];
 
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => SelectMapPage(
-          post: widget.post,
+          post: widget.post ??
+              Post(
+                title: titleController.text,
+                price: int.parse(priceController.text),
+                content: contentController.text,
+                images: imageUrls,
+                category: CategoryList[selectedCategory],
+              ),
           edit: edit,
         ),
       ),
