@@ -8,13 +8,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SelectMapPage extends StatefulWidget {
   final Post post;
-  SelectMapPage({this.post});
+  final bool edit;
+  SelectMapPage({this.post, @required this.edit});
 
   @override
-  State<StatefulWidget> createState() => SelectMapPageState();
+  State<StatefulWidget> createState() => SelectMapPageState(edit: edit);
 }
 
 class SelectMapPageState extends State<SelectMapPage> {
+  final bool edit;
+
+  SelectMapPageState({@required this.edit});
+
   GlobalKey<LoadingWrapperState> _loadingWrapperKey =
       GlobalKey<LoadingWrapperState>();
 
@@ -89,14 +94,25 @@ class SelectMapPageState extends State<SelectMapPage> {
       if (widget.post.locationLat == null) {
         showSnackBar(context, "선호 지역을 선택해주세요.");
       }
-      final res = await dio
-          .postUri(getUri('/api/posts'), data: {'data': widget.post.toJson()});
 
-      Navigator.popUntil(context, ModalRoute.withName('/home'));
+      if (edit != null) {
+        await Navigator.of(context).pop();
+        await Navigator.of(context).pop();
 
-      //데이터 새로 페치
-      final postBloc = BlocProvider.of<PostBloc>(context);
-      postBloc.dispatch(PostFetch(reload: true));
+        //데이터 새로 페치
+        final postBloc = BlocProvider.of<PostBloc>(context);
+        postBloc.dispatch(PostFetch());
+      } else {
+        final res = await dio.postUri(getUri('/api/posts'),
+            data: {'data': widget.post.toJson()});
+
+        Navigator.popUntil(context, ModalRoute.withName('/home'));
+
+        //데이터 새로 페치
+        final postBloc = BlocProvider.of<PostBloc>(context);
+
+        postBloc.dispatch(PostFetch(reload: true));
+      }
     });
   }
 }

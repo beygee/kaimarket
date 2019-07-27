@@ -13,19 +13,33 @@ import 'package:dio/dio.dart';
 
 class PostBookPage extends StatefulWidget {
   final Book book;
-
-  PostBookPage({@required this.book});
+  final Post post;
+  PostBookPage({@required this.book, this.post});
 
   @override
-  State<StatefulWidget> createState() => PostBookPageState();
+  State<StatefulWidget> createState() => PostBookPageState(postinfo: post);
 }
 
 class PostBookPageState extends State<PostBookPage> {
+  PostBookPageState({this.postinfo});
+
+  final Post postinfo;
+  bool edit;
+
   TextEditingController priceController = TextEditingController();
   TextEditingController majorController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
   List<Map<String, String>> imageUrls = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (postinfo != null) {
+      setDefault();
+    }
+  }
 
   @override
   void dispose() {
@@ -104,8 +118,13 @@ class PostBookPageState extends State<PostBookPage> {
     post.content = contentController.text;
     post.images = imageUrls;
 
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => SelectMapPage(post: post)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => SelectMapPage(
+                  post: post,
+                  edit: edit,
+                )));
   }
 
   Widget _buildTotal(context) {
@@ -309,5 +328,13 @@ class PostBookPageState extends State<PostBookPage> {
     } catch (e) {
       log.e(e);
     }
+  }
+
+  void setDefault() {
+    priceController.text = postinfo.bookPrice.toString();
+    majorController.text = postinfo.bookMajor;
+    contentController.text = postinfo.content;
+    imageUrls = postinfo.images;
+    edit = postinfo!=null;
   }
 }

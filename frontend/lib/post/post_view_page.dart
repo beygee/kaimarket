@@ -6,9 +6,11 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:week_3/post/google_map_fixed.dart';
+import 'package:week_3/post/post_book_page.dart';
 import 'package:week_3/post/post_card.dart';
 import 'package:week_3/styles/theme.dart';
 import 'package:week_3/utils/utils.dart';
+import 'package:week_3/models/book.dart';
 import 'dart:math' as math;
 import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/dio.dart';
@@ -17,7 +19,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:week_3/post/post_shimmer_card.dart';
 import 'package:week_3/chat/chat_view_page.dart';
-import 'package:week_3/post/post_edit_page.dart';
+import 'package:week_3/post/post_page.dart';
 
 class PostViewPage extends StatefulWidget {
   final int postId;
@@ -203,13 +205,30 @@ class _PostViewPageState extends State<PostViewPage> {
                         splashColor: Theme.of(context).primaryColorLight,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => PostEditPage(post),
-                            ),
-                          );
-                        },
+                        onPressed: post.isBook
+                            ? () {
+                                Book book = new Book(
+                                  title: post.title,
+                                  image: post.bookImage,
+                                  author: post.bookAuthor,
+                                  price: post.bookPrice,
+                                  pubdate: post.bookPubDate,
+                                  publisher: post.bookPublisher,
+                                );
+                                return Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        PostBookPage(book: book, post: post,),
+                                  ),
+                                );
+                              }
+                            : () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => PostPage(post: post),
+                                  ),
+                                );
+                              },
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10.0,
@@ -269,7 +288,11 @@ class _PostViewPageState extends State<PostViewPage> {
                         splashColor: Theme.of(context).primaryColorLight,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () => post.isSold = true,
+                        onPressed: () {
+                          log.i(post.isSold);
+                          return post.isSold = !post.isSold;
+                          // server issold 바꾸는 call도 주기.
+                          },
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10.0,
@@ -364,8 +387,8 @@ class _PostViewPageState extends State<PostViewPage> {
       });
 
       if (res.statusCode == 200) {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => ChatViewPage(chatId: res.data)));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => ChatViewPage(chatId: res.data)));
       }
     });
   }

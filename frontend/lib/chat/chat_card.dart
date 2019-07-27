@@ -5,6 +5,7 @@ import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:week_3/utils/base_height.dart';
 import 'package:intl/intl.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ChatCard extends StatelessWidget {
   final Chat chat;
@@ -28,16 +29,20 @@ class ChatCard extends StatelessWidget {
         onTap: onPressed,
         child: Container(
           padding: _paddingFormat,
-          child: new Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Row(children: <Widget>[
-                _chatLeft(),
-                SizedBox(width: 10),
-                _chatMiddle(context),
-              ]),
-              SizedBox(width: 40),
+              Expanded(
+                child: Row(children: <Widget>[
+                  _chatLeft(context),
+                  SizedBox(width: 10),
+                  _chatMiddle(context),
+                ]),
+              ),
+              SizedBox(width: 10),
               _chatRight(context),
+              SizedBox(width: 10),
+              _postImage(context),
             ],
           ),
         ),
@@ -45,10 +50,10 @@ class ChatCard extends StatelessWidget {
     );
   }
 
-  Widget _chatLeft() {
+  Widget _chatLeft(context) {
     return new Container(
-      width: 50,
-      height: 50,
+      width: screenAwareSize(50.0, context),
+      height: screenAwareSize(50.0, context),
       decoration: new BoxDecoration(
           border: Border.all(color: Colors.grey[400], width: 1.0),
           shape: BoxShape.circle,
@@ -65,18 +70,25 @@ class ChatCard extends StatelessWidget {
   }
 
   Widget _chatMiddle(context) {
-    return new Container(
-        child: new Column(
+    return new Expanded(
+        child:
+            //Container(child:
+            new Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        new Text(
+        Text(
           loggedUserId == chat.buyer.id ? chat.seller.name : chat.buyer.name,
           style: _userNameFont,
+          overflow: TextOverflow.ellipsis,
         ),
         SizedBox(
           height: screenAwareSize(5.0, context),
         ),
-        new Text(chat.recentMessage.text, style: _chatFont),
+        new Text(
+          chat.recentMessage.text,
+          style: _chatFont,
+          overflow: TextOverflow.ellipsis,
+        ),
       ],
     ));
   }
@@ -103,7 +115,8 @@ class ChatCard extends StatelessWidget {
         child: new Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        if (chat.recentMessage.createdAt == null) new Text(" ", style: _timeFont),
+        if (chat.recentMessage.createdAt == null)
+          new Text(" ", style: _timeFont),
         if (chat.recentMessage.createdAt != null)
           new Text(hourMinute(chat.recentMessage.createdAt), style: _timeFont),
         SizedBox(
@@ -121,5 +134,24 @@ class ChatCard extends StatelessWidget {
 
   String hourMinute(String time) {
     return DateFormat("hh:mm a").format(convertDateFromString(time));
+  }
+
+  Widget _postImage(context) {
+    return new ClipRRect(
+      borderRadius: BorderRadius.circular(8.0),
+      child: chat.post.isBook
+          ? CachedNetworkImage(
+              imageUrl: chat.post.bookImage,
+              width: screenAwareSize(60.0, context),
+              height: screenAwareSize(60.0, context),
+              fit: BoxFit.cover,
+            )
+          : CachedNetworkImage(
+              imageUrl: getUri('').toString() + chat.post.images[0]['url'],
+              width: screenAwareSize(60.0, context),
+              height: screenAwareSize(60.0, context),
+              fit: BoxFit.cover,
+            ),
+    );
   }
 }

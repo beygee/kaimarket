@@ -13,18 +13,33 @@ import 'package:week_3/models/post.dart';
 import 'package:dio/dio.dart';
 
 class PostPage extends StatefulWidget {
+  Post post;
+  PostPage({this.post});
   @override
-  State<StatefulWidget> createState() => PostPageState();
+  State<StatefulWidget> createState() => PostPageState(postinfo: post);
 }
 
 class PostPageState extends State<PostPage> {
   //텍스트 컨트롤러
+  Post postinfo;
+  bool edit;
+  PostPageState({this.postinfo});
+
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
   int selectedCategory = 0;
   List<Map<String, String>> imageUrls = [];
+
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (postinfo != null){
+    setDefault();
+    }
+  }
 
   
   @override
@@ -276,7 +291,7 @@ class PostPageState extends State<PostPage> {
     //서버 업로드
     try {
       var imageData = await Future.wait(images.map((image) async {
-        var bytes = await image.requestOriginal();
+        var bytes = await image.requestThumbnail(1000,1000, quality: 70);
         FormData formData = FormData.from({
           'image':
               UploadFileInfo.fromBytes(bytes.buffer.asUint8List(), image.name)
@@ -331,6 +346,15 @@ class PostPageState extends State<PostPage> {
     post.category = CategoryList[selectedCategory];
 
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => SelectMapPage(post: post)));
+        MaterialPageRoute(builder: (context) => SelectMapPage(post: post, edit: edit,)));
+  }
+
+   void setDefault(){
+    selectedCategory = postinfo.category.id;
+    imageUrls = postinfo.images;
+    titleController.text = postinfo.title;
+    priceController.text = postinfo.price.toString();
+    contentController.text = postinfo.content;
+    edit = postinfo!=null;
   }
 }
