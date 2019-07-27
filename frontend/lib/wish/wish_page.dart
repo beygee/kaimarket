@@ -8,6 +8,7 @@ import 'package:bloc/bloc.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class WishPage extends StatefulWidget {
   @override
@@ -60,7 +61,7 @@ class WishPageState extends State<WishPage> {
           }
           if (state is UserError) {
             return Center(
-              child: Text('포스트를 불러오는데 실패했습니다.'),
+              child: Text('포스트를 불러오는데 실패했습니다.ㅠㅠ'),
             );
           }
           if (state is UserLoaded) {
@@ -117,8 +118,25 @@ class WishPageState extends State<WishPage> {
               builder: (context) => PostViewPage(postId: post.id)));
         },
         onTapHeart: () async {
-          _userBloc.dispatch(UserChangeWish(postId: post.id));
-          _userBloc.dispatch(SearchWishInUser(postId: post.id, wish: true));
+          //서버 통신....
+          var res = await dio.postUri(getUri('/api/posts/${post.id}/wish'));
+          log.i(res.data);
+
+          bool bWish = res.data['wish'];
+          _userBloc.dispatch(SearchWishInUser(postId: post.id, wish: bWish));
+          if (bWish) {
+            Fluttertoast.showToast(
+              msg: "찜 목록에 추가하였습니다.",
+              toastLength: Toast.LENGTH_SHORT,
+              fontSize: screenAwareSize(10.0, context),
+            );
+          } else {
+            Fluttertoast.showToast(
+              msg: "찜 목록에서 제거하였습니다.",
+              toastLength: Toast.LENGTH_SHORT,
+              fontSize: screenAwareSize(10.0, context),
+            );
+          }
         },
         issaved: wish);
   }
