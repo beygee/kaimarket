@@ -130,7 +130,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
                         onTap: () => moveToKaist(),
                         child: Padding(
                           padding:
-                              EdgeInsets.all(screenAwareSize(10.0, context)),
+                              EdgeInsets.all(screenAwareSize(20.0, context)),
                           child: Icon(
                             Icons.refresh,
                             size: 36.0,

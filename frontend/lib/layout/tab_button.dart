@@ -45,7 +45,7 @@ class TabButton extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                  fontSize: 12.0,
+                  fontSize: screenAwareSize(12.0, context),
                   color: bActive ? ThemeColor.primary : Colors.black,
                   fontWeight: FontWeight.w300),
             ),
