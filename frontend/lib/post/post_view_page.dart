@@ -226,6 +226,7 @@ class _PostViewPageState extends State<PostViewPage> {
                               );
                             },
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Icon(
                             Icons.edit,
@@ -241,37 +242,37 @@ class _PostViewPageState extends State<PostViewPage> {
                   Expanded(
                     child: FlatButton(
                       onPressed: () async {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: new Text("삭제하기"),
-                                  content: new Text("정말로 삭제하시겠습니까?"),
-                                  actions: <Widget>[
-                                    new FlatButton(
-                                      child: new Text("No"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    new FlatButton(
-                                      child: new Text("Yes"),
-                                      onPressed: () async {
-                                        await dio.deleteUri(getUri(
-                                            '/api/posts/' +
-                                                post.id.toString()));
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                        final postBloc =
-                                            BlocProvider.of<PostBloc>(context);
-                                        postBloc.dispatch(PostFetch());
-                                      },
-                                    )
-                                  ],
-                                );
-                              });
-                        },
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: new Text("삭제하기"),
+                                content: new Text("정말로 삭제하시겠습니까?"),
+                                actions: <Widget>[
+                                  new FlatButton(
+                                    child: new Text("No"),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  new FlatButton(
+                                    child: new Text("Yes"),
+                                    onPressed: () async {
+                                      await dio.deleteUri(getUri(
+                                          '/api/posts/' + post.id.toString()));
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      final postBloc =
+                                          BlocProvider.of<PostBloc>(context);
+                                      postBloc.dispatch(PostFetch());
+                                    },
+                                  )
+                                ],
+                              );
+                            });
+                      },
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
                           Icon(
                             Icons.remove,
@@ -284,9 +285,10 @@ class _PostViewPageState extends State<PostViewPage> {
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: FlatButton(
-                      onPressed: () {
+                  if (!post.isSold)
+                    Expanded(
+                      child: FlatButton(
+                        onPressed: () {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -304,7 +306,10 @@ class _PostViewPageState extends State<PostViewPage> {
                                       child: new Text("Yes"),
                                       onPressed: () async {
                                         post.isSold = !post.isSold;
-                                        var res = await dio.postUri(getUri('/api/posts/'+post.id.toString()+'/sold'));
+                                        var res = await dio.postUri(getUri(
+                                            '/api/posts/' +
+                                                post.id.toString() +
+                                                '/sold'));
                                         log.i(res.data);
                                         Navigator.of(context).pop();
                                         // 이후 postview 페이지 reload
@@ -317,19 +322,20 @@ class _PostViewPageState extends State<PostViewPage> {
                                 );
                               });
                         },
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.check,
-                            color: Colors.grey,
-                            size: screenAwareSize(14.0, context),
-                          ),
-                          SizedBox(width: 7.0),
-                          Text('판매완료', style: TextStyle(color: Colors.grey)),
-                        ],
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Icon(
+                              Icons.check,
+                              color: Colors.grey,
+                              size: screenAwareSize(14.0, context),
+                            ),
+                            SizedBox(width: 7.0),
+                            Text('판매완료', style: TextStyle(color: Colors.grey)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                 ])));
   }
 
@@ -435,22 +441,43 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 
   Widget _buildImageCarousel() {
-    return Container(
-      height: screenAwareSize(350.0, context),
-      child: Carousel(
-        autoplay: false,
-        boxFit: BoxFit.cover,
-        images: _getImages(),
-        dotSize: 6.0,
-        dotSpacing: 12.0,
-        dotIncreaseSize: 1.6,
-        dotIncreasedColor: Colors.amber[200],
-        dotColor: Colors.amber[100],
-        indicatorBgPadding: 10.0,
-        dotBgColor: Colors.transparent,
-        animationCurve: Curves.fastOutSlowIn,
-        animationDuration: Duration(microseconds: 2000),
-      ),
+    return Stack(
+      children: <Widget>[
+        Container(
+          height: screenAwareSize(350.0, context),
+          child: Carousel(
+            autoplay: false,
+            boxFit: BoxFit.cover,
+            images: _getImages(),
+            dotSize: 6.0,
+            dotSpacing: 12.0,
+            dotIncreaseSize: 1.6,
+            dotIncreasedColor: Colors.amber[200],
+            dotColor: Colors.amber[100],
+            indicatorBgPadding: 10.0,
+            dotBgColor: Colors.transparent,
+            animationCurve: Curves.fastOutSlowIn,
+            animationDuration: Duration(microseconds: 2000),
+          ),
+        ),
+        if (post.isSold)
+          Container(
+              height: screenAwareSize(350.0, context),
+                decoration: new BoxDecoration(
+                    color: Color.fromARGB(140, 0, 0, 0)),
+                child: Center(
+                  child: Text(
+                    "SOLD\nOUT",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenAwareSize(60.0, context),
+                        color: ThemeColor.primary,
+                        letterSpacing: 10.0,
+                        ),
+                  ),
+                )),
+      ],
     );
   }
 
