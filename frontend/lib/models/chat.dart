@@ -39,15 +39,15 @@ class Chat {
 class Message {
   int userId;
   String text;
-  String time;
+  String createdAt;
   bool showTime;
   bool me;
 
-  Message({this.userId, this.text, this.time, this.showTime, this.me});
+  Message({this.userId, this.text, this.createdAt, this.showTime, this.me});
 
   Message.fromJson(Map<String, dynamic> json)
       : userId = json['userId'],
         text = json['text'],
-        time = json['time'],
+        createdAt = json['createdAt'],
         showTime = json['showTime'];
 }

@@ -60,7 +60,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
       if (existMessages.length != 1) {
         for (int i = 1; i < existMessages.length; i++) {
           if ((existMessages[i].userId == compareMessage.userId) &&
-              (minute(existMessages[i].time) == minute(compareMessage.time))) {
+              (minute(existMessages[i].createdAt) == minute(compareMessage.createdAt))) {
             existMessages[i].showTime = false;
           } else {
             existMessages[i].showTime = true;
@@ -115,18 +115,19 @@ class _ChatViewPageState extends State<ChatViewPage> {
   }
 
   void updateMessage(data) {
+    log.i(data);
     bool showTime = true;
     var prevMessage;
     // 서버에서 받은 메세지
     var currentMessage = {
       "userId": data['userId'],
       "text": data['text'],
-      "time": data['time']
+      "createdAt": data['createdAt']
     };
     if (existMessages.length > 0) {
       prevMessage = existMessages[0];
       if (prevMessage.userId == currentMessage['userId'] &&
-          minute(prevMessage.time) == minute(currentMessage['time']))
+          minute(prevMessage.createdAt) == minute(currentMessage['createdAt']))
         showTime = false;
     }
 
@@ -138,7 +139,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
             Message(
               text: prevMessage.text,
               userId: prevMessage.userId,
-              time: prevMessage.time,
+              createdAt: prevMessage.createdAt,
               me: prevMessage.me,
               showTime: showTime,
             ));
@@ -148,7 +149,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
           Message(
             text: currentMessage['text'],
             userId: currentMessage['userId'],
-            time: currentMessage['time'],
+            createdAt: currentMessage['createdAt'],
             me: currentMessage['userId'] == loggedUserId,
             showTime: true,
           ));
@@ -162,7 +163,6 @@ class _ChatViewPageState extends State<ChatViewPage> {
   }
 
   Future callback(socket) async {
-    log.i("클릭");
     if (messageController.text.length > 0) {
       // server로 보내기
       await socket.emit("message", [
@@ -339,7 +339,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
                         .map((message) => MessageBubble(
                               userId: message.userId,
                               text: message.text,
-                              time: message.time,
+                              createdAt: message.createdAt,
                               me: message.me,
                               showTime: message.showTime,
                             ))
@@ -389,7 +389,7 @@ class SendButton extends StatelessWidget {
 class MessageBubble extends StatelessWidget {
   final int userId;
   final String text;
-  String time;
+  String createdAt;
   bool me;
   bool showTime;
 
@@ -400,7 +400,7 @@ class MessageBubble extends StatelessWidget {
       {Key key,
       this.userId,
       this.text,
-      this.time,
+      this.createdAt,
       this.me = true,
       this.showTime = true})
       : super(key: key);
@@ -419,7 +419,7 @@ class MessageBubble extends StatelessWidget {
         children: <Widget>[
           if (me && showTime)
             Text(
-              DateFormat("hh:mm a").format(convertDateFromString(time)),
+              DateFormat("hh:mm a").format(convertDateFromString(createdAt)),
               style: _timeFont,
             ),
           Column(
@@ -464,7 +464,7 @@ class MessageBubble extends StatelessWidget {
           ),
           if (!me && showTime)
             Text(
-              DateFormat("hh:mm a").format(convertDateFromString(time)),
+              DateFormat("hh:mm a").format(convertDateFromString(createdAt)),
               style: _timeFont,
             ),
         ],

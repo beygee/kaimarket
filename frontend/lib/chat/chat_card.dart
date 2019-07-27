@@ -105,9 +105,9 @@ class ChatCard extends StatelessWidget {
         child: new Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        if (chat.recentMessage.time == null) new Text(" ", style: _timeFont),
-        if (chat.recentMessage.time != null)
-          new Text(hourMinute(chat.recentMessage.time), style: _timeFont),
+        if (chat.recentMessage.createdAt == null) new Text(" ", style: _timeFont),
+        if (chat.recentMessage.createdAt != null)
+          new Text(hourMinute(chat.recentMessage.createdAt), style: _timeFont),
         SizedBox(
           height: screenAwareSize(10.0, context),
         ),
