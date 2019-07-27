@@ -8,14 +8,12 @@ class PostCard extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onTapHeart;
   final Post post;
-  final bool issaved;
   final bool small;
 
   PostCard(
       {@required this.post,
       this.onTap,
       this.onTapHeart,
-      this.issaved,
       this.small = false});
 
   @override
@@ -126,7 +124,7 @@ class PostCard extends StatelessWidget {
                                     padding: EdgeInsets.all(
                                       screenAwareSize(5.0, context),
                                     ),
-                                    child: issaved
+                                    child: post.isWish
                                         ? Icon(
                                             Icons.favorite,
                                             color: Colors.amber[200],

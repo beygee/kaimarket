@@ -43,6 +43,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
       if (event is UserGetWish && currentState is UserLoaded) {
         var res = await dio.getUri(getUri('/api/me/wish'));
+        log.i(res.data);
         final currentstate = (currentState as UserLoaded);
         List<Post> posts = res.data
             .map((p) {
@@ -50,6 +51,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             })
             .toList()
             .cast<Post>();
+            
         yield UserLoaded(
             name: currentstate.name,
             id: currentstate.id,
@@ -70,7 +72,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         }).toList();
 
         var currentstate = (currentState as UserLoaded);
-        log.i(wishlist[0].isWish);
+        
         yield UserLoaded(
             id: currentstate.id,
             name: currentstate.name,

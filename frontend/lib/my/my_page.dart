@@ -212,7 +212,6 @@ class _MyPageState extends State<MyPage> {
               for (int i = 0; i < posts.length; i++)
                 PostCard(
                   post: posts[i],
-                  issaved: false,
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => PostViewPage(postId: posts[i].id)));

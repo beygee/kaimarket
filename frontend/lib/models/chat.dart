@@ -3,7 +3,7 @@ import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/utils.dart';
 
 class Chat {
-  String id;
+  int id;
   User seller;
   User buyer;
   Post post;
@@ -15,7 +15,7 @@ class Chat {
   int sellerNonReadCount;
 
   Chat.fromJson(Map<String, dynamic> json)
-      : id = json['_id'],
+      : id = json['id'],
         seller = User.fromJson(json['seller']),
         buyer = User.fromJson(json['buyer']),
         post = Post.fromJson(json['post']),
@@ -37,16 +37,16 @@ class Chat {
 }
 
 class Message {
-  String from;
+  int userId;
   String text;
   String time;
   bool showTime;
   bool me;
 
-  Message({this.from, this.text, this.time, this.showTime, this.me});
+  Message({this.userId, this.text, this.time, this.showTime, this.me});
 
   Message.fromJson(Map<String, dynamic> json)
-      : from = json['from'],
+      : userId = json['userId'],
         text = json['text'],
         time = json['time'],
         showTime = json['showTime'];

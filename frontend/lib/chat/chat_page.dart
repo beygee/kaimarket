@@ -69,7 +69,7 @@ class ChatListsState extends State<ChatLists> {
               });
 
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => ChatViewPage(chat: chats[i])));
+                  builder: (context) => ChatViewPage(chatId: chats[i].id)));
             },
           );
         },

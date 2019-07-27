@@ -221,7 +221,6 @@ class HomePageState extends State<HomePage> {
               fontSize: screenAwareSize(10.0, context),
             );
           }
-        },
-        issaved: wish);
+        });
   }
 }
