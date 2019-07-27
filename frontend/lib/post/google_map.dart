@@ -7,8 +7,9 @@ import 'package:week_3/utils/utils.dart';
 
 class GoogleMapPage extends StatefulWidget {
   final Function(double, double) onTap;
+  final LatLng defaultmarker;
 
-  GoogleMapPage({this.onTap});
+  GoogleMapPage({this.onTap, this.defaultmarker});
   @override
   State<StatefulWidget> createState() => _GoogleMapState();
 }
@@ -17,6 +18,16 @@ class _GoogleMapState extends State<GoogleMapPage> {
   //Completer<GoogleMapController> _controller = Completer();
 
   GoogleMapController _controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.defaultmarker != null){
+      
+    setDefault();
+    }
+  }
 
   final kaist = CameraPosition(
     target: LatLng(36.3708602, 127.3625224),
@@ -119,7 +130,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
                         onTap: () => moveToKaist(),
                         child: Padding(
                           padding:
-                              EdgeInsets.all(screenAwareSize(10.0, context)),
+                              EdgeInsets.all(screenAwareSize(20.0, context)),
                           child: Icon(
                             Icons.refresh,
                             size: 36.0,
@@ -142,5 +153,9 @@ class _GoogleMapState extends State<GoogleMapPage> {
         ),
       ],
     );
+  }
+
+  void setDefault(){
+    _onAddMarkerButtonPressed(widget.defaultmarker);
   }
 }
