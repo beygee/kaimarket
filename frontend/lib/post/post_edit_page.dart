@@ -12,12 +12,20 @@ import 'package:week_3/models/post.dart';
 import 'package:week_3/models/post.dart';
 import 'package:dio/dio.dart';
 
-class PostPage extends StatefulWidget {
+class PostEditPage extends StatefulWidget {
+  Post temp;
+  PostEditPage(Post post) {
+    this.temp = post;
+  }
   @override
-  State<StatefulWidget> createState() => PostPageState();
+  State<StatefulWidget> createState() => PostEditPageState(temp);
 }
 
-class PostPageState extends State<PostPage> {
+class PostEditPageState extends State<PostEditPage> {
+  Post postinfo;
+  PostEditPageState(Post post) {
+    this.postinfo = post;
+  }
   //텍스트 컨트롤러
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -26,7 +34,6 @@ class PostPageState extends State<PostPage> {
   int selectedCategory = 0;
   List<Map<String, String>> imageUrls = [];
 
-  
   @override
   void dispose() {
     priceController.dispose();
