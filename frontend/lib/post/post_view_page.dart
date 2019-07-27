@@ -192,122 +192,90 @@ class _PostViewPageState extends State<PostViewPage> {
               ],
               color: Colors.white,
             ),
-            child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      RaisedButton(
-                        padding: EdgeInsets.symmetric(
-                            vertical: screenAwareSize(10.0, context)),
-                        color: ThemeColor.primary,
-                        textColor: Colors.white,
-                        splashColor: Theme.of(context).primaryColorLight,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: post.isBook
-                            ? () {
-                                Book book = new Book(
-                                  title: post.title,
-                                  image: post.bookImage,
-                                  author: post.bookAuthor,
-                                  price: post.bookPrice,
-                                  pubdate: post.bookPubDate,
-                                  publisher: post.bookPublisher,
-                                );
-                                return Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        PostBookPage(book: book, post: post,),
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: FlatButton(
+                      onPressed: post.isBook
+                          ? () {
+                              Book book = new Book(
+                                title: post.title,
+                                image: post.bookImage,
+                                author: post.bookAuthor,
+                                price: post.bookPrice,
+                                pubdate: post.bookPubDate,
+                                publisher: post.bookPublisher,
+                              );
+                              return Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => PostBookPage(
+                                    book: book,
+                                    post: post,
                                   ),
-                                );
-                              }
-                            : () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => PostPage(post: post),
-                                  ),
-                                );
-                              },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10.0,
+                                ),
+                              );
+                            }
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => PostPage(post: post),
+                                ),
+                              );
+                            },
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.edit,
+                            color: Colors.grey,
+                            size: screenAwareSize(14.0, context),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: screenAwareSize(14.0, context),
-                              ),
-                              SizedBox(width: 10.0),
-                              Text('수정하기',
-                                  style: TextStyle(color: Colors.white)),
-                            ],
-                          ),
-                        ),
+                          SizedBox(width: 7.0),
+                          Text('수정하기', style: TextStyle(color: Colors.grey)),
+                        ],
                       ),
-                      RaisedButton(
-                        padding: EdgeInsets.symmetric(
-                            vertical: screenAwareSize(10.0, context)),
-                        color: ThemeColor.primary,
-                        textColor: Colors.white,
-                        splashColor: Theme.of(context).primaryColorLight,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () async {
-                          await dio.deleteUri(
-                              getUri('/api/posts/' + post.id.toString()));
-                          Navigator.of(context).pop();
-                          final postBloc = BlocProvider.of<PostBloc>(context);
-                          postBloc.dispatch(PostFetch());
-                        },
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10.0,
+                    ),
+                  ),
+                  Expanded(
+                    child: FlatButton(
+                      onPressed: () async {
+                        await dio.deleteUri(
+                            getUri('/api/posts/' + post.id.toString()));
+                        Navigator.of(context).pop();
+                        final postBloc = BlocProvider.of<PostBloc>(context);
+                        postBloc.dispatch(PostFetch());
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.remove,
+                            color: Colors.grey,
+                            size: screenAwareSize(14.0, context),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.remove,
-                                color: Colors.white,
-                                size: screenAwareSize(14.0, context),
-                              ),
-                              SizedBox(width: 10.0),
-                              Text('삭제하기',
-                                  style: TextStyle(color: Colors.white)),
-                            ],
-                          ),
-                        ),
+                          SizedBox(width: 7.0),
+                          Text('삭제하기', style: TextStyle(color: Colors.grey)),
+                        ],
                       ),
-                      RaisedButton(
-                        padding: EdgeInsets.symmetric(
-                            vertical: screenAwareSize(10.0, context)),
-                        color: ThemeColor.primary,
-                        textColor: Colors.white,
-                        splashColor: Theme.of(context).primaryColorLight,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () => post.isSold = true,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10.0,
+                    ),
+                  ),
+                  Expanded(
+                    child: FlatButton(
+                      onPressed: () => post.isSold = true,
+                      child: Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.check,
+                            color: Colors.grey,
+                            size: screenAwareSize(14.0, context),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.check,
-                                color: Colors.white,
-                                size: screenAwareSize(14.0, context),
-                              ),
-                              SizedBox(width: 10.0),
-                              Text('판매완료',
-                                  style: TextStyle(color: Colors.white)),
-                            ],
-                          ),
-                        ),
-                      )
-                    ]))));
+                          SizedBox(width: 7.0),
+                          Text('판매완료', style: TextStyle(color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ])));
   }
 
   Widget _buildBottomTab() {
