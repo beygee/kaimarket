@@ -99,6 +99,7 @@ class SelectMapPageState extends State<SelectMapPage> {
     _loadingWrapperKey.currentState.loadFuture(() async {
       if (widget.post.locationLat == null) {
         showSnackBar(context, "선호 지역을 선택해주세요.");
+        return;
       }
 
       if (widget.edit) {

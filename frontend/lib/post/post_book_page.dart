@@ -110,7 +110,7 @@ class PostBookPageState extends State<PostBookPage> {
     }
 
     //포스트를 만들어 전달한다.
-    if (widget.post == null) widget.post = Post();
+    if (widget.post == null) widget.post = Post.fromBook(widget.book);
     widget.post.price = int.parse(priceController.text);
     widget.post.content = contentController.text;
     widget.post.bookMajor = majorController.text;
