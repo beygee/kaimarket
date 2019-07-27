@@ -26,16 +26,6 @@ const start = async () => {
   publicApp.use(serve("./public"))
   app.use(mount("/public", publicApp))
 
-  //DB 연결
-  await mongoose.connect("mongodb://localhost:27017/kaimarket", {
-    useNewUrlParser: true
-  })
-  const db = require("lib/db")
-  app.use((ctx, next) => {
-    ctx.db = db
-    return next()
-  })
-
   //파이어베이스 연결
   const serviceAccount = require("data/firebase-admin.json")
   const fb = admin.initializeApp({
@@ -61,7 +51,7 @@ const start = async () => {
 
   //소켓 연결
   server.listen(port)
-  createSocketServer(server, db)
+  createSocketServer(server)
 
   console.ready({
     message: `서버 오픈 :) ${port} >_ <`,

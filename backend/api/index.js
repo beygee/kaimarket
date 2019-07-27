@@ -44,7 +44,7 @@ router.post("/upload", upload, async ctx => {
     .resize(200)
     .toFile(path.resolve("public", "thumb", file.filename))
 
-  ctx.body = { thumb: `/${file.path}`, url: `/public/thumb/${file.filename}` }
+  ctx.body = { url: `/${file.path}`, thumb: `/public/thumb/${file.filename}` }
 })
 
 module.exports = router

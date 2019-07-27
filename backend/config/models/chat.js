@@ -12,6 +12,28 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   )
-  Chat.associate = function(models) {}
+
+  Chat.associate = function(models) {
+    Chat.belongsTo(models.User, {
+      as: "seller",
+      foreignKey: "sellerId",
+      targetKey: "id"
+    })
+    Chat.belongsTo(models.User, {
+      as: "buyer",
+      foreignKey: "buyerId",
+      targetKey: "id"
+    })
+    Chat.belongsTo(models.Post, {
+      as: "post",
+      foreignKey: "postId",
+      targetKey: "id"
+    })
+    Chat.hasMany(models.ChatMessage, {
+      as: "messages",
+      foreignKey: "chatId",
+      sourceKey: "id"
+    })
+  }
   return Chat
 }

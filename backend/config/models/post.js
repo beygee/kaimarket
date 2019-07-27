@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       bookMajor: DataTypes.STRING,
       bookAuthor: DataTypes.STRING,
       bookPublisher: DataTypes.STRING,
+      bookPubDate: DataTypes.STRING,
       bookImage: DataTypes.STRING,
       bookPrice: DataTypes.INTEGER,
       isSold: DataTypes.BOOLEAN
@@ -30,6 +31,12 @@ module.exports = (sequelize, DataTypes) => {
       as: "user",
       foreignKey: "userId",
       targetKey: "id"
+    })
+
+    Post.hasMany(models.PostImage, {
+      as: "images",
+      foreignKey: "postId",
+      sourceKey: "id"
     })
   }
   return Post

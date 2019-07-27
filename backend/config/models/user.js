@@ -12,10 +12,19 @@ module.exports = (sequelize, DataTypes) => {
     {}
   )
   User.associate = function(models) {
-    User.hasMany(models.UserSale, {
-      as: "sales",
+
+    User.belongsToMany(models.Post, {
       foreignKey: "userId",
-      sourceKey: "id"
+      otherKey: 'postId',
+      as: "wishes",
+      through: "UserWish"
+    })
+
+    User.belongsToMany(models.Post, {
+      foreignKey: "userId",
+      otherKey: 'postId',
+      as: "sales",
+      through: "UserSale"
     })
   }
   return User

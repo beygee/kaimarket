@@ -2,17 +2,17 @@ const ctrl = {}
 const { stripNull } = require("lib/common")
 const moment = require("lib/moment")
 const Sequelize = require("sequelize")
+const { Op } = Sequelize
 const models = require("config/models")
+const sanitizeHtml = require("sanitize-html")
 
 ctrl.getPosts = async ctx => {
-  // const { Post, Category, User } = ctx.db
   const { q, category: categoryId } = ctx.query
-  // const { id: userId } = ctx.user
-  const userId = 1
+  const { id: userId } = ctx.user
 
   let posts = await models.Post.findAll({
     where: {
-      ...(q ? { title: new RegExp(q) } : {}),
+      ...(q ? { title: { [Op.like]: `%${q}%` } } : {}),
       ...(categoryId && categoryId != 0 ? { categoryId } : {})
     },
     order: [["createdAt", "desc"]],
@@ -26,28 +26,20 @@ ctrl.getPosts = async ctx => {
         ]
       ]
     },
-    include: {
-      model: models.User,
-      as: "user",
-      attributes: {
-        include: [
-          [
-            Sequelize.literal(
-              `(select count(id) from UserSale where userId=user.id && postId=Post.id)`
-            ),
-            "salesCount"
-          ]
-        ]
+    include: [
+      {
+        model: models.PostImage,
+        as: "images"
       }
-    }
+    ]
   })
 
   //세일 개수
-
   posts = posts.map(p => {
     p = p.toJSON()
     return {
       ...p,
+      isWish: !!p.isWish,
       createdAt: moment(p.createdAt).fromNow(),
       updatedAt: moment(p.updatedAt).fromNow()
     }
@@ -57,119 +49,158 @@ ctrl.getPosts = async ctx => {
 }
 
 ctrl.getPost = async ctx => {
-  const { Post, User } = ctx.db
   const { id } = ctx.params
   const { id: userId } = ctx.user
 
-  const user = await User.findById(userId)
-
-  let post = await Post.findById(ObjectId(id))
-    .populate("user")
-    .populate("category")
+  let post = await models.Post.findOne({
+    where: { id },
+    attributes: {
+      include: [
+        [
+          Sequelize.literal(
+            `(select count(id) from UserWish where userId=${userId} && postId=Post.id)`
+          ),
+          "isWish"
+        ]
+      ]
+    },
+    include: [
+      {
+        model: models.User,
+        as: "user",
+        attributes: {
+          include: [
+            [
+              Sequelize.literal(
+                `(select count(id) from UserSale where userId=user.id && postId=Post.id)`
+              ),
+              "salesCount"
+            ]
+          ]
+        }
+      },
+      {
+        model: models.PostImage,
+        as: "images"
+      }
+    ]
+  })
 
   post.view++
-  await post.save()
+  await post.save({ silent: true })
 
   post = post.toJSON()
 
   //관련된 카테고리 포스트를 5개 가져온다.
-  let relatedPosts = await Post.find({
-    category: post.category,
-    _id: { $ne: post._id }
+  let relatedPosts = await models.Post.findAll({
+    where: {
+      categoryId: post.categoryId
+    },
+    attributes: {
+      include: [
+        [
+          Sequelize.literal(
+            `(select count(id) from UserWish where userId=${userId} && postId=Post.id)`
+          ),
+          "isWish"
+        ]
+      ]
+    },
+    include: {
+      model: models.PostImage,
+      as: "images"
+    },
+    order: Sequelize.literal("rand()"),
+    limit: 5
   })
-    .sort({ _id: -1 })
-    .limit(5)
-    .populate("user")
-    .populate("category")
 
   relatedPosts = relatedPosts.map(p => {
     p = p.toJSON()
     return {
       ...p,
-      created: moment(p.created).fromNow(),
-      updated: moment(p.updated).fromNow(),
-      isWish: user.wish.includes(p._id)
+      createdAt: moment(p.createdAt).fromNow(),
+      updatedAt: moment(p.updatedAt).fromNow(),
+      isWish: !!p.isWish
     }
   })
 
-  //찜 개수 가져오기
-  const wish = await User.count({
-    wish: { $elemMatch: { $eq: post._id } }
+  //해당 포스트 위시 개수 가져오기
+  const wish = await models.UserWish.count({
+    where: { postId: id }
   })
 
   ctx.body = {
     ...post,
-    created: moment(post.created).fromNow(),
-    updated: moment(post.updated).fromNow(),
-    user: { ...post.user, salesCount: post.user.sales.length },
-    isWish: user.wish.includes(post._id),
+    createdAt: moment(post.createdAt).fromNow(),
+    updatedAt: moment(post.updatedAt).fromNow(),
     relatedPosts,
+    isWish: !!post.isWish,
     wish
   }
 }
 
 ctrl.createPost = async ctx => {
-  const { User, Post, Category } = ctx.db
-  const { user } = ctx
+  const { id: userId } = ctx.user
   const { data } = ctx.request.body
 
-  const post = await Post.create(
+  //포스트 생성
+  const post = await models.Post.create(
     stripNull({
       ...data,
-      category: await Category.findOne({ id: data.category.id }),
-      user: await User.findById(user.id)
+      stripTagContent: sanitizeHtml(data.content, {
+        allowedTags: [],
+        allowedAttributes: {}
+      }),
+      userId
     })
   )
 
-  const fetchedUser = await User.findById(ObjectId(user.id))
-  fetchedUser.sales.push(post)
-  await fetchedUser.save()
+  //이미지 생성
+  await Promise.all(
+    data.images.map(image =>
+      models.PostImage.create({
+        postId: post.id,
+        thumb: image.thumb,
+        url: image.url
+      })
+    )
+  )
 
-  ctx.body = "OK"
-}
-
-ctrl.increaseView = async ctx => {
-  const { id } = ctx.params
-  const { Post } = ctx.db
-
-  const post = await Post.findById(ObjectId(id))
-  post.view++
-  await post.save()
+  //판매내역
+  await models.UserSale.create({ postId: post.id, userId })
 
   ctx.body = "OK"
 }
 
 ctrl.wish = async ctx => {
-  const { Post, User } = ctx.db
   const { id } = ctx.params
   const { id: userId } = ctx.user
 
-  //해당 포스트를 위시리스트에 추가
-  const user = await User.findById(userId)
-  // const user = await User.findOne({ email: "doug0476@naver.com" })
-
-  //해당 유저의 위시리스트에 포함되어있는지 확인
-  // const users = await User.find({
-  //   email: "doug0476@naver.com",
-  //   wish: { $elemMatch: { $eq: id } }
-  // })
-  const users = await User.find({
-    _id: userId,
-    wish: { $elemMatch: { $eq: id } }
-  })
-
-  //위시리스트를 추가하지 않았다면
-  let wish = false
-  if (users.length == 0) {
-    wish = true
-    user.wish.push(id)
-    await user.save()
+  const wish = await models.UserWish.findOne({ where: { userId, postId: id } })
+  if (wish) {
+    await wish.destroy()
   } else {
-    user.wish.remove(id)
-    await user.save()
+    await models.UserWish.create({ postId: id, userId })
   }
 
-  ctx.body = { wish, postId: id }
+  ctx.body = { wish: !wish, postId: id }
+}
+
+ctrl.deletePost = async ctx => {
+  const { id: userId } = ctx.user
+  const { id } = ctx.params
+
+  const post = await models.Post.findOne({ where: { id } })
+
+  //만약 주인이 아니면 거절한다.
+  if (post.userId != userId) {
+    ctx.error(403, "NOT MINE", { code: 1 })
+    return
+  }
+
+  await post.destroy()
+
+  ctx.body = "OK"
 }
 
 module.exports = ctrl

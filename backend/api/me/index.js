@@ -9,7 +9,4 @@ router.get('/wish', ctrl.getWish)
 router.get('/sales', ctrl.getSales)
 router.get('/chats', ctrl.getChats)
 
-
-router.get('/test', ctrl.test)
-
 module.exports = router
