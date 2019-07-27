@@ -30,9 +30,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
       EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);
 
   final _partnerNameFont = TextStyle(fontSize: 20.0, color: Colors.grey[600]);
-  final _chatFont = TextStyle(fontSize: 14.0, color: Colors.grey[500]);
-  final _postFont = TextStyle(fontSize: 14.0, color: Colors.grey[600]);
-  final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
+  // final _chatFont = TextStyle(fontSize: 14.0, color: Colors.grey[500]);
+  // final _postFont = TextStyle(fontSize: 14.0, color: Colors.grey[600]);
+  // final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
   List<Message> existMessages = [];
 
@@ -239,7 +239,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
               Expanded(
                 child: Text(
                   chat.post.title,
-                  style: _postFont,
+                  style: TextStyle(fontSize: screenAwareSize(14.0, context), color: Colors.grey[600]),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -247,7 +247,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
           ),
           Text(
             getMoneyFormat(chat.post.price) + '원',
-            style: _postFont,
+            style: TextStyle(fontSize: screenAwareSize(14.0, context), color: Colors.grey[600]),
           ),
         ],
       ),
@@ -274,7 +274,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
               child: Text(
             "게시글\n확인하기",
             style: TextStyle(
-              fontSize: 12.0,
+              fontSize: screenAwareSize(12.0, context),
               color: Colors.amber[600],
             ),
             textAlign: TextAlign.center,

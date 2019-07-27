@@ -13,8 +13,6 @@ class ChatCard extends StatelessWidget {
 
   ChatCard({this.chat, this.loggedUserId, this.onPressed});
 
-  final _profileImage = 'assets/images/logo.jpg';
-
   final _userNameFont = TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold);
   final _chatFont = TextStyle(fontSize: 12.0, color: Colors.grey[500]);
   final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
