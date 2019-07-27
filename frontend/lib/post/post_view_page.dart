@@ -65,6 +65,7 @@ class _PostViewPageState extends State<PostViewPage> {
         .toList()
         .cast<Post>();
     await Future.delayed(Duration(milliseconds: 250));
+
     if (res.statusCode == 200) {
       if (mounted) {
         setState(() {
@@ -240,12 +241,36 @@ class _PostViewPageState extends State<PostViewPage> {
                   Expanded(
                     child: FlatButton(
                       onPressed: () async {
-                        await dio.deleteUri(
-                            getUri('/api/posts/' + post.id.toString()));
-                        Navigator.of(context).pop();
-                        final postBloc = BlocProvider.of<PostBloc>(context);
-                        postBloc.dispatch(PostFetch());
-                      },
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: new Text("삭제하기"),
+                                  content: new Text("정말로 삭제하시겠습니까?"),
+                                  actions: <Widget>[
+                                    new FlatButton(
+                                      child: new Text("No"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    new FlatButton(
+                                      child: new Text("Yes"),
+                                      onPressed: () async {
+                                        await dio.deleteUri(getUri(
+                                            '/api/posts/' +
+                                                post.id.toString()));
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        final postBloc =
+                                            BlocProvider.of<PostBloc>(context);
+                                        postBloc.dispatch(PostFetch());
+                                      },
+                                    )
+                                  ],
+                                );
+                              });
+                        },
                       child: Row(
                         children: <Widget>[
                           Icon(
@@ -261,7 +286,37 @@ class _PostViewPageState extends State<PostViewPage> {
                   ),
                   Expanded(
                     child: FlatButton(
-                      onPressed: () => post.isSold = true,
+                      onPressed: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: new Text("판매완료"),
+                                  content: new Text("판매 완료 상태로 변경합니다."),
+                                  actions: <Widget>[
+                                    new FlatButton(
+                                      child: new Text("No"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    new FlatButton(
+                                      child: new Text("Yes"),
+                                      onPressed: () async {
+                                        post.isSold = !post.isSold;
+                                        var res = await dio.postUri(getUri('/api/posts/'+post.id.toString()+'/sold'));
+                                        log.i(res.data);
+                                        Navigator.of(context).pop();
+                                        // 이후 postview 페이지 reload
+                                        final postBloc =
+                                            BlocProvider.of<PostBloc>(context);
+                                        postBloc.dispatch(PostFetch());
+                                      },
+                                    )
+                                  ],
+                                );
+                              });
+                        },
                       child: Row(
                         children: <Widget>[
                           Icon(

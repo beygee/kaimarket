@@ -21,8 +21,9 @@ class PostError extends PostState {
 
 class PostLoaded extends PostState {
   final List<Post> posts;
+  final bool bReachedMax;
 
-  PostLoaded({this.posts}) : super([posts]);
+  PostLoaded({this.posts, this.bReachedMax = false}) : super([posts, bReachedMax]);
 
   @override
   String toString() => "PostLoaded";

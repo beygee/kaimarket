@@ -10,8 +10,10 @@ abstract class PostEvent extends Equatable {
 class PostFetch extends PostEvent {
   final int selectedCategory;
   final String searchText;
+  final bool reload;  //모든 데이터 날리고 새로 로딩
 
-  PostFetch({this.selectedCategory = 0, this.searchText = ''});
+  PostFetch(
+      {this.selectedCategory = 0, this.searchText = '', this.reload = false});
   @override
   String toString() {
     return "Fetch";
