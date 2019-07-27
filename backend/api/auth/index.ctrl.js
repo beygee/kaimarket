@@ -88,6 +88,13 @@ ctrl.authToken = async ctx => {
 ctrl.validHakbun = async ctx => {
   const { id, password } = ctx.request.body
   const { id: userId } = ctx.user
+
+  //아이디 중복 체크
+  if (await models.User.findOne({ where: { hakbun: id } })) {
+    ctx.error(403, "EXIST", { code: 1 })
+    return
+  }
+
   const result = await validHakbun(id, password)
 
   if (result) {

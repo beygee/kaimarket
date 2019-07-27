@@ -41,7 +41,15 @@ ctrl.getWish = async ctx => {
     }
   })
 
-  const wishes = user.wishes.map(p => ({ ...p.toJSON(), isWish: !!p.toJSON().isWish }))
+  const wishes = user.wishes.map(p => {
+    p = p.toJSON()
+    return {
+      ...p,
+      isWish: !!p.isWish,
+      createdAt: moment(p.createdAt).fromNow(),
+      updatedAt: moment(p.updatedAt).fromNow()
+    }
+  })
 
   ctx.body = wishes
 }
@@ -58,7 +66,7 @@ ctrl.getSales = async ctx => {
         include: [
           [
             Sequelize.literal(
-              `(select count(id) from UserWish where userId=${userId} && postId=Post.id)`
+              `(select count(id) from UserWish where userId=${userId} && postId=sales.id)`
             ),
             "isWish"
           ]
@@ -71,7 +79,15 @@ ctrl.getSales = async ctx => {
     }
   })
 
-  const sales = user.sales.map(p => ({ ...p.toJSON(), isWish: !!p.toJSON().isWish }))
+  const sales = user.sales.map(p => {
+    p = p.toJSON()
+    return {
+      ...p,
+      isWish: !!p.isWish,
+      createdAt: moment(p.createdAt).fromNow(),
+      updatedAt: moment(p.updatedAt).fromNow()
+    }
+  })
 
   ctx.body = sales
 }

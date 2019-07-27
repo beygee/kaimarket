@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_PATH=./ nodemon index.js",
     "start": "cross-env NODE_PATH=./ forever start index.js",
+    "forever:start": "cross-env NODE_ENV=production NODE_PATH=./ forever start -c 'node index.js' ./",
     "clean": "fuser -k -n tcp 3005",
     "crowl": "cross-env NODE_PATH=./ node crowl/index.js"
   },
