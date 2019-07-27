@@ -291,7 +291,7 @@ class PostPageState extends State<PostPage> {
     //서버 업로드
     try {
       var imageData = await Future.wait(images.map((image) async {
-        var bytes = await image.requestOriginal();
+        var bytes = await image.requestThumbnail(1000,1000, quality: 70);
         FormData formData = FormData.from({
           'image':
               UploadFileInfo.fromBytes(bytes.buffer.asUint8List(), image.name)

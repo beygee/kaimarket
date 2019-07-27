@@ -288,7 +288,11 @@ class _PostViewPageState extends State<PostViewPage> {
                         splashColor: Theme.of(context).primaryColorLight,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.0)),
-                        onPressed: () => post.isSold = true,
+                        onPressed: () {
+                          log.i(post.isSold);
+                          return post.isSold = !post.isSold;
+                          // server issold 바꾸는 call도 주기.
+                          },
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10.0,

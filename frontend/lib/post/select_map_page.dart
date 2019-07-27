@@ -95,10 +95,11 @@ class SelectMapPageState extends State<SelectMapPage> {
         showSnackBar(context, "선호 지역을 선택해주세요.");
       }
 
-      if (edit){
+      if (edit!=null){
       await Navigator.of(context).pop();
       await Navigator.of(context).pop();
 
+      
         //데이터 새로 페치
       final postBloc = BlocProvider.of<PostBloc>(context);
       postBloc.dispatch(PostFetch());
