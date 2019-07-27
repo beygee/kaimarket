@@ -27,7 +27,6 @@ class SelectMapPageState extends State<SelectMapPage> {
   @override
   void initState() {
     super.initState();
-    log.i(widget.edit);
     if(widget.edit){
     setDefault();
     }
@@ -90,6 +89,7 @@ class SelectMapPageState extends State<SelectMapPage> {
 
   //지도에서 마커를 선택했을 시 좌표 값을 받아온다.
   _onTapLagLng(double lat, double lng) {
+    log.i(widget.post);
     widget.post.locationLat = lat;
     widget.post.locationLng = lng;
   }
@@ -103,6 +103,7 @@ class SelectMapPageState extends State<SelectMapPage> {
       }
 
       if (widget.edit) {
+        log.i("edit");
         await dio.postUri(
           getUri('/api/posts/' + widget.post.id.toString()),
           data: {'data': widget.post.toJson()},
@@ -111,6 +112,7 @@ class SelectMapPageState extends State<SelectMapPage> {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
       } else {
+        log.i("else");
         await dio.postUri(getUri('/api/posts'),
             data: {'data': widget.post.toJson()});
 
