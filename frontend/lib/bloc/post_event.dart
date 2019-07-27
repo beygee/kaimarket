@@ -34,7 +34,7 @@ class PostDelete extends PostEvent {
 
 class SearchWish extends PostEvent {
   final bool wish;
-  String postId;
+  int postId;
 
   SearchWish({this.postId, this.wish});
 

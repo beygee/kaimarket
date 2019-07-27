@@ -140,7 +140,7 @@ class PostCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
                           Text(
-                            post.updated,
+                            post.updatedAt,
                             style: TextStyle(
                               color: Colors.grey[400],
                               fontSize: screenAwareSize(9.0, context),

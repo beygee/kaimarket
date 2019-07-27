@@ -6,15 +6,15 @@ import 'package:equatable/equatable.dart';
 import 'package:week_3/utils/utils.dart';
 
 class Post extends Equatable {
-  String id;
+  int id;
   String title;
   String content;
   int price;
   int view;
   int wish;
   int chat;
-  String created;
-  String updated;
+  String createdAt;
+  String updatedAt;
   bool isWish;
   bool isSold;
 
@@ -40,8 +40,8 @@ class Post extends Equatable {
     this.view = 0,
     this.wish = 0,
     this.chat = 0,
-    this.created,
-    this.updated,
+    this.createdAt,
+    this.updatedAt,
     this.isWish,
     this.isSold,
 
@@ -74,8 +74,8 @@ class Post extends Equatable {
     view = p.view;
     wish = p.wish;
     chat = p.chat;
-    created = p.created;
-    updated = p.updated;
+    createdAt = p.createdAt;
+    updatedAt = p.updatedAt;
     isWish = p.isWish;
     isSold = p.isSold;
 
@@ -96,7 +96,7 @@ class Post extends Equatable {
   }
 
   Post.fromJson(Map<String, dynamic> json)
-      : id = json['_id'],
+      : id = json['id'],
         title = json['title'],
         content = json['content'],
         price = json['price'],
@@ -105,20 +105,19 @@ class Post extends Equatable {
         chat = json['chat'],
         locationLat = json['locationLat'].toDouble(),
         locationLng = json['locationLng'].toDouble(),
-        created = json['created'],
-        updated = json['updated'],
+        createdAt = json['createdAt'],
+        updatedAt = json['updatedAt'],
         isBook = json['isBook'],
         isWish = json['isWish'],
         isSold = json['isSold'],
         bookMajor = json['bookMajor'],
-        bookAuthor = json['bookAuther'],
+        bookAuthor = json['bookAuthor'],
         bookPublisher = json['bookPublisher'],
         bookPubDate = json['bookPubDate'],
         bookImage = json['bookImage'],
         bookPrice = json['bookPrice'] {
     try {
-      images = json['images']
-          .where((p) {
+      images = json['images']?.where((p) {
             return p is! String;
           })
           .map((image) {
@@ -128,12 +127,12 @@ class Post extends Equatable {
           .cast<Map<String, String>>();
 
       if (json['category'] is! String) {
-        category = CategoryList[json['category']['id']];
+        category = CategoryList[json['categoryId']];
       }
 
-      if (json['user'] is! String) {
-        user = User.fromJson(json['user']);
-      }
+      // if (json['user'] is! String) {
+      //   user = User.fromJson(json['user']);
+      // }
     } catch (e) {
       log.e(e);
     }
@@ -152,7 +151,7 @@ class Post extends Equatable {
 
   Map<String, dynamic> toJson() {
     return {
-      '_id': id,
+      'id': id,
       'title': title,
       'content': content,
       'price': price,
@@ -161,16 +160,16 @@ class Post extends Equatable {
       'chat': chat,
       'locationLat': locationLat,
       'locationLng': locationLng,
-      'created': created,
-      'updated': updated,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
       'isBook': isBook,
       'bookMajor': bookMajor,
-      'bookAuther': bookAuthor,
+      'bookAuthor': bookAuthor,
       'bookPublisher': bookPublisher,
       'bookPubDate': bookPubDate,
       'bookImage': bookImage,
       'bookPrice': bookPrice,
-      'category': category.toJson(),
+      'categoryId': category.id,
       'images': images,
     };
   }

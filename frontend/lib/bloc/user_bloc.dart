@@ -26,6 +26,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         var res = await dio.getUri(getUri('/api/me'));
 
         if (res.statusCode == 200) {
+          log.i(res.data);
           User user = User.fromJson(res.data);
           yield UserLoaded(
             id: user.id,
@@ -74,7 +75,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
       if (event is SearchWishInUser && currentState is UserLoaded) {
         List<Post> wishlist = (currentState as UserLoaded).wish;
-        String postId = (event as SearchWishInUser).postId;
+        int postId = (event as SearchWishInUser).postId;
         bool wish = (event as SearchWishInUser).wish;
 
         wishlist = wishlist.map((p) {

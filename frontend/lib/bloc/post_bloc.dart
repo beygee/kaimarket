@@ -22,18 +22,22 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         var res = await dio.getUri(getUri('/api/posts',
             {'q': searchText, 'category': selectedCategory.toString()}));
 
-        List<Post> posts = res.data
-            .map((p) {
-              return Post.fromJson(p);
-            })
-            .toList()
-            .cast<Post>();
-        yield PostLoaded(posts: posts);
+        try {
+          List<Post> posts = res.data
+              .map((p) {
+                return Post.fromJson(p);
+              })
+              .toList()
+              .cast<Post>();
+          yield PostLoaded(posts: posts);
+        } catch (e) {
+          log.e(e);
+        }
       }
 
       if (event is SearchWish && currentState is PostLoaded) {
         List<Post> list = (currentState as PostLoaded).posts;
-        String postId = (event as SearchWish).postId;
+        int postId = (event as SearchWish).postId;
         bool wish = (event as SearchWish).wish;
 
         list = list.map((p) {

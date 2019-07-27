@@ -26,7 +26,7 @@ String getMoneyFormat(int price) {
 }
 
 //유저 아이디를 통해 아스키 코드 알고리즘을 통해 아바타 이미지 만들기
-String getRandomAvatarUrlByPostId(String postId) {
+String getRandomAvatarUrlByPostId(int postId) {
   int idx = postId.hashCode % 5;
 
   return 'assets/avatar/$idx.png';

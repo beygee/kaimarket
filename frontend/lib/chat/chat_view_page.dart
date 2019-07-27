@@ -24,7 +24,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   //로그인한 유저 정보
   UserBloc _userBloc;
-  String loggedUserId = '';
+  int loggedUserId = 0;
 
   final _paddingFormat =
       EdgeInsets.only(left: 26, top: 12, bottom: 12, right: 26);

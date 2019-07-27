@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 class ChatCard extends StatelessWidget {
   final Chat chat;
-  final String loggedUserId;
+  final int loggedUserId;
   final VoidCallback onPressed;
 
   ChatCard({this.chat, this.loggedUserId, this.onPressed});

@@ -22,7 +22,7 @@ class UserDelete extends UserEvent {
 }
 
 class UserChangeWish extends UserEvent {
-  final String postId;
+  final int postId;
 
   getPostId() => this.postId;
 
@@ -56,7 +56,7 @@ class UserGetWish extends UserEvent{
 
 class SearchWishInUser extends UserEvent {
   final bool wish;
-  String postId;
+  int postId;
 
   SearchWishInUser({this.postId, this.wish});
 

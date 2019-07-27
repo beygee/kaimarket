@@ -19,7 +19,7 @@ class UserError extends UserState {
 }
 
 class UserLoaded extends UserState {
-  final String id;
+  final int id;
   final String name;
 
   final List<Post> wish;

@@ -11,7 +11,7 @@ import 'package:equatable/equatable.dart';
 //   keywords: [String]
 
 class User extends Equatable {
-  String id;
+  int id;
   String name;
   String email;
   List<Post> purchases;
@@ -34,23 +34,24 @@ class User extends Equatable {
   }
 
   User.fromJson(Map<String, dynamic> json)
-      : id = json['_id'],
+      : id = json['id'],
         name = json['name'],
         email = json['email'] {
     try {
-      sales = json['sales'].length > 0
-          ? json['sales']
-              .where((p) {
-                return p is! String;
-              })
-              .map((p) {
-                return Post.fromJson(p);
-              })
-              .toList()
-              .cast<Post>()
-          : <Post>[];
+      
+      // sales = json['sales'].length > 0
+      //     ? json['sales']
+      //         .where((p) {
+      //           return p is! String;
+      //         })
+      //         .map((p) {
+      //           return Post.fromJson(p);
+      //         })
+      //         .toList()
+      //         .cast<Post>()
+      //     : <Post>[];
 
-      salesCount = json['salesCount'];
+      // salesCount = json['salesCount'];
 
       // wish = json['wish'].length > 0
       //     ? json['wish']

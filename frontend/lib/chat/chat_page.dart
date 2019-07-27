@@ -18,7 +18,7 @@ class ChatListsState extends State<ChatLists> {
   List<Chat> chats = [];
 
   UserBloc _userBloc;
-  String loggedUserId = '';
+  int loggedUserId = 0;
 
   @override
   void initState() {

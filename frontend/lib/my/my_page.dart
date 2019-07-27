@@ -17,7 +17,7 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
   UserBloc _userBloc;
-  String loggedUserId = '';
+  int loggedUserId = 0;
   List<Post> posts = [];
 
   @override

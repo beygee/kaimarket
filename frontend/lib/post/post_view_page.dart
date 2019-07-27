@@ -19,7 +19,7 @@ import 'package:week_3/post/post_shimmer_card.dart';
 import 'package:week_3/chat/chat_view_page.dart';
 
 class PostViewPage extends StatefulWidget {
-  final String postId;
+  final int postId;
 
   PostViewPage({@required this.postId});
 
@@ -37,7 +37,7 @@ class _PostViewPageState extends State<PostViewPage> {
       GlobalKey<LoadingWrapperState>();
 
   UserBloc _userBloc;
-  String loggedUserId = '';
+  int loggedUserId = 0;
 
   @override
   void initState() {
@@ -259,7 +259,7 @@ class _PostViewPageState extends State<PostViewPage> {
     for (int i = 0; i < post.images.length; i++) {
       images.add(
         CachedNetworkImage(
-          imageUrl: getUri('').toString() + post.images[i]['thumb'],
+          imageUrl: getUri('').toString() + post.images[i]['url'],
           fit: BoxFit.cover,
           placeholder: (context, url) => Shimmer.fromColors(
             baseColor: Colors.grey[200],
@@ -347,7 +347,7 @@ class _PostViewPageState extends State<PostViewPage> {
                     ),
                     SizedBox(width: 2.0),
                     Text(
-                      post.updated,
+                      post.updatedAt,
                       style: TextStyle(
                         color: Colors.grey[400],
                         fontSize: 12.0,
@@ -437,7 +437,7 @@ class _PostViewPageState extends State<PostViewPage> {
               ),
               SizedBox(width: 3.0),
               Text(
-                post.updated,
+                post.updatedAt,
                 style: TextStyle(
                   color: Colors.grey[400],
                   fontSize: 12.0,
