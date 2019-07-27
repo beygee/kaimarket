@@ -26,7 +26,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         var res = await dio.getUri(getUri('/api/me'));
 
         if (res.statusCode == 200) {
-          log.i(res.data);
           User user = User.fromJson(res.data);
           yield UserLoaded(
             id: user.id,
@@ -42,18 +41,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       if (event is UserDelete && currentState is UserLoaded) {
         yield UserUninitialized();
       }
-      if (event is UserChangeWish) {
-        var res = await dio.post(
-            getUri('/api/posts/').toString() + event.getPostId() + "/wish");
-        final currentstate = (currentState as UserLoaded);
-
-        yield UserLoaded(
-            name: currentstate.name,
-            id: currentstate.id,
-            wish: currentstate.wish,
-            sales: currentstate.sales,
-            chats: currentstate.chats);
-      }
       if (event is UserGetWish && currentState is UserLoaded) {
         var res = await dio.getUri(getUri('/api/me/wish'));
         final currentstate = (currentState as UserLoaded);
@@ -63,9 +50,6 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             })
             .toList()
             .cast<Post>();
-        // log.i(currentstate.name);
-        // log.i(posts);
-        // log.i(posts[0].title);
         yield UserLoaded(
             name: currentstate.name,
             id: currentstate.id,
@@ -84,7 +68,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           post.isWish = wish;
           return post;
         }).toList();
+
         var currentstate = (currentState as UserLoaded);
+        log.i(wishlist[0].isWish);
         yield UserLoaded(
             id: currentstate.id,
             name: currentstate.name,

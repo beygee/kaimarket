@@ -3,6 +3,7 @@ import 'package:week_3/models/post.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:equatable/equatable.dart';
+import 'package:collection/collection.dart';
 
 //   purchases: [{ type: Schema.Types.ObjectId, ref: "post" }], //구매내역
 //   sales: [{ type: Schema.Types.ObjectId, ref: "post" }], //판매내역
@@ -36,9 +37,9 @@ class User extends Equatable {
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
-        email = json['email'] {
+        email = json['email'],
+        salesCount = json['salesCount'] {
     try {
-      
       // sales = json['sales'].length > 0
       //     ? json['sales']
       //         .where((p) {
@@ -91,5 +92,16 @@ class User extends Equatable {
       'name': name,
       'email': email,
     };
+  }
+
+  @override
+  bool operator ==(Object other) {
+      Function deepEq = const DeepCollectionEquality().equals;
+      return identical(this, other) ||
+      other is User &&
+          runtimeType == other.runtimeType &&
+          name == other.name &&
+          id == other.id &&
+          deepEq(wish,other.wish);
   }
 }
