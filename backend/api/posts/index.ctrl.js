@@ -7,7 +7,7 @@ const models = require("config/models")
 const sanitizeHtml = require("sanitize-html")
 
 ctrl.getPosts = async ctx => {
-  const { q, category: categoryId } = ctx.query
+  const { q, category: categoryId, offset } = ctx.query
   const { id: userId } = ctx.user
 
   let posts = await models.Post.findAll({
@@ -16,6 +16,8 @@ ctrl.getPosts = async ctx => {
       ...(categoryId && categoryId != 0 ? { categoryId } : {})
     },
     order: [["createdAt", "desc"]],
+    limit: 5,
+    offset: parseInt(offset) || 0,
     attributes: {
       include: [
         [
@@ -72,7 +74,7 @@ ctrl.getPost = async ctx => {
           include: [
             [
               Sequelize.literal(
-                `(select count(id) from UserSale where userId=user.id && postId=Post.id)`
+                `(select count(id) from UserSale where userId=user.id)`
               ),
               "salesCount"
             ]
@@ -94,7 +96,8 @@ ctrl.getPost = async ctx => {
   //관련된 카테고리 포스트를 5개 가져온다.
   let relatedPosts = await models.Post.findAll({
     where: {
-      categoryId: post.categoryId
+      categoryId: post.categoryId,
+      id: { [Op.ne]: post.id }
     },
     attributes: {
       include: [
@@ -172,6 +175,47 @@ ctrl.createPost = async ctx => {
   ctx.body = "OK"
 }
 
+ctrl.updatePost = async ctx => {
+  const { id } = ctx.params
+  const { id: userId } = ctx.user
+  const { data } = ctx.request.body
+
+  //포스트 가져오기
+  const post = await models.Post.findOne({ where: { id } })
+
+  if (post.userId != userId) {
+    ctx.error(403, "NOT MINE", { code: 1 })
+    return
+  }
+
+  await post.update(data, {
+    fields: [
+      "categoryId",
+      "title",
+      "content",
+      "price",
+      "locationLat",
+      "locationLng"
+    ]
+  })
+
+  //이미지 업로드
+  await models.PostImage.destroy({ where: { postId: post.id } })
+
+  //이미지 생성
+  await Promise.all(
+    data.images.map(image =>
+      models.PostImage.create({
+        postId: post.id,
+        thumb: image.thumb,
+        url: image.url
+      })
+    )
+  )
+
+  ctx.body = "OK"
+}
+
 ctrl.wish = async ctx => {
   const { id } = ctx.params
   const { id: userId } = ctx.user
@@ -184,6 +228,23 @@ ctrl.wish = async ctx => {
   }
 
   ctx.body = { wish: !wish, postId: id }
+}
+
+ctrl.sold = async ctx => {
+  const { id } = ctx.params
+  const { id: userId } = ctx.user
+
+  const post = await models.Post.findOne({ where: { id } })
+
+  if (post.userId != userId) {
+    ctx.error(403, "NOT MINE", { code: 1 })
+    return
+  }
+
+  post.isSold = true
+  await post.save()
+
+  ctx.body = "OK"
 }
 
 ctrl.deletePost = async ctx => {
