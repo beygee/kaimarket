@@ -117,22 +117,25 @@ class Post extends Equatable {
         bookImage = json['bookImage'],
         bookPrice = json['bookPrice'] {
     try {
-      images = json['images']?.where((p) {
-            return p is! String;
-          })
-          .map((image) {
-            return image.cast<String, String>();
-          })
-          .toList()
-          .cast<Map<String, String>>();
+      if (json['images'] != null) {
+        images = json['images']
+            ?.where((p) {
+              return p is! String;
+            })
+            .map((image) {
+              return image.cast<String, String>();
+            })
+            .toList()
+            .cast<Map<String, String>>();
+      }
 
-      if (json['category'] is! String) {
+      if (json['categoryId'] != null) {
         category = CategoryList[json['categoryId']];
       }
 
-      // if (json['user'] is! String) {
-      //   user = User.fromJson(json['user']);
-      // }
+      if (json['user'] != null) {
+        user = User.fromJson(json['user']);
+      }
     } catch (e) {
       log.e(e);
     }
