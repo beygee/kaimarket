@@ -65,6 +65,7 @@ class _PostViewPageState extends State<PostViewPage> {
         .toList()
         .cast<Post>();
     await Future.delayed(Duration(milliseconds: 250));
+
     if (res.statusCode == 200) {
       if (mounted) {
         setState(() {
@@ -217,8 +218,10 @@ class _PostViewPageState extends State<PostViewPage> {
                                 );
                                 return Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        PostBookPage(book: book, post: post,),
+                                    builder: (context) => PostBookPage(
+                                      book: book,
+                                      post: post,
+                                    ),
                                   ),
                                 );
                               }
@@ -292,7 +295,7 @@ class _PostViewPageState extends State<PostViewPage> {
                           log.i(post.isSold);
                           return post.isSold = !post.isSold;
                           // server issold 바꾸는 call도 주기.
-                          },
+                        },
                         child: Padding(
                           padding: EdgeInsets.symmetric(
                             horizontal: 10.0,

@@ -15,33 +15,33 @@ import 'package:dio/dio.dart';
 class PostPage extends StatefulWidget {
   Post post;
   PostPage({this.post});
+
   @override
-  State<StatefulWidget> createState() => PostPageState(postinfo: post);
+  State<StatefulWidget> createState() => PostPageState();
 }
 
 class PostPageState extends State<PostPage> {
   //텍스트 컨트롤러
-  Post postinfo;
-  bool edit;
-  PostPageState({this.postinfo});
+  PostPageState();
+
+  bool get edit => widget.post != null;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController contentController = TextEditingController();
 
   int selectedCategory = 0;
-  List<Map<String, String>> imageUrls = [];
+  List<Map<String, dynamic>> imageUrls = [];
 
- @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (postinfo != null){
-    setDefault();
+    if (widget.post != null) {
+      setDefault();
     }
   }
 
-  
   @override
   void dispose() {
     priceController.dispose();
@@ -288,10 +288,10 @@ class PostPageState extends State<PostPage> {
       enableCamera: true,
     );
 
-    //서버 업로드
+    //서버 업로��
     try {
       var imageData = await Future.wait(images.map((image) async {
-        var bytes = await image.requestThumbnail(1000,1000, quality: 70);
+        var bytes = await image.requestThumbnail(1000, 1000, quality: 70);
         FormData formData = FormData.from({
           'image':
               UploadFileInfo.fromBytes(bytes.buffer.asUint8List(), image.name)
@@ -337,24 +337,30 @@ class PostPageState extends State<PostPage> {
     }
 
     //포스트를 만들어 전달한다.
-    Post post = Post();
+    if (widget.post == null) widget.post = Post();
 
-    post.title = titleController.text;
-    post.price = int.parse(priceController.text);
-    post.content = contentController.text;
-    post.images = imageUrls;
-    post.category = CategoryList[selectedCategory];
+    widget.post.title = titleController.text;
+    widget.post.price = int.parse(priceController.text);
+    widget.post.content = contentController.text;
+    widget.post.images = imageUrls;
+    widget.post.category = CategoryList[selectedCategory];
 
-    Navigator.push(context,
-        MaterialPageRoute(builder: (context) => SelectMapPage(post: post, edit: edit,)));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => SelectMapPage(
+          post: widget.post,
+          edit: edit,
+        ),
+      ),
+    );
   }
 
-   void setDefault(){
-    selectedCategory = postinfo.category.id;
-    imageUrls = postinfo.images;
-    titleController.text = postinfo.title;
-    priceController.text = postinfo.price.toString();
-    contentController.text = postinfo.content;
-    edit = postinfo!=null;
+  void setDefault() {
+    selectedCategory = widget.post.category.id;
+    imageUrls = widget.post.images;
+    titleController.text = widget.post.title;
+    priceController.text = widget.post.price.toString();
+    contentController.text = widget.post.content;
   }
 }

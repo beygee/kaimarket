@@ -18,7 +18,7 @@ class Post extends Equatable {
   bool isWish;
   bool isSold;
 
-  List<Map<String, String>> images = [];
+  List<Map<String, dynamic>> images = [];
   User user;
   double locationLat;
   double locationLng;
@@ -118,15 +118,9 @@ class Post extends Equatable {
         bookPrice = json['bookPrice'] {
     try {
       if (json['images'] != null) {
-        images = json['images']
-            ?.where((p) {
-              return p is! String;
-            })
-            .map((image) {
-              return image.cast<String, String>();
-            })
-            .toList()
-            .cast<Map<String, String>>();
+        images = json['images'].map((image) {
+          return image;
+        }).toList().cast<Map<String,dynamic>>();
       }
 
       if (json['categoryId'] != null) {
@@ -172,7 +166,7 @@ class Post extends Equatable {
       'bookPubDate': bookPubDate,
       'bookImage': bookImage,
       'bookPrice': bookPrice,
-      'categoryId': category.id,
+      'categoryId': category?.id,
       'images': images,
     };
   }
