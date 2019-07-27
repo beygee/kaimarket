@@ -14,25 +14,33 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   Stream<PostState> mapEventToState(PostEvent event) async* {
     try {
       if (event is PostFetch) {
-        yield PostUninitialized();
-        final searchText = (event as PostFetch).searchText;
-        final selectedCategory = (event as PostFetch).selectedCategory;
+        final searchText = event.searchText;
+        final selectedCategory = event.selectedCategory;
 
         //데이터 받아오기
-        var res = await dio.getUri(getUri('/api/posts',
-            {'q': searchText, 'category': selectedCategory.toString()}));
+        var res = await dio.getUri(getUri(
+          '/api/posts',
+          {
+            'q': searchText,
+            'category': selectedCategory.toString(),
+            'offset': currentState is PostLoaded && !event.reload
+                ? (currentState as PostLoaded).posts.length.toString()
+                : '0'
+          },
+        ));
 
-        try {
-          List<Post> posts = res.data
-              .map((p) {
-                return Post.fromJson(p);
-              })
-              .toList()
-              .cast<Post>();
-          yield PostLoaded(posts: posts);
-        } catch (e) {
-          log.e(e);
-        }
+        List<Post> posts = res.data
+            .map((p) {
+              return Post.fromJson(p);
+            })
+            .toList()
+            .cast<Post>();
+
+        yield PostLoaded(
+            posts: currentState is PostLoaded && !event.reload
+                ? (currentState as PostLoaded).posts + posts
+                : posts,
+            bReachedMax: posts.length != 5);
       }
 
       if (event is SearchWish && currentState is PostLoaded) {
@@ -54,6 +62,19 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       yield PostError();
     }
   }
+
+  // @override
+  // Stream<PostState> transform(
+  //   Stream<PostEvent> events,
+  //   Stream<PostState> Function(PostEvent event) next,
+  // ) {
+  //   return super.transform(
+  //     (events as Observable<PostEvent>).throttleTime(
+  //       Duration(milliseconds: 500),
+  //     ),
+  //     next,
+  //   );
+  // }
 
   Future<List<Post>> _getAllPost() async {
     var response = await dio.getUri(getUri('/api/posts'));

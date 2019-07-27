@@ -47,6 +47,7 @@ dependencies:
   cached_network_image: ^1.1.0
   date_format: ^1.0.6
   shimmer: ^1.0.0
+  throttling: ^0.8.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

@@ -12,6 +12,7 @@ import 'package:week_3/bloc/user_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:week_3/models/post.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:throttling/throttling.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -24,19 +25,27 @@ class HomePageState extends State<HomePage> {
 
   int selectedCategory = 0;
 
+  //검색바
   TextEditingController searchController = TextEditingController();
+
+  //무한 스크롤링 컨트롤러
+  ScrollController scrollController = ScrollController();
+  final Throttling thr = Throttling(duration: Duration(milliseconds: 300));
 
   @override
   void initState() {
     super.initState();
     _postBloc = BlocProvider.of<PostBloc>(context);
-    _postBloc.dispatch(PostFetch());
+    _postBloc.dispatch(PostFetch(reload: true));
     _userBloc = BlocProvider.of<UserBloc>(context);
+
+    scrollController.addListener(_onInfiniteScroll);
   }
 
   @override
   void dispose() {
     searchController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -90,8 +99,7 @@ class HomePageState extends State<HomePage> {
                         ),
                       );
                     }
-                    return Expanded(
-                        child: _buildSuggestions(context, state.posts));
+                    return Expanded(child: _buildSuggestions(context, state));
                   }
                 },
               ),
@@ -100,6 +108,18 @@ class HomePageState extends State<HomePage> {
         },
       ),
     );
+  }
+
+  void _onInfiniteScroll() {
+    final maxScroll = scrollController.position.maxScrollExtent;
+    final currentScroll = scrollController.position.pixels;
+    if (maxScroll - currentScroll <= 250) {
+      thr.throttle(() {
+        _postBloc.dispatch(PostFetch(
+            searchText: searchController.text,
+            selectedCategory: selectedCategory));
+      });
+    }
   }
 
   Widget _buildSearchInput(context) {
@@ -133,7 +153,9 @@ class HomePageState extends State<HomePage> {
 
   void _searchPosts() {
     _postBloc.dispatch(PostFetch(
-        searchText: searchController.text, selectedCategory: selectedCategory));
+        searchText: searchController.text,
+        selectedCategory: selectedCategory,
+        reload: true));
   }
 
   Widget _buildCategoryList(context) {
@@ -152,7 +174,8 @@ class HomePageState extends State<HomePage> {
                 selectedCategory = idx;
                 _postBloc.dispatch(PostFetch(
                     selectedCategory: selectedCategory,
-                    searchText: searchController.text));
+                    searchText: searchController.text,
+                    reload: true));
               });
             },
           );
@@ -168,44 +191,31 @@ class HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildSuggestions(context, posts) {
-    List<Post> _loaded = <Post>[];
+  Widget _buildSuggestions(context, state) {
     return RefreshIndicator(
       displacement: 20.0,
       onRefresh: () async {
         _searchPosts();
       },
-      // child: ListView.separated(
-      //   padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
-      //   // physics: BouncingScrollPhysics(),
-      //   itemCount: posts.length,
-      //   itemBuilder: (BuildContext context, int idx) {
-      //     return _buildRow(context, posts[idx]);
-      //   },
-      //   separatorBuilder: (BuildContext context, int i) {
-      //     return Divider();
-      //   },
-      // ),
-      child: ListView.builder(
+      child: ListView.separated(
+        physics: BouncingScrollPhysics(),
+        controller: scrollController,
         padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
-        itemBuilder: (BuildContext context, int i){
-          if (i.isOdd){
-            return Divider();
-          }
-          final int index = i ~/ 2;
-          if (index >= _loaded.length){
-            // 서버에 요청
-            _loaded.addAll(posts);
-          }
-          return _buildRow(context, _loaded[index]);
-        }
+        itemCount:
+            state.bReachedMax ? state.posts.length + 1 : state.posts.length + 1,
+        itemBuilder: (BuildContext context, int idx) {
+          return idx == state.posts.length
+              ? Container()
+              : _buildRow(context, state.posts[idx]);
+        },
+        separatorBuilder: (BuildContext context, int i) {
+          return Divider();
+        },
       ),
     );
   }
 
   Widget _buildRow(context, Post post) {
-    bool wish = post.isWish;
-
     return PostCard(
         post: post,
         onTap: () {

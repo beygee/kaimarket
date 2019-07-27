@@ -45,7 +45,7 @@ class PostCard extends StatelessWidget {
                             )
                           : CachedNetworkImage(
                               imageUrl:
-                                  getUri('').toString() + post.images[0]['url'],
+                                  getUri('').toString() + post.images[0]['thumb'],
                               width: screenAwareSize(
                                   small ? 70.0 : 100.0, context),
                               height: screenAwareSize(
