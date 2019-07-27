@@ -36,9 +36,9 @@ class User extends Equatable {
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
-        email = json['email'] {
+        email = json['email'],
+        salesCount = json['salesCount'] {
     try {
-      
       // sales = json['sales'].length > 0
       //     ? json['sales']
       //         .where((p) {
