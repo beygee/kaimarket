@@ -17,6 +17,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:week_3/post/post_shimmer_card.dart';
 import 'package:week_3/chat/chat_view_page.dart';
+import 'package:week_3/post/post_edit_page.dart';
 
 class PostViewPage extends StatefulWidget {
   final int postId;
@@ -110,7 +111,9 @@ class _PostViewPageState extends State<PostViewPage> {
                 ),
               ),
               _buildAppBar(),
-              _buildBottomTab(),
+              loggedUserId == post.user.id
+                  ? _buildSellerBottomTab()
+                  : _buildBottomTab(),
             ],
           ),
         );
@@ -171,6 +174,121 @@ class _PostViewPageState extends State<PostViewPage> {
           )
       ],
     );
+  }
+
+  Widget _buildSellerBottomTab() {
+    return Positioned(
+        bottom: 0.0,
+        left: 0.0,
+        right: 0.0,
+        child: Container(
+            height: screenAwareSize(50.0, context),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black26, blurRadius: 5.0, spreadRadius: -3.0),
+              ],
+              color: Colors.white,
+            ),
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      RaisedButton(
+                        padding: EdgeInsets.symmetric(
+                            vertical: screenAwareSize(10.0, context)),
+                        color: ThemeColor.primary,
+                        textColor: Colors.white,
+                        splashColor: Theme.of(context).primaryColorLight,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => PostEditPage(post),
+                            ),
+                          );
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: screenAwareSize(14.0, context),
+                              ),
+                              SizedBox(width: 10.0),
+                              Text('수정하기',
+                                  style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      RaisedButton(
+                        padding: EdgeInsets.symmetric(
+                            vertical: screenAwareSize(10.0, context)),
+                        color: ThemeColor.primary,
+                        textColor: Colors.white,
+                        splashColor: Theme.of(context).primaryColorLight,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        onPressed: () async {
+                          await dio.deleteUri(
+                              getUri('/api/posts/' + post.id.toString()));
+                          Navigator.of(context).pop();
+                          final postBloc = BlocProvider.of<PostBloc>(context);
+                          postBloc.dispatch(PostFetch());
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.remove,
+                                color: Colors.white,
+                                size: screenAwareSize(14.0, context),
+                              ),
+                              SizedBox(width: 10.0),
+                              Text('삭제하기',
+                                  style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      ),
+                      RaisedButton(
+                        padding: EdgeInsets.symmetric(
+                            vertical: screenAwareSize(10.0, context)),
+                        color: ThemeColor.primary,
+                        textColor: Colors.white,
+                        splashColor: Theme.of(context).primaryColorLight,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                        onPressed: () => post.isSold = true,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 10.0,
+                          ),
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.check,
+                                color: Colors.white,
+                                size: screenAwareSize(14.0, context),
+                              ),
+                              SizedBox(width: 10.0),
+                              Text('판매완료',
+                                  style: TextStyle(color: Colors.white)),
+                            ],
+                          ),
+                        ),
+                      )
+                    ]))));
   }
 
   Widget _buildBottomTab() {
