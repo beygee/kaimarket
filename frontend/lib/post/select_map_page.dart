@@ -5,6 +5,7 @@ import 'package:week_3/utils/utils.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SelectMapPage extends StatefulWidget {
   final Post post;
@@ -16,6 +17,8 @@ class SelectMapPage extends StatefulWidget {
 }
 
 class SelectMapPageState extends State<SelectMapPage> {
+  LatLng defaultmarker;
+
   SelectMapPageState();
 
   GlobalKey<LoadingWrapperState> _loadingWrapperKey =
@@ -24,6 +27,7 @@ class SelectMapPageState extends State<SelectMapPage> {
   @override
   void initState() {
     super.initState();
+    setDefault();
   }
 
   @override
@@ -61,6 +65,7 @@ class SelectMapPageState extends State<SelectMapPage> {
             ),
             body: GoogleMapPage(
               onTap: _onTapLagLng,
+              defaultmarker: defaultmarker,
             ),
           ),
           loading
@@ -111,5 +116,9 @@ class SelectMapPageState extends State<SelectMapPage> {
       final postBloc = BlocProvider.of<PostBloc>(context);
       postBloc.dispatch(PostFetch(reload: true));
     });
+  }
+
+  void setDefault(){
+    defaultmarker = new LatLng(widget.post.locationLat, widget.post.locationLng);
   }
 }
