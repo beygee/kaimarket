@@ -166,7 +166,6 @@ class _PostViewPageState extends State<PostViewPage> {
         for (int i = 0; i < relatedPosts.length; i++)
           PostCard(
             post: relatedPosts[i],
-            issaved: relatedPosts[i].isWish,
             onTap: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) =>
@@ -365,9 +364,8 @@ class _PostViewPageState extends State<PostViewPage> {
       });
 
       if (res.statusCode == 200) {
-        Chat chat = Chat.fromJson(res.data);
         Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => ChatViewPage(chat: chat)));
+            MaterialPageRoute(builder: (context) => ChatViewPage(chatId: res.data)));
       }
     });
   }

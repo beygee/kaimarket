@@ -72,8 +72,9 @@ class ChatCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         new Text(
-            loggedUserId == chat.buyer.id ? chat.seller.name : chat.buyer.name,
-            style: _userNameFont),
+          loggedUserId == chat.buyer.id ? chat.seller.name : chat.buyer.name,
+          style: _userNameFont,
+        ),
         SizedBox(
           height: screenAwareSize(5.0, context),
         ),

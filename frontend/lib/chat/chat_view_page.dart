@@ -10,8 +10,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
 
 class ChatViewPage extends StatefulWidget {
-  final Chat chat;
-  ChatViewPage({this.chat});
+  final int chatId;
+  ChatViewPage({this.chatId});
 
   @override
   _ChatViewPageState createState() => _ChatViewPageState();
@@ -34,17 +34,17 @@ class _ChatViewPageState extends State<ChatViewPage> {
   final _postFont = TextStyle(fontSize: 14.0, color: Colors.grey[600]);
   final _timeFont = TextStyle(fontSize: 10.0, color: Colors.grey[400]);
 
-  List<Widget> response;
   List<Message> existMessages = [];
-  // test용
-  // var docs = [
-  //   {'from': 'diuni', 'text': 'hi', 'time': '오후 8:30'},
-  //   {'from': 'banana', 'text': 'hi I am banana', 'time': '오후 8:31'}
-  // ];
+
+  Chat chat;
 
   Future initShow() async {
-    var dbChats = await dio.getUri(getUri('/api/chats/' + widget.chat.id));
-    existMessages = Chat.fromJson(dbChats.data).messages;
+    var res =
+        await dio.getUri(getUri('/api/chats/' + widget.chatId.toString()));
+    setState(() {
+      chat = Chat.fromJson(res.data);
+    });
+    existMessages = Chat.fromJson(res.data).messages;
 
     if (existMessages.length > 0) {
       // me 계산하기
@@ -53,13 +53,14 @@ class _ChatViewPageState extends State<ChatViewPage> {
         existMessages[i] = existMessages[existMessages.length - 1 - i];
         existMessages[existMessages.length - 1 - i] = tempMessage;
       }
-    
+
       // showTime 계산하기
       existMessages[0].showTime = true;
       Message compareMessage = existMessages[0];
       if (existMessages.length != 1) {
         for (int i = 1; i < existMessages.length; i++) {
-          if ((existMessages[i].from == compareMessage.from) && (minute(existMessages[i].time) == minute(compareMessage.time))) {
+          if ((existMessages[i].userId == compareMessage.userId) &&
+              (minute(existMessages[i].time) == minute(compareMessage.time))) {
             existMessages[i].showTime = false;
           } else {
             existMessages[i].showTime = true;
@@ -71,7 +72,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
     // reverse
     setState(() {
       for (int i = 0; i < existMessages.length; i++) {
-        if (loggedUserId == existMessages[i].from) {
+        if (loggedUserId == existMessages[i].userId) {
           existMessages[i].me = true;
         } else {
           existMessages[i].me = false;
@@ -79,11 +80,11 @@ class _ChatViewPageState extends State<ChatViewPage> {
       }
     });
 
-    scrollController.animateTo(
-        //0.0,
-        scrollController.position.minScrollExtent,
-        curve: Curves.easeOut,
-        duration: const Duration(milliseconds: 300));
+    // scrollController.animateTo(
+    //     //0.0,
+    //     scrollController.position.minScrollExtent,
+    //     curve: Curves.easeOut,
+    //     duration: const Duration(milliseconds: 300));
     //scrollController.jumpTo(scrollController.position.maxScrollExtent);
   }
 
@@ -103,6 +104,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
     _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async {
       updateMessage(data);
     }));
+
     initShow();
   }
 
@@ -113,31 +115,29 @@ class _ChatViewPageState extends State<ChatViewPage> {
   }
 
   void updateMessage(data) {
-    log.i(data);
     bool showTime = true;
     var prevMessage;
     // 서버에서 받은 메세지
     var currentMessage = {
-      "from": data['from'],
+      "userId": data['userId'],
       "text": data['text'],
       "time": data['time']
     };
-    log.i (existMessages.length);
-    if (existMessages.length > 0){
+    if (existMessages.length > 0) {
       prevMessage = existMessages[0];
-      if (prevMessage.from == currentMessage['from'] &&
+      if (prevMessage.userId == currentMessage['userId'] &&
           minute(prevMessage.time) == minute(currentMessage['time']))
         showTime = false;
     }
-    
+
     setState(() {
-      if (existMessages.length > 0){
+      if (existMessages.length > 0) {
         existMessages.remove(prevMessage);
         existMessages.insert(
             0,
             Message(
               text: prevMessage.text,
-              from: prevMessage.from,
+              userId: prevMessage.userId,
               time: prevMessage.time,
               me: prevMessage.me,
               showTime: showTime,
@@ -147,9 +147,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
           0,
           Message(
             text: currentMessage['text'],
-            from: currentMessage['from'],
+            userId: currentMessage['userId'],
             time: currentMessage['time'],
-            me: currentMessage['from'] == loggedUserId,
+            me: currentMessage['userId'] == loggedUserId,
             showTime: true,
           ));
     });
@@ -167,12 +167,10 @@ class _ChatViewPageState extends State<ChatViewPage> {
       // server로 보내기
       await socket.emit("message", [
         {
-          'chatId': widget.chat.id,
+          'chatId': chat.id,
           "text": messageController.text,
-          "from": loggedUserId,
-          "to": loggedUserId == widget.chat.buyer.id
-              ? widget.chat.seller.id
-              : widget.chat.buyer.id,
+          "userId": loggedUserId,
+          "to": loggedUserId == chat.buyer.id ? chat.seller.id : chat.buyer.id,
         }
       ]);
       messageController.clear();
@@ -208,16 +206,15 @@ class _ChatViewPageState extends State<ChatViewPage> {
   Widget _itemLeft(context) {
     return new ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
-      child: widget.chat.post.isBook
+      child: chat.post.isBook
           ? CachedNetworkImage(
-              imageUrl: widget.chat.post.bookImage,
+              imageUrl: chat.post.bookImage,
               width: screenAwareSize(60.0, context),
               height: screenAwareSize(60.0, context),
               fit: BoxFit.cover,
             )
           : CachedNetworkImage(
-              imageUrl:
-                  getUri('').toString() + widget.chat.post.images[0]['url'],
+              imageUrl: getUri('').toString() + chat.post.images[0]['url'],
               width: screenAwareSize(60.0, context),
               height: screenAwareSize(60.0, context),
               fit: BoxFit.cover,
@@ -233,7 +230,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
         children: <Widget>[
           Row(
             children: <Widget>[
-              // if (widget.chat.post.isSold)
+              // if (chat.post.isSold)
               //   Text(
               //     "[판매완료]",
               //     style: _postFont,
@@ -241,7 +238,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
               // SizedBox(width: 5.0),
               Expanded(
                 child: Text(
-                  widget.chat.post.title,
+                  chat.post.title,
                   style: _postFont,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -249,7 +246,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
             ],
           ),
           Text(
-            getMoneyFormat(widget.chat.post.price) + '원',
+            getMoneyFormat(chat.post.price) + '원',
             style: _postFont,
           ),
         ],
@@ -264,7 +261,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
         borderRadius: BorderRadius.circular(screenAwareSize(5.0, context)),
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => PostViewPage(postId: widget.chat.post.id)));
+              builder: (context) => PostViewPage(postId: chat.post.id)));
         },
         child: Container(
           height: screenAwareSize(45.0, context),
@@ -309,13 +306,14 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (chat == null) {
+      return Scaffold();
+    }
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            loggedUserId == widget.chat.buyer.id
-                ? widget.chat.seller.name
-                : widget.chat.buyer.name,
+            loggedUserId == chat.buyer.id ? chat.seller.name : chat.buyer.name,
             style: _partnerNameFont,
           ),
           backgroundColor: Colors.white,
@@ -339,7 +337,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
                   children: <Widget>[
                     ...existMessages
                         .map((message) => MessageBubble(
-                              from: message.from,
+                              userId: message.userId,
                               text: message.text,
                               time: message.time,
                               me: message.me,
@@ -389,7 +387,7 @@ class SendButton extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  final String from;
+  final int userId;
   final String text;
   String time;
   bool me;
@@ -400,7 +398,7 @@ class MessageBubble extends StatelessWidget {
 
   MessageBubble(
       {Key key,
-      this.from,
+      this.userId,
       this.text,
       this.time,
       this.me = true,

@@ -90,6 +90,7 @@ class WishPageState extends State<WishPage> {
                 ],
               );
             }
+
             return SafeArea(
               child: ListView.separated(
                 padding:
@@ -120,7 +121,6 @@ class WishPageState extends State<WishPage> {
         onTapHeart: () async {
           //서버 통신....
           var res = await dio.postUri(getUri('/api/posts/${post.id}/wish'));
-          log.i(res.data);
 
           bool bWish = res.data['wish'];
           _userBloc.dispatch(SearchWishInUser(postId: post.id, wish: bWish));
@@ -137,7 +137,6 @@ class WishPageState extends State<WishPage> {
               fontSize: screenAwareSize(10.0, context),
             );
           }
-        },
-        issaved: wish);
+        });
   }
 }

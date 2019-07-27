@@ -3,19 +3,18 @@ import 'package:week_3/utils/utils.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:week_3/styles/theme.dart';
 
 class PostCard extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback onTapHeart;
   final Post post;
-  final bool issaved;
   final bool small;
 
   PostCard(
       {@required this.post,
       this.onTap,
       this.onTapHeart,
-      this.issaved,
       this.small = false});
 
   @override
@@ -31,24 +30,50 @@ class PostCard extends StatelessWidget {
                 horizontal: 10.0, vertical: screenAwareSize(5.0, context)),
             child: Row(
               children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: post.isBook
-                      ? CachedNetworkImage(
-                          imageUrl: post.bookImage,
-                          width: screenAwareSize(small ? 70.0 : 100.0, context),
-                          height:
-                              screenAwareSize(small ? 70.0 : 100.0, context),
-                          fit: BoxFit.cover,
-                        )
-                      : CachedNetworkImage(
-                          imageUrl:
-                              getUri('').toString() + post.images[0]['url'],
-                          width: screenAwareSize(small ? 70.0 : 100.0, context),
-                          height:
-                              screenAwareSize(small ? 70.0 : 100.0, context),
-                          fit: BoxFit.cover,
-                        ),
+                Stack(
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: post.isBook
+                          ? CachedNetworkImage(
+                              imageUrl: post.bookImage,
+                              width: screenAwareSize(
+                                  small ? 70.0 : 100.0, context),
+                              height: screenAwareSize(
+                                  small ? 70.0 : 100.0, context),
+                              fit: BoxFit.cover,
+                            )
+                          : CachedNetworkImage(
+                              imageUrl:
+                                  getUri('').toString() + post.images[0]['url'],
+                              width: screenAwareSize(
+                                  small ? 70.0 : 100.0, context),
+                              height: screenAwareSize(
+                                  small ? 70.0 : 100.0, context),
+                              fit: BoxFit.cover,
+                            ),
+                    ),
+                    if (post.isSold)
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Container(
+                              width: screenAwareSize(
+                                  small ? 70.0 : 100.0, context),
+                              height: screenAwareSize(
+                                  small ? 70.0 : 100.0, context),
+                              decoration: new BoxDecoration(
+                                  color: Color.fromARGB(140, 0, 0, 0)),
+                              child: Center(
+                                child: Text(
+                                  "SOLD\nOUT",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20.0,
+                                      color: ThemeColor.primary),
+                                ),
+                              ))),
+                  ],
                 ),
                 //  Image.network(
                 //     ,
@@ -126,7 +151,7 @@ class PostCard extends StatelessWidget {
                                     padding: EdgeInsets.all(
                                       screenAwareSize(5.0, context),
                                     ),
-                                    child: issaved
+                                    child: post.isWish
                                         ? Icon(
                                             Icons.favorite,
                                             color: Colors.amber[200],
