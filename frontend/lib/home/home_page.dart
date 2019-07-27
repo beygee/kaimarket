@@ -169,21 +169,36 @@ class HomePageState extends State<HomePage> {
   }
 
   Widget _buildSuggestions(context, posts) {
+    List<Post> _loaded = <Post>[];
     return RefreshIndicator(
       displacement: 20.0,
       onRefresh: () async {
         _searchPosts();
       },
-      child: ListView.separated(
+      // child: ListView.separated(
+      //   padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
+      //   // physics: BouncingScrollPhysics(),
+      //   itemCount: posts.length,
+      //   itemBuilder: (BuildContext context, int idx) {
+      //     return _buildRow(context, posts[idx]);
+      //   },
+      //   separatorBuilder: (BuildContext context, int i) {
+      //     return Divider();
+      //   },
+      // ),
+      child: ListView.builder(
         padding: EdgeInsets.only(bottom: screenAwareSize(50.0, context)),
-        // physics: BouncingScrollPhysics(),
-        itemCount: posts.length,
-        itemBuilder: (BuildContext context, int idx) {
-          return _buildRow(context, posts[idx]);
-        },
-        separatorBuilder: (BuildContext context, int i) {
-          return Divider();
-        },
+        itemBuilder: (BuildContext context, int i){
+          if (i.isOdd){
+            return Divider();
+          }
+          final int index = i ~/ 2;
+          if (index >= _loaded.length){
+            // 서버에 요청
+            _loaded.addAll(posts);
+          }
+          return _buildRow(context, _loaded[index]);
+        }
       ),
     );
   }
