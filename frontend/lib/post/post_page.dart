@@ -24,7 +24,7 @@ class PostPageState extends State<PostPage> {
   //텍스트 컨트롤러
   PostPageState();
 
-  bool get edit => widget.post != null;
+  bool edit = false;
 
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -302,7 +302,7 @@ class PostPageState extends State<PostPage> {
       }).toList());
 
       setState(() {
-        imageUrls = imageData.map((json) {
+        imageUrls = imageUrls + imageData.map((json) {
           return {
             'thumb': json['thumb'].toString(),
             'url': json['url'].toString(),
@@ -345,6 +345,8 @@ class PostPageState extends State<PostPage> {
     widget.post.images = imageUrls;
     widget.post.category = CategoryList[selectedCategory];
 
+    
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -362,5 +364,6 @@ class PostPageState extends State<PostPage> {
     titleController.text = widget.post.title;
     priceController.text = widget.post.price.toString();
     contentController.text = widget.post.content;
+    edit = true;
   }
 }
