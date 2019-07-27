@@ -21,10 +21,10 @@ class _GoogleMapState extends State<GoogleMapPage> {
 
   @override
   void initState() {
+    
     // TODO: implement initState
     super.initState();
     if (widget.defaultmarker != null){
-      
     setDefault();
     }
   }
@@ -41,6 +41,10 @@ class _GoogleMapState extends State<GoogleMapPage> {
   LatLng _lastMapPosition;
 
   LatLng _selectMapPosition;
+
+  void setDefault(){
+    _onAddMarkerButtonPressed(widget.defaultmarker);
+  }
 
   void _onCameraMove(CameraPosition position) {
     _lastMapPosition = position.target;
@@ -153,9 +157,5 @@ class _GoogleMapState extends State<GoogleMapPage> {
         ),
       ],
     );
-  }
-
-  void setDefault(){
-    _onAddMarkerButtonPressed(widget.defaultmarker);
   }
 }

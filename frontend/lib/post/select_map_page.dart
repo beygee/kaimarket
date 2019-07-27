@@ -27,7 +27,10 @@ class SelectMapPageState extends State<SelectMapPage> {
   @override
   void initState() {
     super.initState();
+    log.i(widget.edit);
+    if(widget.edit){
     setDefault();
+    }
   }
 
   @override
@@ -119,6 +122,8 @@ class SelectMapPageState extends State<SelectMapPage> {
   }
 
   void setDefault(){
+    if (widget.post.locationLat != null && widget.post.locationLng != null){
     defaultmarker = new LatLng(widget.post.locationLat, widget.post.locationLng);
+    }
   }
 }
