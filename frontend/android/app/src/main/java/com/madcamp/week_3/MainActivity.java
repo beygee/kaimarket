@@ -1,4 +1,4 @@
-package com.example.week_3;
+package com.madcamp.week_3;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

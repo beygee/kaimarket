@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:852111566125:android:eb816024ef33bb9e",
+        "mobilesdk_app_id": "1:852111566125:android:f836ec96581cf36f",
         "android_client_info": {
-          "package_name": "com.example.week_3"
+          "package_name": "com.madcamp.week_3"
         }
       },
       "oauth_client": [
         {
-          "client_id": "852111566125-mltapjuk69np1e87lri5jbcgcotj882o.apps.googleusercontent.com",
+          "client_id": "852111566125-a9hp069cjbn34vgqcv31abraqhf42vlv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.week_3",
+            "package_name": "com.madcamp.week_3",
             "certificate_hash": "41230d791886c580c26257371013c89df87a2aa9"
           }
         },
