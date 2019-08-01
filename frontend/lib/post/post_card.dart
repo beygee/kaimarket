@@ -12,10 +12,7 @@ class PostCard extends StatelessWidget {
   final bool small;
 
   PostCard(
-      {@required this.post,
-      this.onTap,
-      this.onTapHeart,
-      this.small = false});
+      {@required this.post, this.onTap, this.onTapHeart, this.small = false});
 
   @override
   Widget build(BuildContext context) {
@@ -44,8 +41,8 @@ class PostCard extends StatelessWidget {
                               fit: BoxFit.cover,
                             )
                           : CachedNetworkImage(
-                              imageUrl:
-                                  getUri('').toString() + post.images[0]['thumb'],
+                              imageUrl: getUri('').toString() +
+                                  post.images[0]['thumb'],
                               width: screenAwareSize(
                                   small ? 70.0 : 100.0, context),
                               height: screenAwareSize(
@@ -98,50 +95,53 @@ class PostCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                width: screenAwareSize(
-                                    small ? 150.0 : 150, context),
-                                child: Text(
-                                  post.title,
-                                  maxLines: small ? 1 : 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: screenAwareSize(
-                                        small ? 12.0 : 14.0, context),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: screenAwareSize(5.0, context)),
-                              if (post.isBook) ...[
-                                Text("수업명: " + post.bookMajor,
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Container(
+                                  // width: screenAwareSize(
+                                      // small ? 150.0 : 150, context),
+                                  child: Text(
+                                    post.title,
+                                    maxLines: small ? 1 : 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: true,
                                     style: TextStyle(
                                       color: Colors.grey[600],
-                                      fontSize: screenAwareSize(9.0, context),
-                                    )),
-                                SizedBox(height: screenAwareSize(2.0, context))
-                              ],
-                              Container(
-                                width: screenAwareSize(
-                                    small ? 100.0 : 150, context),
-                                child: Text(
-                                  post.content,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: post.isBook ? 1 : small ? 2 : 3,
-                                  softWrap: true,
-                                  style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: screenAwareSize(9.0, context),
+                                      fontSize: screenAwareSize(
+                                          small ? 12.0 : 14.0, context),
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: screenAwareSize(5.0, context)),
+                                if (post.isBook) ...[
+                                  Text("수업명: " + post.bookMajor,
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: screenAwareSize(9.0, context),
+                                      )),
+                                  SizedBox(
+                                      height: screenAwareSize(2.0, context))
+                                ],
+                                Container(
+                                  // width: screenAwareSize(
+                                      // small ? 100.0 : 150, context),
+                                  child: Text(
+                                    post.content,
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: post.isBook ? 1 : small ? 2 : 3,
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      color: Colors.grey[500],
+                                      fontSize: screenAwareSize(9.0, context),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                           small
                               ? Container()

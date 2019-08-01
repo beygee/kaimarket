@@ -125,9 +125,12 @@ class _ValidPageState extends State<ValidPage> {
             fontSize: screenAwareSize(10.0, context),
           );
         } else {
-          showSnackBar(context, "학번 인증에 실패했습니다.");
+          showSnackBar(context, "학번 인증에 실패했습니다. 다시 시도해주세요.");
         }
       }
+    },
+    onError: (e){
+      showSnackBar(context, "이미 인증한 학번입니다.");
     });
   }
 
