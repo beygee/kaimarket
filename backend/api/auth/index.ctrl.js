@@ -9,9 +9,15 @@ ctrl.login = async ctx => {
   ctx.body = "OK"
 }
 
-ctrl.authWithGoogle = async ctx => {
+ctrl.authWithGoogle = async (ctx, next) => {
   const { access_token } = ctx.request.body
-  ctx.body = "OK"
+
+  const body = await request.get(
+    `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${access_token}`
+  )
+  const data = JSON.parse(body)
+  ctx.data = data
+  return next()
 }
 
 ctrl.authWithFacebook = async (ctx, next) => {

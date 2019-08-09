@@ -110,13 +110,13 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xffaaaaaa),
           onPressed: () => _loginWithGuest(context),
         ),
-        // SizedBox(height: 10.0),
-        // LoginButton(
-        //   text: "구글과 연결하기",
-        //   icon: FontAwesomeIcons.google,
-        //   color: Color(0xff3488f1),
-        //   onPressed: () => _loginWithGoogle(context),
-        // ),
+        SizedBox(height: 10.0),
+        LoginButton(
+          text: "구글과 연결하기",
+          icon: FontAwesomeIcons.google,
+          color: Color(0xff3488f1),
+          onPressed: () => _loginWithGoogle(context),
+        ),
         SizedBox(height: screenAwareSize(5.0, context)),
         LoginButton(
           text: "페이스북과 연결하기",
@@ -124,14 +124,14 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xff3a5c93),
           onPressed: () => _loginWithFacebook(context),
         ),
-        SizedBox(height: screenAwareSize(5.0, context)),
-        LoginButton(
-          text: "네이버와 연결하기",
-          icon: IconData(0xe600, fontFamily: 'custom'),
-          // color: Color(0xff00cf63),
-          color: Color(0xff1ec800),
-          onPressed: () => _loginWithNaver(context),
-        ),
+        // SizedBox(height: screenAwareSize(5.0, context)),
+        // LoginButton(
+        //   text: "네이버와 연결하기",
+        //   icon: IconData(0xe600, fontFamily: 'custom'),
+        //   // color: Color(0xff00cf63),
+        //   color: Color(0xff1ec800),
+        //   onPressed: () => _loginWithNaver(context),
+        // ),
         // SizedBox(height: screenAwareSize(5.0, context)),
         // KakaoLoginButton(
         //   text: "카카오톡과 연결하기",
@@ -162,15 +162,15 @@ class _LoginPageState extends State<LoginPage> {
 
       var token = googleAuth.accessToken;
 
-      // var res = await Dio()
-      //     .postUri(getUri('/api/auth/google'), data: {'access_token': token});
+      var res = await dio
+          .postUri(getUri('/api/auth/google'), data: {'access_token': token});
 
-      // if (res.statusCode == 200) {
-      //   // _id = json.decode(res.body);
-      //   // _submitAnimationController.forward();
-      // } else {
-      //   showSnackBar(context, "로그인 실패");
-      // }
+      if (res.statusCode == 200) {
+        // log.i(res.headers.value("access_token"));
+        _authUserWithValid(context, res);
+      } else {
+        showSnackBar(context, "로그인 실패");
+      }
     }, onError: (e) {
       log.e(e);
       showSnackBar(context, "로그인 실패");
