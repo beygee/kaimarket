@@ -77,7 +77,6 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
   @override
   Widget build(BuildContext context) {
-    
     return WillPopScope(
       onWillPop: () async {
         DateTime now = DateTime.now();
@@ -92,14 +91,20 @@ class _DefaultLayoutState extends State<DefaultLayout>
         }
         return true;
       },
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: <Widget>[
-          _buildPageView(context),
-          _buildBottomTabs(context),
-          _buildSellButton(context),
-          _buildSellOverlay(context),
-        ],
+      child: Container(
+        color: Colors.white,
+        child: SafeArea(
+          top: false,
+          child: Stack(
+            alignment: Alignment.bottomCenter,
+            children: <Widget>[
+              _buildPageView(context),
+              _buildBottomTabs(context),
+              _buildSellButton(context),
+              _buildSellOverlay(context),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -144,7 +149,9 @@ class _DefaultLayoutState extends State<DefaultLayout>
             height: screenAwareSize(50.0, context),
             decoration: BoxDecoration(color: Colors.white, boxShadow: [
               BoxShadow(
-                blurRadius: 10.0,
+                offset: Offset(0, -5),
+                blurRadius: 5.0,
+                spreadRadius: -3.0,
                 color: Colors.black12,
               )
             ]),
