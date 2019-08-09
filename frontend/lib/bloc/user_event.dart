@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 import 'package:week_3/models/post.dart';
 
@@ -63,5 +64,16 @@ class SearchWishInUser extends UserEvent {
   @override
   String toString() {
     return "searchWish";
+  }
+}
+
+class UserChangeProfile extends UserEvent{
+  final String profilename;
+  
+  UserChangeProfile({this.profilename});
+
+  @override
+  String toString(){
+    return "UserChangeProfile";
   }
 }
