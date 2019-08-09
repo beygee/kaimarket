@@ -146,6 +146,8 @@ ctrl.createPost = async ctx => {
   const { id: userId } = ctx.user
   const { data } = ctx.request.body
 
+  console.log(data)
+
   //포스트 생성
   const post = await models.Post.create(
     stripNull({

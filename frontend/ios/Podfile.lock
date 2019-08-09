@@ -1,0 +1,314 @@
+PODS:
+  - adhara_socket_io (0.0.1):
+    - Flutter
+    - Socket.IO-Client-Swift
+    - Starscream
+  - Bolts (1.9.0):
+    - Bolts/AppLinks (= 1.9.0)
+    - Bolts/Tasks (= 1.9.0)
+  - Bolts/AppLinks (1.9.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.9.0)
+  - BSGridCollectionViewLayout (1.2.3)
+  - BSImagePicker (2.10.0):
+    - BSGridCollectionViewLayout (= 1.2.3)
+    - BSImageView (= 1.0.3)
+  - BSImageView (1.0.3)
+  - FBSDKCoreKit (4.39.1):
+    - Bolts (~> 1.9)
+  - FBSDKLoginKit (4.39.1):
+    - FBSDKCoreKit
+  - Firebase/Auth (6.5.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 6.2.1)
+  - Firebase/Core (6.5.0):
+    - Firebase/CoreOnly
+    - FirebaseAnalytics (= 6.0.4)
+  - Firebase/CoreOnly (6.5.0):
+    - FirebaseCore (= 6.1.0)
+  - Firebase/Messaging (6.5.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 4.1.1)
+  - firebase_auth (0.0.1):
+    - Firebase/Auth (~> 6.0)
+    - Firebase/Core
+    - Flutter
+  - firebase_core (0.0.1):
+    - Firebase/Core
+    - Flutter
+  - firebase_messaging (0.0.1):
+    - Firebase/Core
+    - Firebase/Messaging
+    - Flutter
+  - FirebaseAnalytics (6.0.4):
+    - FirebaseCore (~> 6.1)
+    - FirebaseInstanceID (~> 4.2)
+    - GoogleAppMeasurement (= 6.0.4)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/MethodSwizzler (~> 6.0)
+    - GoogleUtilities/Network (~> 6.0)
+    - "GoogleUtilities/NSData+zlib (~> 6.0)"
+    - nanopb (~> 0.3)
+  - FirebaseAnalyticsInterop (1.2.0)
+  - FirebaseAuth (6.2.1):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GTMSessionFetcher/Core (~> 1.1)
+  - FirebaseAuthInterop (1.0.0)
+  - FirebaseCore (6.1.0):
+    - GoogleUtilities/Environment (~> 6.0)
+    - GoogleUtilities/Logger (~> 6.0)
+  - FirebaseInstanceID (4.2.2):
+    - FirebaseCore (~> 6.0)
+    - GoogleUtilities/Environment (~> 6.0)
+    - GoogleUtilities/UserDefaults (~> 6.0)
+  - FirebaseMessaging (4.1.1):
+    - FirebaseAnalyticsInterop (~> 1.1)
+    - FirebaseCore (~> 6.0)
+    - FirebaseInstanceID (~> 4.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GoogleUtilities/Reachability (~> 6.2)
+    - GoogleUtilities/UserDefaults (~> 6.2)
+    - Protobuf (~> 3.1)
+  - Flutter (1.0.0)
+  - flutter_facebook_login (0.0.1):
+    - FBSDKCoreKit (= 4.39.1)
+    - FBSDKLoginKit (= 4.39.1)
+    - Flutter
+  - flutter_kakao_login (0.0.7):
+    - Flutter
+    - KakaoOpenSDK (~> 1.11.1)
+  - flutter_naver_login (0.0.1):
+    - Flutter
+    - naveridlogin-sdk-ios (~> 4.0.12)
+  - flutter_socket_io (0.0.1):
+    - Flutter
+  - fluttertoast (0.0.2):
+    - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - google_maps_flutter (0.0.1):
+    - Flutter
+    - GoogleMaps
+  - google_sign_in (0.0.1):
+    - Flutter
+    - GoogleSignIn (~> 4.0)
+  - GoogleAppMeasurement (6.0.4):
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
+    - GoogleUtilities/MethodSwizzler (~> 6.0)
+    - GoogleUtilities/Network (~> 6.0)
+    - "GoogleUtilities/NSData+zlib (~> 6.0)"
+    - nanopb (~> 0.3)
+  - GoogleMaps (3.3.0):
+    - GoogleMaps/Maps (= 3.3.0)
+  - GoogleMaps/Base (3.3.0)
+  - GoogleMaps/Maps (3.3.0):
+    - GoogleMaps/Base
+  - GoogleSignIn (4.4.0):
+    - "GoogleToolboxForMac/NSDictionary+URLArguments (~> 2.1)"
+    - "GoogleToolboxForMac/NSString+URLArguments (~> 2.1)"
+    - GTMSessionFetcher/Core (~> 1.1)
+  - GoogleToolboxForMac/DebugUtils (2.2.1):
+    - GoogleToolboxForMac/Defines (= 2.2.1)
+  - GoogleToolboxForMac/Defines (2.2.1)
+  - "GoogleToolboxForMac/NSDictionary+URLArguments (2.2.1)":
+    - GoogleToolboxForMac/DebugUtils (= 2.2.1)
+    - GoogleToolboxForMac/Defines (= 2.2.1)
+    - "GoogleToolboxForMac/NSString+URLArguments (= 2.2.1)"
+  - "GoogleToolboxForMac/NSString+URLArguments (2.2.1)"
+  - GoogleUtilities/AppDelegateSwizzler (6.2.3):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Logger
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (6.2.3)
+  - GoogleUtilities/Logger (6.2.3):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/MethodSwizzler (6.2.3):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/Network (6.2.3):
+    - GoogleUtilities/Logger
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (6.2.3)"
+  - GoogleUtilities/Reachability (6.2.3):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (6.2.3):
+    - GoogleUtilities/Logger
+  - GTMSessionFetcher/Core (1.2.2)
+  - image_picker (0.0.1):
+    - Flutter
+  - KakaoOpenSDK (1.11.2):
+    - KakaoOpenSDK/KakaoCommon (= 1.11.2)
+    - KakaoOpenSDK/KakaoLink (= 1.11.2)
+    - KakaoOpenSDK/KakaoMessageTemplate (= 1.11.2)
+    - KakaoOpenSDK/KakaoNavi (= 1.11.2)
+    - KakaoOpenSDK/KakaoOpenSDK (= 1.11.2)
+    - KakaoOpenSDK/KakaoS2 (= 1.11.2)
+  - KakaoOpenSDK/KakaoCommon (1.11.2)
+  - KakaoOpenSDK/KakaoLink (1.11.2):
+    - KakaoOpenSDK/KakaoCommon
+  - KakaoOpenSDK/KakaoMessageTemplate (1.11.2)
+  - KakaoOpenSDK/KakaoNavi (1.11.2):
+    - KakaoOpenSDK/KakaoCommon
+  - KakaoOpenSDK/KakaoOpenSDK (1.11.2)
+  - KakaoOpenSDK/KakaoS2 (1.11.2):
+    - KakaoOpenSDK/KakaoCommon
+  - multi_image_picker (4.3.5):
+    - BSImagePicker (~> 2.10.0)
+    - Flutter
+  - nanopb (0.3.901):
+    - nanopb/decode (= 0.3.901)
+    - nanopb/encode (= 0.3.901)
+  - nanopb/decode (0.3.901)
+  - nanopb/encode (0.3.901)
+  - naveridlogin-sdk-ios (4.0.12)
+  - path_provider (0.0.1):
+    - Flutter
+  - Protobuf (3.9.0)
+  - shared_preferences (0.0.1):
+    - Flutter
+  - Socket.IO-Client-Swift (15.1.0):
+    - Starscream (~> 3.1)
+  - sqflite (0.0.1):
+    - Flutter
+    - FMDB (~> 2.7.2)
+  - Starscream (3.1.0)
+
+DEPENDENCIES:
+  - adhara_socket_io (from `.symlinks/plugins/adhara_socket_io/ios`)
+  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
+  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
+  - Flutter (from `.symlinks/flutter/ios`)
+  - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
+  - flutter_kakao_login (from `.symlinks/plugins/flutter_kakao_login/ios`)
+  - flutter_naver_login (from `.symlinks/plugins/flutter_naver_login/ios`)
+  - flutter_socket_io (from `.symlinks/plugins/flutter_socket_io/ios`)
+  - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
+  - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - multi_image_picker (from `.symlinks/plugins/multi_image_picker/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Bolts
+    - BSGridCollectionViewLayout
+    - BSImagePicker
+    - BSImageView
+    - FBSDKCoreKit
+    - FBSDKLoginKit
+    - Firebase
+    - FirebaseAnalytics
+    - FirebaseAnalyticsInterop
+    - FirebaseAuth
+    - FirebaseAuthInterop
+    - FirebaseCore
+    - FirebaseInstanceID
+    - FirebaseMessaging
+    - FMDB
+    - GoogleAppMeasurement
+    - GoogleMaps
+    - GoogleSignIn
+    - GoogleToolboxForMac
+    - GoogleUtilities
+    - GTMSessionFetcher
+    - KakaoOpenSDK
+    - nanopb
+    - naveridlogin-sdk-ios
+    - Protobuf
+    - Socket.IO-Client-Swift
+    - Starscream
+
+EXTERNAL SOURCES:
+  adhara_socket_io:
+    :path: ".symlinks/plugins/adhara_socket_io/ios"
+  firebase_auth:
+    :path: ".symlinks/plugins/firebase_auth/ios"
+  firebase_core:
+    :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+  flutter_facebook_login:
+    :path: ".symlinks/plugins/flutter_facebook_login/ios"
+  flutter_kakao_login:
+    :path: ".symlinks/plugins/flutter_kakao_login/ios"
+  flutter_naver_login:
+    :path: ".symlinks/plugins/flutter_naver_login/ios"
+  flutter_socket_io:
+    :path: ".symlinks/plugins/flutter_socket_io/ios"
+  fluttertoast:
+    :path: ".symlinks/plugins/fluttertoast/ios"
+  google_maps_flutter:
+    :path: ".symlinks/plugins/google_maps_flutter/ios"
+  google_sign_in:
+    :path: ".symlinks/plugins/google_sign_in/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
+  multi_image_picker:
+    :path: ".symlinks/plugins/multi_image_picker/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  shared_preferences:
+    :path: ".symlinks/plugins/shared_preferences/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+
+SPEC CHECKSUMS:
+  adhara_socket_io: 4b0cfe3ef54dcefc195273bc5ca69d3fc408ee80
+  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
+  BSGridCollectionViewLayout: 568273e113fbc815f868f1898ef0465aee68f955
+  BSImagePicker: fa0c15b6740e8aa7a7b7f0fe38a71ad4cfa0ec4a
+  BSImageView: a149459433a2687157d034c78e059d30ac7f2544
+  FBSDKCoreKit: f442aa96179cc9b382bb4abeb7e340a47cca8f91
+  FBSDKLoginKit: c3079d9a4db27c492287b1eed7a4272b28cf8a59
+  Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
+  firebase_auth: ba238762663f6b3503cc5468c50d652df1306185
+  firebase_core: 44f31f51532812598f0f9f4af0caa705b9edfc19
+  firebase_messaging: 4e6f6e9826e41858d819bd85936eb315a5d1abfb
+  FirebaseAnalytics: 3fb375bc9d13779add4039716f868d233a473fad
+  FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
+  FirebaseAuth: a06ad63e9bf4c86165b54cceb1c14d4f4c38d419
+  FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
+  FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
+  FirebaseInstanceID: 662b8108a09fe9ed01aafdedba100fde8536b0f6
+  FirebaseMessaging: 6bb0bdaf64c55fef7a219b7bb1e94e94a0855ced
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  flutter_facebook_login: be61e24a4b7d621515353c6b4583d1981bdaa3d6
+  flutter_kakao_login: badd010bfbdd554e3faad3065778ea5e61edc5ce
+  flutter_naver_login: d5245429e5025b048c81d9eb3e90369fcbdb8066
+  flutter_socket_io: fce27977d95a82c181bd959180f33384f51a5973
+  fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  google_maps_flutter: 78a52114c898b42ea647919679a4c58b70abe876
+  google_sign_in: 27e70a98b529f0b076d4b19f231b81da28b1750b
+  GoogleAppMeasurement: 183bd916af7f80deb67c01888368f1108d641832
+  GoogleMaps: cfee83da305b9aaeccf92c24ac79df11c3003492
+  GoogleSignIn: 7ff245e1a7b26d379099d3243a562f5747e23d39
+  GoogleToolboxForMac: b3553629623a3b1bff17f555e736cd5a6d95ad55
+  GoogleUtilities: d2b0e277a95962e09bb27f5cd42f5f0b6a506c7d
+  GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
+  image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
+  KakaoOpenSDK: cb3237cef2f458f6b4b895475fac72fe7a76f34d
+  multi_image_picker: 8e581d9526d7c4650094e49290551ad2bf329bcb
+  nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  naveridlogin-sdk-ios: f894849d1f3454f8a68a57383ba29bd9f0d0257f
+  path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
+  Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
+  shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
+  Socket.IO-Client-Swift: 7cb44c0ffb86e158cee32d0642d30ec5fdcf8f61
+  sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
+  Starscream: 08172b481e145289c4930cb567230fb55897cfa4
+
+PODFILE CHECKSUM: b6a0a141693093b304368d08511b46cf3d1d0ac5
+
+COCOAPODS: 1.6.1
