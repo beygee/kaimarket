@@ -333,6 +333,7 @@ class _PostViewPageState extends State<PostViewPage> {
                                 val = 1;
                               else if (newValueSelected == '판매완료') val = 2;
                               post.status = val;
+                              
                               _currentStatus = newValueSelected;
                             });
                           },
