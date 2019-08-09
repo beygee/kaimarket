@@ -117,7 +117,7 @@ ctrl.updateName = async ctx => {
   const { id: userId } = ctx.user
   const { name } = ctx.request.body
 
-  const user = await models.User.findOne({ where: { id: userID } })
+  const user = await models.User.findOne({ where: { id: userId } })
 
   user.name = name
   await user.save()

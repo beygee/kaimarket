@@ -606,54 +606,56 @@ class _PostViewPageState extends State<PostViewPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(children: <Widget>[
-            Text(
-              getMoneyFormat(post.price) + " 원",
-              style: TextStyle(
-                fontSize: screenAwareSize(18.0, context),
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[800],
+          Row(
+            children: <Widget>[
+              Text(
+                getMoneyFormat(post.price) + " 원",
+                style: TextStyle(
+                  fontSize: screenAwareSize(18.0, context),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[800],
+                ),
               ),
-            ),
-            SizedBox(width: screenAwareSize(5.0, context)),
-            if (post.status == 1)
-              ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                child: Container(
-                    width: screenAwareSize(50.0, context),
-                    height: screenAwareSize(20.0, context),
-                    color: Colors.red[700],
-                    child: Center(
-                      child: Text(
-                        "판매완료",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: screenAwareSize(10.0, context),
-                            color: Colors.white),
-                      ),
-                    )),
-              ),
-            // if (post.status == 2)
-            if (post.isSold)
-              ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                child: Container(
-                    width: screenAwareSize(50.0, context),
-                    height: screenAwareSize(20.0, context),
-                    color: Colors.amber[800],
-                    child: Center(
-                      child: Text(
-                        "예약중",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: screenAwareSize(10.0, context),
-                            color: Colors.white),
-                      ),
-                    )),
-              )
-          ]),
+              SizedBox(width: screenAwareSize(5.0, context)),
+              if (post.status == 1)
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  child: Container(
+                      width: screenAwareSize(50.0, context),
+                      height: screenAwareSize(20.0, context),
+                      color: Colors.red[700],
+                      child: Center(
+                        child: Text(
+                          "판매완료",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenAwareSize(10.0, context),
+                              color: Colors.white),
+                        ),
+                      )),
+                ),
+                // if (post.status == 2)
+              if (post.isSold)
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  child: Container(
+                      width: screenAwareSize(50.0, context),
+                      height: screenAwareSize(20.0, context),
+                      color: Colors.amber[800],
+                      child: Center(
+                        child: Text(
+                          "예약중",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenAwareSize(10.0, context),
+                              color: Colors.white),
+                        ),
+                      )),
+                )
+            ]
+          ),
           SizedBox(height: screenAwareSize(5.0, context)),
           Text(
             post.title,
