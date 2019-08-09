@@ -113,4 +113,15 @@ ctrl.validHakbun = async ctx => {
   ctx.body = result
 }
 
+ctrl.updateName = async ctx => {
+  const { id: userId } = ctx.user
+  const { name } = ctx.request.body
+
+  const user = await models.User.findOne({ where: { id: userID } })
+
+  user.name = name
+  await user.save()
+
+  ctx.body = user
+}
 module.exports = ctrl

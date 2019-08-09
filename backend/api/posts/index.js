@@ -11,6 +11,8 @@ router.post("/:id", ctrl.updatePost)
 router.post("/:id/wish", ctrl.wish)
 
 router.post("/:id/sold", ctrl.sold)
+router.post("/:id/status/:status", ctrl.updateStatus)
+
 
 router.delete("/:id", ctrl.deletePost)
 

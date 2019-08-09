@@ -3,6 +3,8 @@ const router = new Router()
 
 const ctrl = require("./index.ctrl")
 
+router.post("/name", ctrl.updateName)
+
 router.post("/google", ctrl.authWithGoogle, ctrl.authToken)
 router.post("/facebook", ctrl.authWithFacebook, ctrl.authToken)
 router.post("/naver", ctrl.authWithNaver, ctrl.authToken)
