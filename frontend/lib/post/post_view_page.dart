@@ -180,6 +180,14 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 
   Widget _buildSellerBottomTab() {
+    var _status = ['판매중', '예약중', '판매완료'];
+    var _currentStatus;
+    if (post.status == 0)
+      _currentStatus = '판매중';
+    else if (post.status == 1)
+      _currentStatus = '예약중';
+    else if (post.status == 2) _currentStatus = '판매완료';
+
     return Positioned(
         bottom: 0.0,
         left: 0.0,
@@ -234,7 +242,10 @@ class _PostViewPageState extends State<PostViewPage> {
                             size: screenAwareSize(14.0, context),
                           ),
                           SizedBox(width: 7.0),
-                          Text('수정하기', style: TextStyle(color: Colors.grey)),
+                          Text('수정하기',
+                              style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: screenAwareSize(14.0, context))),
                         ],
                       ),
                     ),
@@ -277,65 +288,98 @@ class _PostViewPageState extends State<PostViewPage> {
                           Icon(
                             Icons.remove,
                             color: Colors.grey,
-                            size: screenAwareSize(14.0, context),
+                            size: screenAwareSize(14.5, context),
                           ),
                           SizedBox(width: 7.0),
-                          Text('삭제하기', style: TextStyle(color: Colors.grey)),
+                          Text('삭제하기', style: TextStyle(
+                              fontSize: screenAwareSize(14.5, context),
+                              color: Colors.grey)),
                         ],
                       ),
                     ),
                   ),
-                  if (!post.isSold)
-                    Expanded(
-                      child: FlatButton(
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: new Text("판매완료"),
-                                  content: new Text("판매 완료 상태로 변경합니다."),
-                                  actions: <Widget>[
-                                    new FlatButton(
-                                      child: new Text("No"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                    new FlatButton(
-                                      child: new Text("Yes"),
-                                      onPressed: () async {
-                                        post.isSold = !post.isSold;
-                                        var res = await dio.postUri(getUri(
-                                            '/api/posts/' +
-                                                post.id.toString() +
-                                                '/sold'));
-                                        log.i(res.data);
-                                        Navigator.of(context).pop();
-                                        // 이후 postview 페이지 reload
-                                        final postBloc =
-                                            BlocProvider.of<PostBloc>(context);
-                                        postBloc.dispatch(PostFetch());
-                                      },
-                                    )
-                                  ],
-                                );
-                              });
-                        },
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            Icon(
-                              Icons.check,
-                              color: Colors.grey,
-                              size: screenAwareSize(14.0, context),
-                            ),
-                            SizedBox(width: 7.0),
-                            Text('판매완료', style: TextStyle(color: Colors.grey)),
-                          ],
+                  Expanded(
+                    child: ButtonTheme(
+                      alignedDropdown: true,
+                      buttonColor: Colors.amber,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          items: _status.map((String dropDownStringItem) {
+                            return DropdownMenuItem<String>(
+                              value: dropDownStringItem,
+                              child: Text(dropDownStringItem),
+                            );
+                          }).toList(),
+                          onChanged: (String newValueSelected) {
+                            setState(() {
+                              int val;
+                              if (newValueSelected == '판매중')
+                                val = 0;
+                              else if (newValueSelected == '예약중')
+                                val = 1;
+                              else if (newValueSelected == '판매완료') 
+                                val = 2;
+                              post.status = val;
+                              _currentStatus = newValueSelected;
+                            });
+                          },
+                          value: _currentStatus,
+                          isExpanded: true,
+                          style: TextStyle(
+                              fontSize: screenAwareSize(14.5, context),
+                              color: Colors.grey),
+                          elevation: 1,
+
+                          // onPressed: () {
+                          //   showDialog(
+                          //       context: context,
+                          //       builder: (BuildContext context) {
+                          //         return AlertDialog(
+                          //           title: new Text("판매완료"),
+                          //           content: new Text("판매 완료 상태로 변경합니다."),
+                          //           actions: <Widget>[
+                          //             new FlatButton(
+                          //               child: new Text("No"),
+                          //               onPressed: () {
+                          //                 Navigator.of(context).pop();
+                          //               },
+                          //             ),
+                          //             new FlatButton(
+                          //               child: new Text("Yes"),
+                          //               onPressed: () async {
+                          //                 post.isSold = !post.isSold;
+                          //                 var res = await dio.postUri(getUri(
+                          //                     '/api/posts/' +
+                          //                         post.id.toString() +
+                          //                         '/sold'));
+                          //                 log.i(res.data);
+                          //                 Navigator.of(context).pop();
+                          //                 // 이후 postview 페이지 reload
+                          //                 final postBloc =
+                          //                     BlocProvider.of<PostBloc>(context);
+                          //                 postBloc.dispatch(PostFetch());
+                          //               },
+                          //             )
+                          //           ],
+                          //         );
+                          //       });
+                          //   },
+                          //   child: Row(
+                          //     mainAxisSize: MainAxisSize.min,
+                          //     children: <Widget>[
+                          //       Icon(
+                          //         Icons.check,
+                          //         color: Colors.grey,
+                          //         size: screenAwareSize(14.0, context),
+                          //       ),
+                          //       SizedBox(width: 7.0),
+                          //       Text('판매완료', style: TextStyle(color: Colors.grey)),
+                          //     ],
+                          //   ),
                         ),
                       ),
                     ),
+                  ),
                 ])));
   }
 
@@ -463,20 +507,20 @@ class _PostViewPageState extends State<PostViewPage> {
         if (post.isSold)
           Container(
               height: screenAwareSize(350.0, context),
-                decoration: new BoxDecoration(
-                    color: Color.fromARGB(140, 0, 0, 0)),
-                child: Center(
-                  child: Text(
-                    "SOLD\nOUT",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: screenAwareSize(60.0, context),
-                        color: ThemeColor.primary,
-                        letterSpacing: 10.0,
-                        ),
+              decoration:
+                  new BoxDecoration(color: Color.fromARGB(140, 0, 0, 0)),
+              child: Center(
+                child: Text(
+                  "SOLD\nOUT",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenAwareSize(60.0, context),
+                    color: ThemeColor.primary,
+                    letterSpacing: 10.0,
                   ),
-                )),
+                ),
+              )),
       ],
     );
   }
