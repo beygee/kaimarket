@@ -89,35 +89,43 @@ class _PostViewPageState extends State<PostViewPage> {
     return LoadingWrapper(
       key: _loadingWrapperKey,
       builder: (context, loading) {
-        return Scaffold(
-          body: Stack(
-            children: <Widget>[
-              SingleChildScrollView(
-                controller: scrollController,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _buildImageCarousel(),
-                    SizedBox(height: screenAwareSize(10.0, context)),
-                    post.isBook
-                        ? _buildBookPostHeader(context)
-                        : _buildPostHeader(context),
-                    _buildDivider(),
-                    _buildPostContent(context),
-                    _buildLocation(),
-                    _buildDivider(),
-                    _buildUserInfo(context),
-                    _buildDivider(),
-                    _buildRelatedPosts(context),
-                    SizedBox(height: screenAwareSize(70.0, context)),
-                  ],
-                ),
+        return Container(
+          color: Colors.white,
+          child: SafeArea(
+            top: false,
+            child: Scaffold(
+              body: Stack(
+                children: <Widget>[
+                  SafeArea(
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          _buildImageCarousel(),
+                          SizedBox(height: screenAwareSize(10.0, context)),
+                          post.isBook
+                              ? _buildBookPostHeader(context)
+                              : _buildPostHeader(context),
+                          _buildDivider(),
+                          _buildPostContent(context),
+                          _buildLocation(),
+                          _buildDivider(),
+                          _buildUserInfo(context),
+                          _buildDivider(),
+                          _buildRelatedPosts(context),
+                          SizedBox(height: screenAwareSize(70.0, context)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  _buildAppBar(),
+                  loggedUserId == post.user.id
+                      ? _buildSellerBottomTab()
+                      : _buildBottomTab(),
+                ],
               ),
-              _buildAppBar(),
-              loggedUserId == post.user.id
-                  ? _buildSellerBottomTab()
-                  : _buildBottomTab(),
-            ],
+            ),
           ),
         );
       },
@@ -128,8 +136,10 @@ class _PostViewPageState extends State<PostViewPage> {
     return AnimatedBuilder(
       animation: scrollController,
       builder: (context, child) {
-        final double opacityTween = math.min(
-            scrollController.offset / screenAwareSize(350.0, context), 1);
+        final double opacityTween = math.max(
+            math.min(
+                scrollController.offset / screenAwareSize(350.0, context), 1),
+            0);
         return Container(
           height: screenAwareSize(50.0, context) +
               MediaQuery.of(context).padding.top,
@@ -189,7 +199,10 @@ class _PostViewPageState extends State<PostViewPage> {
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black26, blurRadius: 5.0, spreadRadius: -3.0),
+                    color: Colors.black12,
+                    blurRadius: 3.0,
+                    spreadRadius: -3.0,
+                    offset: Offset(0, -3)),
               ],
               color: Colors.white,
             ),
@@ -349,7 +362,10 @@ class _PostViewPageState extends State<PostViewPage> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-                color: Colors.black26, blurRadius: 5.0, spreadRadius: -3.0),
+                color: Colors.black12,
+                blurRadius: 3.0,
+                spreadRadius: -3.0,
+                offset: Offset(0, -3.0)),
           ],
           color: Colors.white,
         ),
@@ -423,7 +439,7 @@ class _PostViewPageState extends State<PostViewPage> {
     for (int i = 0; i < post.images.length; i++) {
       images.add(
         CachedNetworkImage(
-          imageUrl: getUri('').toString() + post.images[i]['url'],
+          imageUrl: post.images[i]['url'],
           fit: BoxFit.cover,
           placeholder: (context, url) => Shimmer.fromColors(
             baseColor: Colors.grey[200],
@@ -463,20 +479,20 @@ class _PostViewPageState extends State<PostViewPage> {
         if (post.isSold)
           Container(
               height: screenAwareSize(350.0, context),
-                decoration: new BoxDecoration(
-                    color: Color.fromARGB(140, 0, 0, 0)),
-                child: Center(
-                  child: Text(
-                    "SOLD\nOUT",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: screenAwareSize(60.0, context),
-                        color: ThemeColor.primary,
-                        letterSpacing: 10.0,
-                        ),
+              decoration:
+                  new BoxDecoration(color: Color.fromARGB(140, 0, 0, 0)),
+              child: Center(
+                child: Text(
+                  "SOLD\nOUT",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: screenAwareSize(60.0, context),
+                    color: ThemeColor.primary,
+                    letterSpacing: 10.0,
                   ),
-                )),
+                ),
+              )),
       ],
     );
   }

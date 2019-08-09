@@ -35,16 +35,16 @@ router.use("/chats", chats.routes())
 
 //파일 업로드
 const upload = require("lib/upload")
-router.post("/upload", upload, async ctx => {
+router.post("/upload", upload.single("image"), async ctx => {
   const { file } = ctx.req
 
   //썸네일 만들기
-  const fullPath = path.resolve(file.path)
-  const thumb = await sharp(fullPath)
-    .resize(200)
-    .toFile(path.resolve("public", "thumb", file.filename))
+  // const fullPath = path.resolve(file.path)
+  // const thumb = await sharp(fullPath)
+  //   .resize(200)
+  //   .toFile(path.resolve("public", "thumb", file.filename))
 
-  ctx.body = { url: `/${file.path}`, thumb: `/public/thumb/${file.filename}` }
+  ctx.body = { url: file.Location, thumb: file.Location }
 })
 
 module.exports = router
