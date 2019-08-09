@@ -74,12 +74,18 @@ class _LoginPageState extends State<LoginPage> {
     return new Container(
       width: screenAwareSize(180.0, context),
       height: screenAwareSize(180.0, context),
-      decoration: new BoxDecoration(
-        border: Border.all(color: Colors.grey[400], width: 1.0),
-        shape: BoxShape.circle,
+      // decoration: new BoxDecoration(
+      //   border: Border.all(color: Colors.grey[400], width: 1.0),
+      //   shape: BoxShape.circle,
+      //   image: new DecorationImage(
+      //       fit: BoxFit.fill,
+      //       image: ExactAssetImage('assets/images/neopjuk.png', scale: 1.2)),
+      // ),
+      decoration: BoxDecoration(
         image: new DecorationImage(
-            fit: BoxFit.fill,
-            image: ExactAssetImage('assets/images/neopjuk.png')),
+          fit: BoxFit.fill,
+          image: ExactAssetImage('assets/images/neopjuk.png'),
+        ),
       ),
     );
   }
