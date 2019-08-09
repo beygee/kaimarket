@@ -18,6 +18,7 @@ class Post extends Equatable {
   bool isWish;
   bool isSold;
   int status;
+  // status 0: 판매중, 1: 예약중, 2: 판매완료
   
 
   List<Map<String, dynamic>> images = [];
@@ -46,6 +47,7 @@ class Post extends Equatable {
     this.updatedAt,
     this.isWish,
     this.isSold,
+    this.status,
 
     //
     this.images,
@@ -80,6 +82,7 @@ class Post extends Equatable {
     updatedAt = p.updatedAt;
     isWish = p.isWish;
     isSold = p.isSold;
+    status = p.status;
 
     images = p.images;
     user = p.user;
@@ -112,6 +115,7 @@ class Post extends Equatable {
         isBook = json['isBook'],
         isWish = json['isWish'],
         isSold = json['isSold'],
+        status = json['status'],
         bookMajor = json['bookMajor'],
         bookAuthor = json['bookAuthor'],
         bookPublisher = json['bookPublisher'],

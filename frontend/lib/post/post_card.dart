@@ -41,8 +41,7 @@ class PostCard extends StatelessWidget {
                               fit: BoxFit.cover,
                             )
                           : CachedNetworkImage(
-                              imageUrl: getUri('').toString() +
-                                  post.images[0]['thumb'],
+                              imageUrl: post.images[0]['thumb'],
                               width: screenAwareSize(
                                   small ? 70.0 : 100.0, context),
                               height: screenAwareSize(
@@ -50,7 +49,7 @@ class PostCard extends StatelessWidget {
                               fit: BoxFit.cover,
                             ),
                     ),
-                    if (post.isSold)
+                    if (post.status == 1 || post.status == 2)
                       ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
                           child: Container(
@@ -59,17 +58,50 @@ class PostCard extends StatelessWidget {
                               height: screenAwareSize(
                                   small ? 70.0 : 100.0, context),
                               decoration: new BoxDecoration(
-                                  color: Color.fromARGB(140, 0, 0, 0)),
-                              child: Center(
-                                child: Text(
-                                  "SOLD\nOUT",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
-                                      color: ThemeColor.primary),
-                                ),
-                              ))),
+                                  color: Color.fromARGB(90, 0, 0, 0)),
+                              )),
+                    if (post.status == 1)
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0)),
+                        child: Container(
+                          width: screenAwareSize(
+                            small ? 30.0 : 50.0, context),
+                          height: screenAwareSize(
+                            small ? 15.0 : 20.0 , context),
+                          color: Colors.amber[800],
+                          child: Center(
+                            child: Text(
+                              "예약중",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenAwareSize(small ? 6.5 : 9.0, context),
+                              color: Colors.white),
+                            ),
+                          ) 
+                        )
+                      ),
+                    if (post.status == 2)
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0)),
+                        child: Container(
+                          width: screenAwareSize(
+                            small ? 30.0 : 50.0, context),
+                          height: screenAwareSize(
+                            small ? 15.0 : 20.0 , context),
+                          color: Colors.red[700],
+                          child: Center(
+                            child: Text(
+                              "판매완료",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenAwareSize(small ? 6.5 : 9.0, context),
+                              color: Colors.white),
+                              ),
+                          ) 
+                        )
+                      )
                   ],
                 ),
                 //  Image.network(
@@ -102,7 +134,7 @@ class PostCard extends StatelessWidget {
                               children: <Widget>[
                                 Container(
                                   // width: screenAwareSize(
-                                      // small ? 150.0 : 150, context),
+                                  // small ? 150.0 : 150, context),
                                   child: Text(
                                     post.title,
                                     maxLines: small ? 1 : 2,
@@ -128,7 +160,7 @@ class PostCard extends StatelessWidget {
                                 ],
                                 Container(
                                   // width: screenAwareSize(
-                                      // small ? 100.0 : 150, context),
+                                  // small ? 100.0 : 150, context),
                                   child: Text(
                                     post.content,
                                     overflow: TextOverflow.ellipsis,

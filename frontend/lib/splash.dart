@@ -32,7 +32,10 @@ class _SplashPageState extends State<SplashPage> {
   Future checkLogin() async {
     //토큰이 저장되어 있는지 확인한다
     try {
+      log.i("실행");
       var res = await dio.getUri(getUri('/api/me'));
+
+      log.i(res.data);
 
       if (res.statusCode == 200) {
         if (res.data['valid']) {
@@ -42,6 +45,7 @@ class _SplashPageState extends State<SplashPage> {
         }
       }
     } catch (e) {
+      log.i(e);
       //로그인 페이지 보내기
       Navigator.of(context).pushReplacementNamed('/login');
     }

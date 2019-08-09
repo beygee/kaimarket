@@ -147,7 +147,7 @@ class ChatCard extends StatelessWidget {
               fit: BoxFit.cover,
             )
           : CachedNetworkImage(
-              imageUrl: getUri('').toString() + chat.post.images[0]['url'],
+              imageUrl: chat.post.images[0]['url'],
               width: screenAwareSize(60.0, context),
               height: screenAwareSize(60.0, context),
               fit: BoxFit.cover,

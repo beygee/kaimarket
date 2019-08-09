@@ -3,7 +3,7 @@ import 'package:week_3/login/login_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_naver_login/flutter_naver_login.dart';
+// import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:dio/dio.dart';
@@ -110,13 +110,13 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xffaaaaaa),
           onPressed: () => _loginWithGuest(context),
         ),
-        // SizedBox(height: 10.0),
-        // LoginButton(
-        //   text: "구글과 연결하기",
-        //   icon: FontAwesomeIcons.google,
-        //   color: Color(0xff3488f1),
-        //   onPressed: () => _loginWithGoogle(context),
-        // ),
+        SizedBox(height: 10.0),
+        LoginButton(
+          text: "구글과 연결하기",
+          icon: FontAwesomeIcons.google,
+          color: Color(0xff3488f1),
+          onPressed: () => _loginWithGoogle(context),
+        ),
         SizedBox(height: screenAwareSize(5.0, context)),
         LoginButton(
           text: "페이스북과 연결하기",
@@ -124,14 +124,14 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xff3a5c93),
           onPressed: () => _loginWithFacebook(context),
         ),
-        SizedBox(height: screenAwareSize(5.0, context)),
-        LoginButton(
-          text: "네이버와 연결하기",
-          icon: IconData(0xe600, fontFamily: 'custom'),
-          // color: Color(0xff00cf63),
-          color: Color(0xff1ec800),
-          onPressed: () => _loginWithNaver(context),
-        ),
+        // SizedBox(height: screenAwareSize(5.0, context)),
+        // LoginButton(
+        //   text: "네이버와 연결하기",
+        //   icon: IconData(0xe600, fontFamily: 'custom'),
+        //   // color: Color(0xff00cf63),
+        //   color: Color(0xff1ec800),
+        //   onPressed: () => _loginWithNaver(context),
+        // ),
         // SizedBox(height: screenAwareSize(5.0, context)),
         // KakaoLoginButton(
         //   text: "카카오톡과 연결하기",
@@ -162,15 +162,15 @@ class _LoginPageState extends State<LoginPage> {
 
       var token = googleAuth.accessToken;
 
-      // var res = await Dio()
-      //     .postUri(getUri('/api/auth/google'), data: {'access_token': token});
+      var res = await dio
+          .postUri(getUri('/api/auth/google'), data: {'access_token': token});
 
-      // if (res.statusCode == 200) {
-      //   // _id = json.decode(res.body);
-      //   // _submitAnimationController.forward();
-      // } else {
-      //   showSnackBar(context, "로그인 실패");
-      // }
+      if (res.statusCode == 200) {
+        // log.i(res.headers.value("access_token"));
+        _authUserWithValid(context, res);
+      } else {
+        showSnackBar(context, "로그인 실패");
+      }
     }, onError: (e) {
       log.e(e);
       showSnackBar(context, "로그인 실패");
@@ -178,26 +178,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //네이버로 연결
-  void _loginWithNaver(context) {
-    _loadingWrapperKey.currentState.loadFuture(() async {
-      NaverLoginResult result = await FlutterNaverLogin.logIn();
-      switch (result.status) {
-        case NaverLoginStatus.loggedIn:
-          var tokenResult = await FlutterNaverLogin.currentAccessToken;
-          final res = await dio.postUri(getUri('/api/auth/naver'),
-              data: {'access_token': tokenResult.accessToken});
-          _authUserWithValid(context, res);
-          break;
-        case NaverLoginStatus.cancelledByUser:
-          break;
-        case NaverLoginStatus.error:
-          showSnackBar(context, "로그인 실패");
-          break;
-      }
-    }, onError: (e) {
-      log.e(e);
-    });
-  }
+  // void _loginWithNaver(context) {
+  //   _loadingWrapperKey.currentState.loadFuture(() async {
+  //     NaverLoginResult result = await FlutterNaverLogin.logIn();
+  //     switch (result.status) {
+  //       case NaverLoginStatus.loggedIn:
+  //         var tokenResult = await FlutterNaverLogin.currentAccessToken;
+  //         final res = await dio.postUri(getUri('/api/auth/naver'),
+  //             data: {'access_token': tokenResult.accessToken});
+  //         _authUserWithValid(context, res);
+  //         break;
+  //       case NaverLoginStatus.cancelledByUser:
+  //         break;
+  //       case NaverLoginStatus.error:
+  //         showSnackBar(context, "로그인 실패");
+  //         break;
+  //     }
+  //   }, onError: (e) {
+  //     log.e(e);
+  //   });
+  // }
 
   //카카오로 연결
   // void _loginWithKakao(context) {
