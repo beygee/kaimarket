@@ -17,6 +17,8 @@ class Post extends Equatable {
   String updatedAt;
   bool isWish;
   bool isSold;
+  int status;
+  
 
   List<Map<String, dynamic>> images = [];
   User user;

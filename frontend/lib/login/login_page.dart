@@ -3,7 +3,6 @@ import 'package:week_3/login/login_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_kakao_login/flutter_kakao_login.dart';
 import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:week_3/utils/utils.dart';
@@ -133,13 +132,13 @@ class _LoginPageState extends State<LoginPage> {
           color: Color(0xff1ec800),
           onPressed: () => _loginWithNaver(context),
         ),
-        SizedBox(height: screenAwareSize(5.0, context)),
-        KakaoLoginButton(
-          text: "카카오톡과 연결하기",
-          icon: IconData(0xe605, fontFamily: 'custom'),
-          color: Color(0xffffe535),
-          onPressed: () => _loginWithKakao(context),
-        ),
+        // SizedBox(height: screenAwareSize(5.0, context)),
+        // KakaoLoginButton(
+        //   text: "카카오톡과 연결하기",
+        //   icon: IconData(0xe605, fontFamily: 'custom'),
+        //   color: Color(0xffffe535),
+        //   onPressed: () => _loginWithKakao(context),
+        // ),
         SizedBox(height: screenAwareSize(15.0, context)),
         Text(
           "SNS 로그인 후 카이스트 학생 인증을 하게 됩니다.",
@@ -201,29 +200,29 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //카카오로 연결
-  void _loginWithKakao(context) {
-    _loadingWrapperKey.currentState.loadFuture(() async {
-      FlutterKakaoLogin kakaoSignIn = FlutterKakaoLogin();
-      final KakaoLoginResult result = await kakaoSignIn.logIn();
+  // void _loginWithKakao(context) {
+  //   _loadingWrapperKey.currentState.loadFuture(() async {
+  //     FlutterKakaoLogin kakaoSignIn = FlutterKakaoLogin();
+  //     final KakaoLoginResult result = await kakaoSignIn.logIn();
 
-      switch (result.status) {
-        case KakaoLoginStatus.loggedIn:
-          var token = await kakaoSignIn.currentAccessToken;
-          final res = await dio.postUri(getUri('/api/auth/kakao'),
-              data: {'access_token': token.token});
-          _authUserWithValid(context, res);
-          break;
-        case KakaoLoginStatus.loggedOut:
-          log.i("로그 아웃");
-          break;
-        case KakaoLoginStatus.error:
-          log.e("로그인 에러" + result.errorMessage);
-          showSnackBar(context, "로그인 실패");
-          break;
-      }
-      return 1;
-    });
-  }
+  //     switch (result.status) {
+  //       case KakaoLoginStatus.loggedIn:
+  //         var token = await kakaoSignIn.currentAccessToken;
+  //         final res = await dio.postUri(getUri('/api/auth/kakao'),
+  //             data: {'access_token': token.token});
+  //         _authUserWithValid(context, res);
+  //         break;
+  //       case KakaoLoginStatus.loggedOut:
+  //         log.i("로그 아웃");
+  //         break;
+  //       case KakaoLoginStatus.error:
+  //         log.e("로그인 에러" + result.errorMessage);
+  //         showSnackBar(context, "로그인 실패");
+  //         break;
+  //     }
+  //     return 1;
+  //   });
+  // }
 
   //페이스북으로 연결
   void _loginWithFacebook(context) {

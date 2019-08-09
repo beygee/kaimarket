@@ -78,14 +78,9 @@ PODS:
     - FBSDKCoreKit (= 4.39.1)
     - FBSDKLoginKit (= 4.39.1)
     - Flutter
-  - flutter_kakao_login (0.0.7):
-    - Flutter
-    - KakaoOpenSDK (~> 1.11.1)
   - flutter_naver_login (0.0.1):
     - Flutter
     - naveridlogin-sdk-ios (~> 4.0.12)
-  - flutter_socket_io (0.0.1):
-    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
   - FMDB (2.7.5):
@@ -141,22 +136,6 @@ PODS:
   - GTMSessionFetcher/Core (1.2.2)
   - image_picker (0.0.1):
     - Flutter
-  - KakaoOpenSDK (1.11.2):
-    - KakaoOpenSDK/KakaoCommon (= 1.11.2)
-    - KakaoOpenSDK/KakaoLink (= 1.11.2)
-    - KakaoOpenSDK/KakaoMessageTemplate (= 1.11.2)
-    - KakaoOpenSDK/KakaoNavi (= 1.11.2)
-    - KakaoOpenSDK/KakaoOpenSDK (= 1.11.2)
-    - KakaoOpenSDK/KakaoS2 (= 1.11.2)
-  - KakaoOpenSDK/KakaoCommon (1.11.2)
-  - KakaoOpenSDK/KakaoLink (1.11.2):
-    - KakaoOpenSDK/KakaoCommon
-  - KakaoOpenSDK/KakaoMessageTemplate (1.11.2)
-  - KakaoOpenSDK/KakaoNavi (1.11.2):
-    - KakaoOpenSDK/KakaoCommon
-  - KakaoOpenSDK/KakaoOpenSDK (1.11.2)
-  - KakaoOpenSDK/KakaoS2 (1.11.2):
-    - KakaoOpenSDK/KakaoCommon
   - multi_image_picker (4.3.5):
     - BSImagePicker (~> 2.10.0)
     - Flutter
@@ -185,9 +164,7 @@ DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - flutter_facebook_login (from `.symlinks/plugins/flutter_facebook_login/ios`)
-  - flutter_kakao_login (from `.symlinks/plugins/flutter_kakao_login/ios`)
   - flutter_naver_login (from `.symlinks/plugins/flutter_naver_login/ios`)
-  - flutter_socket_io (from `.symlinks/plugins/flutter_socket_io/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_maps_flutter (from `.symlinks/plugins/google_maps_flutter/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
@@ -220,7 +197,6 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GoogleUtilities
     - GTMSessionFetcher
-    - KakaoOpenSDK
     - nanopb
     - naveridlogin-sdk-ios
     - Protobuf
@@ -240,12 +216,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/flutter/ios"
   flutter_facebook_login:
     :path: ".symlinks/plugins/flutter_facebook_login/ios"
-  flutter_kakao_login:
-    :path: ".symlinks/plugins/flutter_kakao_login/ios"
   flutter_naver_login:
     :path: ".symlinks/plugins/flutter_naver_login/ios"
-  flutter_socket_io:
-    :path: ".symlinks/plugins/flutter_socket_io/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_maps_flutter:
@@ -284,9 +256,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 6bb0bdaf64c55fef7a219b7bb1e94e94a0855ced
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   flutter_facebook_login: be61e24a4b7d621515353c6b4583d1981bdaa3d6
-  flutter_kakao_login: badd010bfbdd554e3faad3065778ea5e61edc5ce
   flutter_naver_login: d5245429e5025b048c81d9eb3e90369fcbdb8066
-  flutter_socket_io: fce27977d95a82c181bd959180f33384f51a5973
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   google_maps_flutter: 78a52114c898b42ea647919679a4c58b70abe876
@@ -298,7 +268,6 @@ SPEC CHECKSUMS:
   GoogleUtilities: d2b0e277a95962e09bb27f5cd42f5f0b6a506c7d
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
   image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
-  KakaoOpenSDK: cb3237cef2f458f6b4b895475fac72fe7a76f34d
   multi_image_picker: 8e581d9526d7c4650094e49290551ad2bf329bcb
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   naveridlogin-sdk-ios: f894849d1f3454f8a68a57383ba29bd9f0d0257f

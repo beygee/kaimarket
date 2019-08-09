@@ -24,7 +24,6 @@ dependencies:
   flutter_facebook_login: ^2.0.1
   google_sign_in: ^4.0.3
   firebase_auth: ^0.11.1+7
-  flutter_kakao_login: ^0.3.0
   flutter_naver_login: ^0.3.1
   multi_image_picker: ^4.3.4
   adhara_socket_io: ^0.2.0
@@ -35,7 +34,6 @@ dependencies:
   firebase_messaging: ^5.1.0
   google_maps_flutter: ^0.5.19+2
   image_picker: ^0.6.0+15
-  auto_size_text: ^2.0.2
   fluttertoast: ^3.1.0
   html: ^0.14.0+2
   intl: ^0.15.8
@@ -43,7 +41,6 @@ dependencies:
   bloc: ^0.14.4
   flutter_bloc: ^0.19.0
   provider: ^3.0.0+1
-  flutter_socket_io: ^0.5.0
   cached_network_image: ^1.1.0
   date_format: ^1.0.6
   shimmer: ^1.0.0
