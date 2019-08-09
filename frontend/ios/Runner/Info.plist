@@ -76,7 +76,7 @@
 	<key>FacebookAppID</key>
 
 	<!-- Replace "000000000000" with your Facebook App ID here. -->
-	<string>000000000000</string>
+	<string>446460636177242</string>
 	<key>FacebookDisplayName</key>
 
 	<!-- Replace "YOUR_APP_NAME" with your Facebook App name. -->
@@ -89,5 +89,7 @@
 				<string>fbauth2</string>
 				<string>fbshareextension</string>
 	</array>
+	<key>io.flutter.embedded_views_preview</key>
+	<true/>
 </dict>
 </plist>

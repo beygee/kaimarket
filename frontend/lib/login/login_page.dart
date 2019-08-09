@@ -3,7 +3,7 @@ import 'package:week_3/login/login_button.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_naver_login/flutter_naver_login.dart';
+// import 'package:flutter_naver_login/flutter_naver_login.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:week_3/utils/utils.dart';
 import 'package:dio/dio.dart';
@@ -178,26 +178,26 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   //네이버로 연결
-  void _loginWithNaver(context) {
-    _loadingWrapperKey.currentState.loadFuture(() async {
-      NaverLoginResult result = await FlutterNaverLogin.logIn();
-      switch (result.status) {
-        case NaverLoginStatus.loggedIn:
-          var tokenResult = await FlutterNaverLogin.currentAccessToken;
-          final res = await dio.postUri(getUri('/api/auth/naver'),
-              data: {'access_token': tokenResult.accessToken});
-          _authUserWithValid(context, res);
-          break;
-        case NaverLoginStatus.cancelledByUser:
-          break;
-        case NaverLoginStatus.error:
-          showSnackBar(context, "로그인 실패");
-          break;
-      }
-    }, onError: (e) {
-      log.e(e);
-    });
-  }
+  // void _loginWithNaver(context) {
+  //   _loadingWrapperKey.currentState.loadFuture(() async {
+  //     NaverLoginResult result = await FlutterNaverLogin.logIn();
+  //     switch (result.status) {
+  //       case NaverLoginStatus.loggedIn:
+  //         var tokenResult = await FlutterNaverLogin.currentAccessToken;
+  //         final res = await dio.postUri(getUri('/api/auth/naver'),
+  //             data: {'access_token': tokenResult.accessToken});
+  //         _authUserWithValid(context, res);
+  //         break;
+  //       case NaverLoginStatus.cancelledByUser:
+  //         break;
+  //       case NaverLoginStatus.error:
+  //         showSnackBar(context, "로그인 실패");
+  //         break;
+  //     }
+  //   }, onError: (e) {
+  //     log.e(e);
+  //   });
+  // }
 
   //카카오로 연결
   // void _loginWithKakao(context) {

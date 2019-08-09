@@ -42,6 +42,7 @@ class _SplashPageState extends State<SplashPage> {
         }
       }
     } catch (e) {
+      log.i(e);
       //로그인 페이지 보내기
       Navigator.of(context).pushReplacementNamed('/login');
     }

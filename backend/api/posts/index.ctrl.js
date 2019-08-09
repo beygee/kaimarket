@@ -249,6 +249,23 @@ ctrl.sold = async ctx => {
   ctx.body = "OK"
 }
 
+ctrl.updateStatus = async ctx => {
+  const { id, status } = ctx.params
+  const { id: userId } = ctx.user
+
+  const post = await models.Post.findOne({ where: { id } })
+
+  if (post.userId != userId) {
+    ctx.error(403, "NOT MINE", { code: 1 })
+    return
+  }
+
+  post.status = status
+  await post.save()
+
+  ctx.body = "OK"
+}
+
 ctrl.deletePost = async ctx => {
   const { id: userId } = ctx.user
   const { id } = ctx.params

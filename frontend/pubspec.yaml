@@ -24,7 +24,7 @@ dependencies:
   flutter_facebook_login: ^2.0.1
   google_sign_in: ^4.0.3
   firebase_auth: ^0.11.1+7
-  flutter_naver_login: ^0.3.1
+  # flutter_naver_login: ^0.3.1
   multi_image_picker: ^4.3.4
   adhara_socket_io: ^0.2.0
   logger: ^0.7.0+2

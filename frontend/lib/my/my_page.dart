@@ -9,6 +9,7 @@ import 'package:week_3/bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/post/post_view_page.dart';
+import 'package:week_3/my/edit_profile.dart';
 
 class MyPage extends StatefulWidget {
   @override
@@ -82,15 +83,33 @@ class _MyPageState extends State<MyPage> {
     return [
       CircleAvatar(
         backgroundImage: AssetImage(getRandomAvatarUrlByPostId(loggedUserId)),
-        radius: screenAwareSize(40.0, context),
+        radius: screenAwareSize(50.0, context),
       ),
-      SizedBox(height: screenAwareSize(10.0, context)),
-      Text(
-        (_userBloc.currentState as UserLoaded).name,
-        style: TextStyle(
-            color: Colors.grey[600], fontSize: screenAwareSize(16.0, context)),
+      SizedBox(
+        height: screenAwareSize(10.0, context),
       ),
-      SizedBox(height: screenAwareSize(5.0, context)),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SizedBox(
+            width: screenAwareSize(16, context),
+          ),
+          Text(
+            (_userBloc.currentState as UserLoaded).name,
+            style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: screenAwareSize(16.0, context)),
+          ),
+          Container(
+              padding: const EdgeInsets.all(0.0),
+              width: 15.0,
+              child: GestureDetector(
+                  onTap: () {
+                    _showDialog();
+                  },
+                  child: Icon(Icons.edit, size: 16))),
+        ],
+      ),
       Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -148,6 +167,16 @@ class _MyPageState extends State<MyPage> {
         ],
       ),
     ];
+  }
+
+  void _showDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EditProfile();
+      },
+    );
   }
 
   Widget _buildTabView(context) {
@@ -211,13 +240,13 @@ class _MyPageState extends State<MyPage> {
             children: <Widget>[
               for (int i = 0; i < posts.length; i++)
                 PostCard(
-                  post: posts[i],
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PostViewPage(postId: posts[i].id)));
-                  },
-                  small: true
-                )
+                    post: posts[i],
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) =>
+                              PostViewPage(postId: posts[i].id)));
+                    },
+                    small: true)
             ],
           ),
         ),

@@ -60,7 +60,8 @@ class _ChatViewPageState extends State<ChatViewPage> {
       if (existMessages.length != 1) {
         for (int i = 1; i < existMessages.length; i++) {
           if ((existMessages[i].userId == compareMessage.userId) &&
-              (minute(existMessages[i].createdAt) == minute(compareMessage.createdAt))) {
+              (minute(existMessages[i].createdAt) ==
+                  minute(compareMessage.createdAt))) {
             existMessages[i].showTime = false;
           } else {
             existMessages[i].showTime = true;
@@ -214,7 +215,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
               fit: BoxFit.cover,
             )
           : CachedNetworkImage(
-              imageUrl: getUri('').toString() + chat.post.images[0]['url'],
+              imageUrl: chat.post.images[0]['url'],
               width: screenAwareSize(60.0, context),
               height: screenAwareSize(60.0, context),
               fit: BoxFit.cover,
@@ -239,7 +240,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
               Expanded(
                 child: Text(
                   chat.post.title,
-                  style: TextStyle(fontSize: screenAwareSize(14.0, context), color: Colors.grey[600]),
+                  style: TextStyle(
+                      fontSize: screenAwareSize(14.0, context),
+                      color: Colors.grey[600]),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
@@ -247,7 +250,9 @@ class _ChatViewPageState extends State<ChatViewPage> {
           ),
           Text(
             getMoneyFormat(chat.post.price) + '원',
-            style: TextStyle(fontSize: screenAwareSize(14.0, context), color: Colors.grey[600]),
+            style: TextStyle(
+                fontSize: screenAwareSize(14.0, context),
+                color: Colors.grey[600]),
           ),
         ],
       ),

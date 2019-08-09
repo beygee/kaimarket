@@ -41,8 +41,7 @@ class PostCard extends StatelessWidget {
                               fit: BoxFit.cover,
                             )
                           : CachedNetworkImage(
-                              imageUrl: getUri('').toString() +
-                                  post.images[0]['thumb'],
+                              imageUrl: post.images[0]['thumb'],
                               width: screenAwareSize(
                                   small ? 70.0 : 100.0, context),
                               height: screenAwareSize(
@@ -135,7 +134,7 @@ class PostCard extends StatelessWidget {
                               children: <Widget>[
                                 Container(
                                   // width: screenAwareSize(
-                                      // small ? 150.0 : 150, context),
+                                  // small ? 150.0 : 150, context),
                                   child: Text(
                                     post.title,
                                     maxLines: small ? 1 : 2,
@@ -161,7 +160,7 @@ class PostCard extends StatelessWidget {
                                 ],
                                 Container(
                                   // width: screenAwareSize(
-                                      // small ? 100.0 : 150, context),
+                                  // small ? 100.0 : 150, context),
                                   child: Text(
                                     post.content,
                                     overflow: TextOverflow.ellipsis,

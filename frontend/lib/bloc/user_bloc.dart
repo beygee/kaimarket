@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import './bloc.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/utils.dart';
@@ -20,8 +21,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   @override
   Stream<UserState> mapEventToState(UserEvent event) async* {
     try {
-      if ((event is UserInit || event is UserError) &&
-          currentState is UserUninitialized) {
+      if (event is UserInit &&
+          (currentState is UserUninitialized || currentState is UserError)) {
         //유저를 초기화해준다.
         var res = await dio.getUri(getUri('/api/me'));
 
@@ -38,7 +39,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           yield UserError();
         }
       }
-      if (event is UserDelete && currentState is UserLoaded) {
+      if (event is UserDelete) {
         yield UserUninitialized();
       }
       if (event is UserGetWish && currentState is UserLoaded) {
@@ -50,7 +51,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             })
             .toList()
             .cast<Post>();
-            
+
         yield UserLoaded(
             name: currentstate.name,
             id: currentstate.id,
@@ -71,7 +72,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         }).toList();
 
         var currentstate = (currentState as UserLoaded);
-        
+
         yield UserLoaded(
             id: currentstate.id,
             name: currentstate.name,
@@ -79,9 +80,21 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             sales: currentstate.sales,
             chats: currentstate.chats);
       }
+      if (event is UserChangeProfile && currentState is UserLoaded) {
+        log.i("userchangeprofile");
+        String profilename = (event as UserChangeProfile).profilename;
+        await dio.postUri(getUri('/api/auth/name'), data: {"name" : profilename});
+        var currentstate = (currentState as UserLoaded);
+        yield UserLoaded(
+            id: currentstate.id,
+            name: profilename,
+            wish: currentstate.wish,
+            sales: currentstate.sales,
+            chats: currentstate.chats);
+      }
     } catch (_) {
       print(_);
-      yield UserError();
+      yield currentState;
     }
   }
 }
