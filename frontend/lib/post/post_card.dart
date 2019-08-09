@@ -50,8 +50,7 @@ class PostCard extends StatelessWidget {
                               fit: BoxFit.cover,
                             ),
                     ),
-                    // if (post.status != 0)
-                    if (post.isSold)
+                    if (post.status == 1 || post.status == 2)
                       ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
                           child: Container(
@@ -62,8 +61,7 @@ class PostCard extends StatelessWidget {
                               decoration: new BoxDecoration(
                                   color: Color.fromARGB(90, 0, 0, 0)),
                               )),
-                    // if (post.status == 1)
-                    if (post.isSold)
+                    if (post.status == 1)
                       ClipRRect(
                         borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0)),
                         child: Container(
@@ -84,28 +82,27 @@ class PostCard extends StatelessWidget {
                           ) 
                         )
                       ),
-                    // // if (post.status == 2)
-                    // if (post.isSold)
-                    //   ClipRRect(
-                    //     borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0)),
-                    //     child: Container(
-                    //       width: screenAwareSize(
-                    //         small ? 30.0 : 50.0, context),
-                    //       height: screenAwareSize(
-                    //         small ? 15.0 : 20.0 , context),
-                    //       color: Colors.red[700],
-                    //       child: Center(
-                    //         child: Text(
-                    //           "판매완료",
-                    //           textAlign: TextAlign.center,
-                    //           style: TextStyle(
-                    //           fontWeight: FontWeight.bold,
-                    //           fontSize: screenAwareSize(small ? 6.5 : 9.0, context),
-                    //           color: Colors.white),
-                    //           ),
-                    //       ) 
-                    //     )
-                    //   )
+                    if (post.status == 2)
+                      ClipRRect(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(8.0), bottomRight: Radius.circular(8.0)),
+                        child: Container(
+                          width: screenAwareSize(
+                            small ? 30.0 : 50.0, context),
+                          height: screenAwareSize(
+                            small ? 15.0 : 20.0 , context),
+                          color: Colors.red[700],
+                          child: Center(
+                            child: Text(
+                              "판매완료",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenAwareSize(small ? 6.5 : 9.0, context),
+                              color: Colors.white),
+                              ),
+                          ) 
+                        )
+                      )
                   ],
                 ),
                 //  Image.network(

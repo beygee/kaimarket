@@ -52,7 +52,7 @@ class ChatListsState extends State<ChatLists> {
         backgroundColor: Colors.white,
         title: Text(
           "채팅방 목록",
-          style: TextStyle(fontSize: 16.0),
+          style: TextStyle(fontSize: screenAwareSize(16.0, context)),
         ),
       ),
       body: ListView.separated(
