@@ -152,7 +152,7 @@ class _GoogleMapState extends State<GoogleMapPage> {
         Container(
           height: screenAwareSize(40.0, context),
           child: Center(
-            child: Text("지도를 클릭하세요."),
+            child: Text("카이스트 내부를 클릭하세요."),
           ),
         ),
       ],
