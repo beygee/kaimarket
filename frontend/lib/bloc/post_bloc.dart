@@ -66,13 +66,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         // 서버에서 지우기
         await dio.deleteUri(getUri('/api/posts/' + postId.toString()));
         log.i('이전');
-        for (Post p in list){
+        for (Post p in list) {
           log.i(p.id);
         }
         // bloc에서 지우기
         list = list.where((p) => p.id != postId).toList();
         log.i('이후');
-        for (Post p in list){
+        for (Post p in list) {
           log.i(p.id);
         }
 
@@ -80,24 +80,22 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         yield PostLoaded(posts: list);
       }
 
-      if (event is StatusUpdate){
+      if (event is StatusUpdate) {
+        final loaded = currentState as PostLoaded;
         List<Post> list = (currentState as PostLoaded).posts;
         int postId = (event as StatusUpdate).postId;
         int status = (event as StatusUpdate).status;
 
-        await dio.postUri(getUri('/api/posts/${event.postId}/status/${event.status}/'));
-        
+        await dio.postUri(
+            getUri('/api/posts/${event.postId}/status/${event.status}/'));
+
         list = list.map((p) {
           if (p.id != postId) return p;
           var post = p.copyWith(status: status);
-          log.i("before post", post.status);
-          log.i("status", status);
-          post.status = status;
-          log.i("changed post", post.status);
           return post;
         }).toList();
-        log.i(list);
-        yield PostLoaded(posts: list);
+
+        yield loaded.copyWith(posts: list);
       }
     } catch (_) {
       print(_);

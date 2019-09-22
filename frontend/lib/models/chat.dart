@@ -18,11 +18,14 @@ class Chat {
       : id = json['id'],
         seller = User.fromJson(json['seller']),
         buyer = User.fromJson(json['buyer']),
-        post = Post.fromJson(json['post']),
         buyerNonReadCount = json['buyerNonReadCount'],
         sellerNonReadCount = json['sellerNonReadCount'] {
     if (json['recentMessage'] != null) {
       recentMessage = Message.fromJson(json['recentMessage']);
+    }
+
+    if (json['post'] != null) {
+      post = Post.fromJson(json['post']);
     }
 
     messages = json['messages'].length > 0

@@ -20,6 +20,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:week_3/post/post_shimmer_card.dart';
 import 'package:week_3/chat/chat_view_page.dart';
 import 'package:week_3/post/post_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PostViewPage extends StatefulWidget {
   final int postId;
@@ -338,8 +339,13 @@ class _PostViewPageState extends State<PostViewPage> {
                                   BlocProvider.of<PostBloc>(context);
                               postBloc.dispatch(StatusUpdate(
                                   postId: post.id, status: post.status));
+
                               _currentStatus = newValueSelected;
                             });
+
+                            final postBloc = BlocProvider.of<PostBloc>(context);
+                            postBloc.dispatch(StatusUpdate(
+                                postId: post.id, status: post.status));
                           },
                           value: _currentStatus,
                           isExpanded: true,
@@ -384,8 +390,6 @@ class _PostViewPageState extends State<PostViewPage> {
 
                         bool bWish = res.data['wish'];
 
-                        // _userBloc.dispatch(UserChangeWish(postId: post.id));
-                        // post.isWish = !post.isWish;
                         final _postBloc = BlocProvider.of<PostBloc>(context);
                         _postBloc
                             .dispatch(SearchWish(postId: post.id, wish: bWish));
@@ -393,17 +397,17 @@ class _PostViewPageState extends State<PostViewPage> {
                           post.isWish = bWish;
                         });
                         if (bWish) {
-                          // Fluttertoast.showToast(
-                          //   msg: "찜 목록에 추가하였습니다.",
-                          //   toastLength: Toast.LENGTH_SHORT,
-                          //   fontSize: screenAwareSize(10.0, context),
-                          // );
+                          Fluttertoast.showToast(
+                            msg: "찜 목록에 추가하였습니다.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            fontSize: screenAwareSize(10.0, context),
+                          );
                         } else {
-                          // Fluttertoast.showToast(
-                          //   msg: "찜 목록에서 제거하였습니다.",
-                          //   toastLength: Toast.LENGTH_SHORT,
-                          //   fontSize: screenAwareSize(10.0, context),
-                          // );
+                          Fluttertoast.showToast(
+                            msg: "찜 목록에서 제거하였습니다.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            fontSize: screenAwareSize(10.0, context),
+                          );
                         }
                       },
                       child: Padding(

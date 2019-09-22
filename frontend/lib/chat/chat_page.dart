@@ -34,6 +34,7 @@ class ChatListsState extends State<ChatLists> {
     if (res.statusCode == 200) {
       if (mounted) {
         setState(() {
+          log.i(res.data);
           chats = res.data
               .map((chat) {
                 return Chat.fromJson(chat);
