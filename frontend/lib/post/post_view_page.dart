@@ -419,6 +419,8 @@ class _PostViewPageState extends State<PostViewPage> {
                             : Icon(Icons.favorite_border,
                                 color: Colors.amber[200]),
                       )),
+                  SizedBox(width: 5.0),
+                  Text('찜', style: TextStyle(color: ThemeColor.primary)),
                 ],
               ),
               RaisedButton(
