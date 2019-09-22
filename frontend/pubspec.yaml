@@ -45,6 +45,11 @@ dependencies:
   date_format: ^1.0.6
   shimmer: ^1.0.0
   throttling: ^0.8.0
+  flushbar: ^1.8.2
+  after_layout: ^1.0.7+2
+  json_serializable: ^3.1.0
+  timeago: ^2.0.18
+  rxdart: ^0.22.1+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
