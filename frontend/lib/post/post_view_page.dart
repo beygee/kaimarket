@@ -57,7 +57,7 @@ class _PostViewPageState extends State<PostViewPage> {
 
   void initPost() async {
     var res = await dio.getUri(getUri('/api/posts/${widget.postId}'));
-    if(res.data == ""){
+    if (res.data == "") {
       _showDeleteDialog();
     }
     Post p = Post.fromJson(res.data);
@@ -199,8 +199,7 @@ class _PostViewPageState extends State<PostViewPage> {
       _currentStatus = '판매중';
     else if (post.status == 1)
       _currentStatus = '예약중';
-    else if (post.status == 2)
-      _currentStatus = '판매완료';
+    else if (post.status == 2) _currentStatus = '판매완료';
 
     return Positioned(
         bottom: 0.0,
@@ -287,8 +286,9 @@ class _PostViewPageState extends State<PostViewPage> {
                                     onPressed: () async {
                                       final postBloc =
                                           BlocProvider.of<PostBloc>(context);
-                                          log.i(post.id);
-                                      postBloc.dispatch(PostDelete(postId: post.id));
+                                      log.i(post.id);
+                                      postBloc.dispatch(
+                                          PostDelete(postId: post.id));
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                     },
@@ -332,11 +332,12 @@ class _PostViewPageState extends State<PostViewPage> {
                                 val = 0;
                               else if (newValueSelected == '예약중')
                                 val = 1;
-                              else if (newValueSelected == '판매완료') 
-                                val = 2;
+                              else if (newValueSelected == '판매완료') val = 2;
                               post.status = val;
-                              final postBloc = BlocProvider.of<PostBloc>(context);
-                              postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
+                              final postBloc =
+                                  BlocProvider.of<PostBloc>(context);
+                              postBloc.dispatch(StatusUpdate(
+                                  postId: post.id, status: post.status));
                               _currentStatus = newValueSelected;
                             });
                           },
@@ -375,12 +376,48 @@ class _PostViewPageState extends State<PostViewPage> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  post.isWish
-                      ? Icon(
-                          Icons.favorite,
-                          color: Colors.amber[200],
-                        )
-                      : Icon(Icons.favorite_border, color: Colors.amber[200]),
+                  GestureDetector(
+                      onTap: () async {
+                        //서버 통신....
+                        var res = await dio
+                            .postUri(getUri('/api/posts/${post.id}/wish'));
+
+                        bool bWish = res.data['wish'];
+
+                        // _userBloc.dispatch(UserChangeWish(postId: post.id));
+                        // post.isWish = !post.isWish;
+                        final _postBloc = BlocProvider.of<PostBloc>(context);
+                        _postBloc
+                            .dispatch(SearchWish(postId: post.id, wish: bWish));
+                        setState(() {
+                          post.isWish = bWish;
+                        });
+                        if (bWish) {
+                          // Fluttertoast.showToast(
+                          //   msg: "찜 목록에 추가하였습니다.",
+                          //   toastLength: Toast.LENGTH_SHORT,
+                          //   fontSize: screenAwareSize(10.0, context),
+                          // );
+                        } else {
+                          // Fluttertoast.showToast(
+                          //   msg: "찜 목록에서 제거하였습니다.",
+                          //   toastLength: Toast.LENGTH_SHORT,
+                          //   fontSize: screenAwareSize(10.0, context),
+                          // );
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                          screenAwareSize(5.0, context),
+                        ),
+                        child: post.isWish
+                            ? Icon(
+                                Icons.favorite,
+                                color: Colors.amber[200],
+                              )
+                            : Icon(Icons.favorite_border,
+                                color: Colors.amber[200]),
+                      )),
                   SizedBox(width: 5.0),
                   Text('찜', style: TextStyle(color: ThemeColor.primary)),
                 ],
@@ -616,47 +653,46 @@ class _PostViewPageState extends State<PostViewPage> {
                 fontWeight: FontWeight.bold,
                 color: Colors.grey[800],
               ),
+            ),
+            SizedBox(width: screenAwareSize(5.0, context)),
+            if (post.status == 1)
+              // if (post.isSold)
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                child: Container(
+                    width: screenAwareSize(50.0, context),
+                    height: screenAwareSize(20.0, context),
+                    color: Colors.amber[800],
+                    child: Center(
+                      child: Text(
+                        "예약중",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: screenAwareSize(10.0, context),
+                            color: Colors.white),
+                      ),
+                    )),
+              )
+            else if (post.status == 2)
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                child: Container(
+                    width: screenAwareSize(50.0, context),
+                    height: screenAwareSize(20.0, context),
+                    color: Colors.red[700],
+                    child: Center(
+                      child: Text(
+                        "판매완료",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: screenAwareSize(10.0, context),
+                            color: Colors.white),
+                      ),
+                    )),
               ),
-              SizedBox(width: screenAwareSize(5.0, context)),
-              if (post.status == 1)
-             // if (post.isSold)
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  child: Container(
-                      width: screenAwareSize(50.0, context),
-                      height: screenAwareSize(20.0, context),
-                      color: Colors.amber[800],
-                      child: Center(
-                        child: Text(
-                          "예약중",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenAwareSize(10.0, context),
-                              color: Colors.white),
-                        ),
-                      )),
-                )
-              else if (post.status == 2)
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  child: Container(
-                      width: screenAwareSize(50.0, context),
-                      height: screenAwareSize(20.0, context),
-                      color: Colors.red[700],
-                      child: Center(
-                        child: Text(
-                          "판매완료",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenAwareSize(10.0, context),
-                              color: Colors.white),
-                        ),
-                      )),
-                ),          
-            ]
-          ),
+          ]),
           SizedBox(height: screenAwareSize(5.0, context)),
           Text(
             post.title,

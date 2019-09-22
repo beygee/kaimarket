@@ -233,7 +233,7 @@ class HomePageState extends State<HomePage> {
           // post.isWish = !post.isWish;
           _postBloc.dispatch(SearchWish(postId: post.id, wish: bWish));
 
-          if (bWish) {
+          if (bWish) { 
             Fluttertoast.showToast(
               msg: "찜 목록에 추가하였습니다.",
               toastLength: Toast.LENGTH_SHORT,
