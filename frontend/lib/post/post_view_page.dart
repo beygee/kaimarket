@@ -57,6 +57,10 @@ class _PostViewPageState extends State<PostViewPage> {
 
   void initPost() async {
     var res = await dio.getUri(getUri('/api/posts/${widget.postId}'));
+    print(res.data);
+    if(res.data == ""){
+      Navigator.of(context).pop();
+    }
     Post p = Post.fromJson(res.data);
     relatedPosts = res.data['relatedPosts']
         .map((p) {
