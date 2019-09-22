@@ -28,6 +28,12 @@ class PostInsert extends PostEvent {
 }
 
 class PostDelete extends PostEvent {
+  final int postId;
+
+  PostDelete({
+    this.postId = 0
+  });
+
   @override
   String toString() {
     return "Delete";

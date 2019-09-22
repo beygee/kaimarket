@@ -57,9 +57,8 @@ class _PostViewPageState extends State<PostViewPage> {
 
   void initPost() async {
     var res = await dio.getUri(getUri('/api/posts/${widget.postId}'));
-    print(res.data);
     if(res.data == ""){
-      Navigator.of(context).pop();
+      _showDeleteDialog();
     }
     Post p = Post.fromJson(res.data);
     relatedPosts = res.data['relatedPosts']
@@ -285,13 +284,12 @@ class _PostViewPageState extends State<PostViewPage> {
                                   new FlatButton(
                                     child: new Text("Yes"),
                                     onPressed: () async {
-                                      await dio.deleteUri(getUri(
-                                          '/api/posts/' + post.id.toString()));
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
                                       final postBloc =
                                           BlocProvider.of<PostBloc>(context);
-                                      postBloc.dispatch(PostFetch());
+                                          log.i(post.id);
+                                      postBloc.dispatch(PostDelete(postId: post.id));
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
                                     },
                                   )
                                 ],
@@ -796,6 +794,30 @@ class _PostViewPageState extends State<PostViewPage> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showDeleteDialog() {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("접근"),
+          content: new Text("삭제된 게시물입니다."),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("닫기"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
