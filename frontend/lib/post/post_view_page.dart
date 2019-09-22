@@ -1,9 +1,11 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:week_3/bloc/post_event.dart';
 import 'package:week_3/models/chat.dart';
 import 'package:week_3/post/google_map_fixed.dart';
 import 'package:week_3/post/post_book_page.dart';
@@ -57,7 +59,7 @@ class _PostViewPageState extends State<PostViewPage> {
 
   void initPost() async {
     var res = await dio.getUri(getUri('/api/posts/${widget.postId}'));
-    if(res.data == ""){
+    if (res.data == "") {
       _showDeleteDialog();
     }
     Post p = Post.fromJson(res.data);
@@ -199,8 +201,7 @@ class _PostViewPageState extends State<PostViewPage> {
       _currentStatus = '판매중';
     else if (post.status == 1)
       _currentStatus = '예약중';
-    else if (post.status == 2)
-      _currentStatus = '판매완료';
+    else if (post.status == 2) _currentStatus = '판매완료';
 
     return Positioned(
         bottom: 0.0,
@@ -287,8 +288,9 @@ class _PostViewPageState extends State<PostViewPage> {
                                     onPressed: () async {
                                       final postBloc =
                                           BlocProvider.of<PostBloc>(context);
-                                          log.i(post.id);
-                                      postBloc.dispatch(PostDelete(postId: post.id));
+                                      log.i(post.id);
+                                      postBloc.dispatch(
+                                          PostDelete(postId: post.id));
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
                                     },
@@ -332,11 +334,12 @@ class _PostViewPageState extends State<PostViewPage> {
                                 val = 0;
                               else if (newValueSelected == '예약중')
                                 val = 1;
-                              else if (newValueSelected == '판매완료') 
-                                val = 2;
+                              else if (newValueSelected == '판매완료') val = 2;
                               post.status = val;
-                              final postBloc = BlocProvider.of<PostBloc>(context);
-                              postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
+                              final postBloc =
+                                  BlocProvider.of<PostBloc>(context);
+                              postBloc.dispatch(StatusUpdate(
+                                  postId: post.id, status: post.status));
                               _currentStatus = newValueSelected;
                             });
                           },
@@ -616,47 +619,46 @@ class _PostViewPageState extends State<PostViewPage> {
                 fontWeight: FontWeight.bold,
                 color: Colors.grey[800],
               ),
+            ),
+            SizedBox(width: screenAwareSize(5.0, context)),
+            if (post.status == 1)
+              // if (post.isSold)
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                child: Container(
+                    width: screenAwareSize(50.0, context),
+                    height: screenAwareSize(20.0, context),
+                    color: Colors.amber[800],
+                    child: Center(
+                      child: Text(
+                        "예약중",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: screenAwareSize(10.0, context),
+                            color: Colors.white),
+                      ),
+                    )),
+              )
+            else if (post.status == 2)
+              ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                child: Container(
+                    width: screenAwareSize(50.0, context),
+                    height: screenAwareSize(20.0, context),
+                    color: Colors.red[700],
+                    child: Center(
+                      child: Text(
+                        "판매완료",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: screenAwareSize(10.0, context),
+                            color: Colors.white),
+                      ),
+                    )),
               ),
-              SizedBox(width: screenAwareSize(5.0, context)),
-              if (post.status == 1)
-             // if (post.isSold)
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  child: Container(
-                      width: screenAwareSize(50.0, context),
-                      height: screenAwareSize(20.0, context),
-                      color: Colors.amber[800],
-                      child: Center(
-                        child: Text(
-                          "예약중",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenAwareSize(10.0, context),
-                              color: Colors.white),
-                        ),
-                      )),
-                )
-              else if (post.status == 2)
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  child: Container(
-                      width: screenAwareSize(50.0, context),
-                      height: screenAwareSize(20.0, context),
-                      color: Colors.red[700],
-                      child: Center(
-                        child: Text(
-                          "판매완료",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenAwareSize(10.0, context),
-                              color: Colors.white),
-                        ),
-                      )),
-                ),          
-            ]
-          ),
+          ]),
           SizedBox(height: screenAwareSize(5.0, context)),
           Text(
             post.title,
@@ -720,6 +722,8 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 
   Widget _buildPostContent(context) {
+    final myController = TextEditingController();
+
     return Padding(
       padding: EdgeInsets.symmetric(
           horizontal: horizontalPadding,
@@ -727,11 +731,137 @@ class _PostViewPageState extends State<PostViewPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            "상품설명",
-            style: TextStyle(
-              color: Colors.grey[500],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                "상품설명",
+                style: TextStyle(
+                  color: Colors.grey[500],
+                ),
+              ),
+              GestureDetector(              
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(screenAwareSize(32.0, context)))),
+                            contentPadding: EdgeInsets.only(top: screenAwareSize(20.0, context)),
+                            content: Container(
+                              width: 300.0,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        "신고하기",
+                                        style: TextStyle(fontSize: screenAwareSize(16.0, context), fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: screenAwareSize(15.0, context),
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                    height: 4.0,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 30.0, right: 30.0),
+                                    child: TextField(
+                                      controller: myController,
+                                      autofocus: true,
+                                      decoration: InputDecoration(
+                                        hintText: "신고 내용을 적어주세요.",
+                                        border: InputBorder.none,
+                                      ),
+                                      maxLines: 8,
+                                    ),
+                                  ),
+                                  Divider(
+                                    color: Colors.grey,
+                                    height: 4.0,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async{
+                                      await dio.postUri(
+                                      getUri('/api/posts/${post.id}/report/'), data: {"content": myController.text});
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.only(
+                                          top: screenAwareSize(20.0, context), bottom: screenAwareSize(20.0, context)),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(screenAwareSize(32.0, context)),
+                                            bottomRight: Radius.circular(screenAwareSize(32.0, context))),
+                                      ),
+                                      child: Text(
+                                        "제출하기",
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  },
+                  //   showDialog(
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return CupertinoAlertDialog(
+                  //         title: Text('신고하기'),
+                  //         content: TextFormField(),
+                  //         actions: <Widget>[
+                  //           FlatButton(
+                  //               onPressed: () {
+                  //                 Navigator.pop(context);
+                  //               },
+                  //               child: Text('Close')),
+                  //           FlatButton(
+                  //             onPressed: () {
+                  //               print('제출하기!');
+                  //               Navigator.pop(context);
+                  //             },
+                  //             child: Text('제출하기'),
+                  //           )
+                  //         ],
+                  //       );
+                  //     },
+                  //   );
+                  // },
+                  child: Container(
+                    child: Row(
+                      children: <Widget>[
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.red[700],
+                          size: screenAwareSize(13.0, context),
+                        ),
+                        SizedBox(width: screenAwareSize(3.0, context)),
+                        Text(
+                          "신고하기",
+                          style: TextStyle(
+                            color: Colors.red[700],
+                            fontSize: screenAwareSize(11.0, context),
+                          ),
+                          textAlign: TextAlign.right,
+                        ),
+                      ],
+                    ),
+                  )),
+            ],
           ),
           SizedBox(height: screenAwareSize(15.0, context)),
           Text(post.content, style: TextStyle(height: 1.2)),
