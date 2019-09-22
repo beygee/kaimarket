@@ -50,7 +50,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
         list = list.map((p) {
           if (p.id != postId) return p;
-          var post = Post.copyWith(p);
+          var post = p.copyWith(isWish: wish);
           post.isWish = wish;
           return post;
         }).toList();

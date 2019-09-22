@@ -102,7 +102,6 @@ class SelectMapPageState extends State<SelectMapPage> {
         showSnackBar(context, "선호 지역을 선택해주세요.");
         return;
       }
-
       if (widget.edit) {
         log.i("edit");
         await dio.postUri(
