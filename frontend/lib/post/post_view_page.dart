@@ -192,11 +192,21 @@ class _PostViewPageState extends State<PostViewPage> {
   Widget _buildSellerBottomTab() {
     var _status = ['판매중', '예약중', '판매완료'];
     var _currentStatus;
-    if (post.status == 0)
+    if (post.status == 0){
       _currentStatus = '판매중';
-    else if (post.status == 1)
+      final postBloc = BlocProvider.of<PostBloc>(context);
+      postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
+    }
+    else if (post.status == 1){
       _currentStatus = '예약중';
-    else if (post.status == 2) _currentStatus = '판매완료';
+      final postBloc = BlocProvider.of<PostBloc>(context);
+      postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
+    }
+    else if (post.status == 2){
+      _currentStatus = '판매완료';
+      final postBloc = BlocProvider.of<PostBloc>(context);
+      postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
+    }
 
     return Positioned(
         bottom: 0.0,
@@ -331,7 +341,8 @@ class _PostViewPageState extends State<PostViewPage> {
                                 val = 0;
                               else if (newValueSelected == '예약중')
                                 val = 1;
-                              else if (newValueSelected == '판매완료') val = 2;
+                              else if (newValueSelected == '판매완료') 
+                                val = 2;
                               post.status = val;
                               
                               _currentStatus = newValueSelected;
@@ -619,25 +630,7 @@ class _PostViewPageState extends State<PostViewPage> {
               ),
               SizedBox(width: screenAwareSize(5.0, context)),
               if (post.status == 1)
-                ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  child: Container(
-                      width: screenAwareSize(50.0, context),
-                      height: screenAwareSize(20.0, context),
-                      color: Colors.red[700],
-                      child: Center(
-                        child: Text(
-                          "판매완료",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenAwareSize(10.0, context),
-                              color: Colors.white),
-                        ),
-                      )),
-                ),
-                // if (post.status == 2)
-              if (post.isSold)
+             // if (post.isSold)
                 ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(8.0)),
                   child: Container(
@@ -655,6 +648,24 @@ class _PostViewPageState extends State<PostViewPage> {
                         ),
                       )),
                 )
+              else if (post.status == 2)
+                ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  child: Container(
+                      width: screenAwareSize(50.0, context),
+                      height: screenAwareSize(20.0, context),
+                      color: Colors.red[700],
+                      child: Center(
+                        child: Text(
+                          "판매완료",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenAwareSize(10.0, context),
+                              color: Colors.white),
+                        ),
+                      )),
+                ),          
             ]
           ),
           SizedBox(height: screenAwareSize(5.0, context)),

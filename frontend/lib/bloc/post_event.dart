@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/rendering.dart';
 import 'package:meta/meta.dart';
 import 'package:week_3/models/post.dart';
 
@@ -43,5 +44,17 @@ class SearchWish extends PostEvent {
   @override
   String toString() {
     return "searchWish";
+  }
+}
+
+class StatusUpdate extends PostEvent {
+  int status;
+  int postId;
+
+  StatusUpdate({this.postId, this.status});
+  
+  @override
+  String toString() {
+    return "StatusUpdate";
   }
 }

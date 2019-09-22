@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:week_3/bloc/post_event.dart';
 import './bloc.dart';
 import 'package:week_3/models/post.dart';
 import 'package:week_3/utils/dio.dart';
@@ -52,6 +53,22 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           if (p.id != postId) return p;
           var post = Post.copyWith(p);
           post.isWish = wish;
+          return post;
+        }).toList();
+
+        yield PostLoaded(posts: list);
+      }
+      if (event is StatusUpdate){
+        List<Post> list = (currentState as PostLoaded).posts;
+        int postId = (event as StatusUpdate).postId;
+        int status = (event as StatusUpdate).status;
+
+        await dio.postUri(getUri('/api/posts/${event.postId}/status/${event.status}/'));
+        
+        list = list.map((p) {
+          if (p.id != postId) return p;
+          var post = Post.copyWith(p);
+          post.status = status;
           return post;
         }).toList();
 
