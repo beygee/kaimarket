@@ -66,8 +66,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
         wishlist = wishlist.map((p) {
           if (p.id != postId) return p;
-          var post = Post.copyWith(p);
-          post.isWish = wish;
+          var post = p.copyWith(isWish: wish);
           return post;
         }).toList();
 
@@ -83,7 +82,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       if (event is UserChangeProfile && currentState is UserLoaded) {
         log.i("userchangeprofile");
         String profilename = (event as UserChangeProfile).profilename;
-        await dio.postUri(getUri('/api/auth/name'), data: {"name" : profilename});
+        await dio
+            .postUri(getUri('/api/auth/name'), data: {"name": profilename});
         var currentstate = (currentState as UserLoaded);
         yield UserLoaded(
             id: currentstate.id,
