@@ -259,11 +259,17 @@ SPEC CHECKSUMS:
   FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
   FirebaseAuth: e7f86c2dfc57281cd01f7da5e4b40e01e4510a4a
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
+<<<<<<< HEAD
   FirebaseCore: e9d9bd1dae61c1e82bc1e0e617a9d832392086a0
   FirebaseCoreDiagnostics: 4c04ae09d0ab027c30179828c6bb47764df1bd13
   FirebaseCoreDiagnosticsInterop: 6829da2b8d1fc795ff1bd99df751d3788035d2cb
   FirebaseInstanceID: 550df9be1f99f751d8fcde3ac342a1e21a0e6c42
   FirebaseMessaging: 9483ac438b7b223c09dad8712310e9ee7d562c99
+=======
+  FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
+  FirebaseInstanceID: 662b8108a09fe9ed01aafdedba100fde8536b0f6
+  FirebaseMessaging: 6bb0bdaf64c55fef7a219b7bb1e94e94a0855ced
+>>>>>>> 60185fc42aa5e4b5dbe39fc91a5237ce0bda3352
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_facebook_login: be61e24a4b7d621515353c6b4583d1981bdaa3d6
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
