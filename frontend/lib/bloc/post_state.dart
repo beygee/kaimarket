@@ -23,7 +23,18 @@ class PostLoaded extends PostState {
   final List<Post> posts;
   final bool bReachedMax;
 
-  PostLoaded({this.posts, this.bReachedMax = false}) : super([posts, bReachedMax]);
+  PostLoaded({this.posts, this.bReachedMax = false})
+      : super([posts, bReachedMax]);
+
+  PostLoaded copyWith({
+    List<Post> posts,
+    bool bReachedMax,
+  }) {
+    return PostLoaded(
+      posts: posts ?? this.posts,
+      bReachedMax: bReachedMax ?? this.bReachedMax,
+    );
+  }
 
   @override
   String toString() => "PostLoaded";

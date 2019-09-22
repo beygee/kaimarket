@@ -81,6 +81,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       }
 
       if (event is StatusUpdate) {
+        final loaded = currentState as PostLoaded;
         List<Post> list = (currentState as PostLoaded).posts;
         int postId = (event as StatusUpdate).postId;
         int status = (event as StatusUpdate).status;
@@ -93,7 +94,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           var post = p.copyWith(status: status);
           return post;
         }).toList();
-        yield PostLoaded(posts: list);
+
+        yield loaded.copyWith(posts: list);
       }
     } catch (_) {
       print(_);

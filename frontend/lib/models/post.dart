@@ -236,18 +236,6 @@ class Post extends Equatable {
       'images': images,
     };
   }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        other is Post &&
-            runtimeType == other.runtimeType &&
-            id == other.id &&
-            isWish == other.isWish;
-  }
-
-  @override
-  int get hashCode => id.hashCode;
 }
 
 Category _parseCategory(int categoryId) {
