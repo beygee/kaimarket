@@ -22,6 +22,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:week_3/post/post_shimmer_card.dart';
 import 'package:week_3/chat/chat_view_page.dart';
 import 'package:week_3/post/post_page.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class PostViewPage extends StatefulWidget {
   final int postId;
@@ -378,14 +379,46 @@ class _PostViewPageState extends State<PostViewPage> {
             children: <Widget>[
               Row(
                 children: <Widget>[
-                  post.isWish
-                      ? Icon(
-                          Icons.favorite,
-                          color: Colors.amber[200],
-                        )
-                      : Icon(Icons.favorite_border, color: Colors.amber[200]),
-                  SizedBox(width: 5.0),
-                  Text('찜', style: TextStyle(color: ThemeColor.primary)),
+                  GestureDetector(
+                      onTap: () async {
+                        //서버 통신....
+                        var res = await dio
+                            .postUri(getUri('/api/posts/${post.id}/wish'));
+
+                        bool bWish = res.data['wish'];
+
+                        final _postBloc = BlocProvider.of<PostBloc>(context);
+                        _postBloc
+                            .dispatch(SearchWish(postId: post.id, wish: bWish));
+                        setState(() {
+                          post.isWish = bWish;
+                        });
+                        if (bWish) {
+                          Fluttertoast.showToast(
+                            msg: "찜 목록에 추가하였습니다.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            fontSize: screenAwareSize(10.0, context),
+                          );
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "찜 목록에서 제거하였습니다.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            fontSize: screenAwareSize(10.0, context),
+                          );
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(
+                          screenAwareSize(5.0, context),
+                        ),
+                        child: post.isWish
+                            ? Icon(
+                                Icons.favorite,
+                                color: Colors.amber[200],
+                              )
+                            : Icon(Icons.favorite_border,
+                                color: Colors.amber[200]),
+                      )),
                 ],
               ),
               RaisedButton(
