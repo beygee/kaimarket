@@ -4,7 +4,11 @@ import 'package:week_3/models/book.dart';
 import 'package:week_3/models/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:week_3/utils/utils.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'post.g.dart';
+
+@JsonSerializable()
 class Post extends Equatable {
   int id;
   String title;
@@ -24,6 +28,8 @@ class Post extends Equatable {
   User user;
   double locationLat;
   double locationLng;
+
+  @JsonKey(name: 'categoryId', fromJson: _parseCategory)
   Category category;
 
   //도서 변수
@@ -148,49 +154,51 @@ class Post extends Equatable {
     );
   }
 
-  Post.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        title = json['title'],
-        content = json['content'],
-        price = json['price'],
-        view = json['view'],
-        wish = json['wish'],
-        chat = json['chat'],
-        locationLat = json['locationLat'].toDouble(),
-        locationLng = json['locationLng'].toDouble(),
-        createdAt = json['createdAt'],
-        updatedAt = json['updatedAt'],
-        isBook = json['isBook'],
-        isWish = json['isWish'],
-        isSold = json['isSold'],
-        status = json['status'],
-        bookMajor = json['bookMajor'],
-        bookAuthor = json['bookAuthor'],
-        bookPublisher = json['bookPublisher'],
-        bookPubDate = json['bookPubDate'],
-        bookImage = json['bookImage'],
-        bookPrice = json['bookPrice'] {
-    try {
-      if (json['images'] != null) {
-        images = json['images']
-            .map((image) {
-              return image;
-            })
-            .toList()
-            .cast<Map<String, dynamic>>();
-      }
+  factory Post.fromJson(Map<String, dynamic> json) => _$PostFromJson(json);
 
-      if (json['categoryId'] != null) {
-        category = CategoryList[json['categoryId']];
-      }
+  // Post.fromJson(Map<String, dynamic> json)
+  //     : id = json['id'],
+  //       title = json['title'],
+  //       content = json['content'],
+  //       price = json['price'],
+  //       view = json['view'],
+  //       wish = json['wish'],
+  //       chat = json['chat'],
+  //       locationLat = json['locationLat'].toDouble(),
+  //       locationLng = json['locationLng'].toDouble(),
+  //       createdAt = json['createdAt'],
+  //       updatedAt = json['updatedAt'],
+  //       isBook = json['isBook'],
+  //       isWish = json['isWish'],
+  //       isSold = json['isSold'],
+  //       status = json['status'],
+  //       bookMajor = json['bookMajor'],
+  //       bookAuthor = json['bookAuthor'],
+  //       bookPublisher = json['bookPublisher'],
+  //       bookPubDate = json['bookPubDate'],
+  //       bookImage = json['bookImage'],
+  //       bookPrice = json['bookPrice'] {
+  //   try {
+  //     if (json['images'] != null) {
+  //       images = json['images']
+  //           .map((image) {
+  //             return image;
+  //           })
+  //           .toList()
+  //           .cast<Map<String, dynamic>>();
+  //     }
 
-      if (json['user'] != null) {
-        user = User.fromJson(json['user']);
-      }
-    } catch (e) {
-      log.e(e);
-    }
-  }
+  //     if (json['categoryId'] != null) {
+  //       category = CategoryList[json['categoryId']];
+  //     }
+
+  //     if (json['user'] != null) {
+  //       user = User.fromJson(json['user']);
+  //     }
+  //   } catch (e) {
+  //     log.e(e);
+  //   }
+  // }
 
   //책으로부터 정보 받아오기
   Post.fromBook(Book book)
@@ -224,7 +232,7 @@ class Post extends Equatable {
       'bookImage': bookImage,
       'bookPrice': bookPrice,
       'categoryId': category?.id,
-      'status' : status,
+      'status': status,
       'images': images,
     };
   }
@@ -240,4 +248,8 @@ class Post extends Equatable {
 
   @override
   int get hashCode => id.hashCode;
+}
+
+Category _parseCategory(int categoryId) {
+  return CategoryList[categoryId];
 }
