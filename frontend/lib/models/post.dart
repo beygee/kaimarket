@@ -173,6 +173,7 @@ class Post extends Equatable {
       'bookImage': bookImage,
       'bookPrice': bookPrice,
       'categoryId': category?.id,
+      'status' : status,
       'images': images,
     };
   }

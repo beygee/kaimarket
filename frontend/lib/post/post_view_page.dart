@@ -192,21 +192,12 @@ class _PostViewPageState extends State<PostViewPage> {
   Widget _buildSellerBottomTab() {
     var _status = ['판매중', '예약중', '판매완료'];
     var _currentStatus;
-    if (post.status == 0){
+    if (post.status == 0)
       _currentStatus = '판매중';
-      final postBloc = BlocProvider.of<PostBloc>(context);
-      postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
-    }
-    else if (post.status == 1){
+    else if (post.status == 1)
       _currentStatus = '예약중';
-      final postBloc = BlocProvider.of<PostBloc>(context);
-      postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
-    }
-    else if (post.status == 2){
+    else if (post.status == 2)
       _currentStatus = '판매완료';
-      final postBloc = BlocProvider.of<PostBloc>(context);
-      postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
-    }
 
     return Positioned(
         bottom: 0.0,
@@ -267,8 +258,7 @@ class _PostViewPageState extends State<PostViewPage> {
                           SizedBox(width: 7.0),
                           Text('수정하기',
                               style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: screenAwareSize(14.0, context))),
+                                  color: Colors.grey, fontSize: 14.0)),
                         ],
                       ),
                     ),
@@ -316,8 +306,7 @@ class _PostViewPageState extends State<PostViewPage> {
                           SizedBox(width: 7.0),
                           Text('삭제하기',
                               style: TextStyle(
-                                  fontSize: screenAwareSize(14.5, context),
-                                  color: Colors.grey)),
+                                  fontSize: 14.0, color: Colors.grey)),
                         ],
                       ),
                     ),
@@ -344,15 +333,14 @@ class _PostViewPageState extends State<PostViewPage> {
                               else if (newValueSelected == '판매완료') 
                                 val = 2;
                               post.status = val;
-                              
+                              final postBloc = BlocProvider.of<PostBloc>(context);
+                              postBloc.dispatch(StatusUpdate(postId: post.id, status: post.status));
                               _currentStatus = newValueSelected;
                             });
                           },
                           value: _currentStatus,
                           isExpanded: true,
-                          style: TextStyle(
-                              fontSize: screenAwareSize(14.5, context),
-                              color: Colors.grey),
+                          style: TextStyle(fontSize: 14.0, color: Colors.grey),
                           elevation: 1,
                         ),
                       ),
@@ -618,15 +606,14 @@ class _PostViewPageState extends State<PostViewPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Text(
-                getMoneyFormat(post.price) + " 원",
-                style: TextStyle(
-                  fontSize: screenAwareSize(18.0, context),
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey[800],
-                ),
+          Row(children: <Widget>[
+            Text(
+              getMoneyFormat(post.price) + " 원",
+              style: TextStyle(
+                fontSize: screenAwareSize(18.0, context),
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[800],
+              ),
               ),
               SizedBox(width: screenAwareSize(5.0, context)),
               if (post.status == 1)

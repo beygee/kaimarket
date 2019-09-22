@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 
 class ThemeColor {
   static const Color primary = Colors.amber;
-  // static const Color loginGradientEnd = const Color(0xFF184e68);
+  // static const Color primaryLight = Color(0xffcbd6fc);
+  // static const Color secondary = Color(0xff3cbcb0);
 
-  // static const primaryGradient = const LinearGradient(
-  //   colors: const [loginGradientStart, loginGradientEnd],
-  //   stops: const [0.0, 1.0],
-  //   begin: Alignment.topCenter,
-  //   end: Alignment.bottomCenter,
-  // );
+  static const Color danger = Color(0xffe64c3d);
+
+  static const Color background = Color(0xfff3f4fa);
 }

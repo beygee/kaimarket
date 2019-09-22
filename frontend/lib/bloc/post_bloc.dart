@@ -68,10 +68,13 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         list = list.map((p) {
           if (p.id != postId) return p;
           var post = Post.copyWith(p);
+          log.i("before post", post.status);
+          log.i("status", status);
           post.status = status;
+          log.i("changed post", post.status);
           return post;
         }).toList();
-
+        log.i(list);
         yield PostLoaded(posts: list);
       }
     } catch (_) {
