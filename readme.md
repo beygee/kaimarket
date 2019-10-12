@@ -12,7 +12,6 @@
   <img src="https://img.shields.io/github/languages/top/beygee/kaimarket" />
   <img src="https://img.shields.io/github/commit-activity/m/beygee/kaimarket"/>
   <img src="https://img.shields.io/github/last-commit/beygee/kaimarket"/>
-  <img src="https://img.shields.io/github/license/beygee/kaimarket" />
 </div>
 
 ## Tech Stack
