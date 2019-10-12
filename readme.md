@@ -17,30 +17,26 @@
 
 ## Tech Stack
 
-<table>
-<tr>
-<td>
+### FrontEnd
 
 - Flutter
 - Socket.io
 
-</td>
-</tr>
-</table>
-
 ### BackEnd
 
-Node.JS
-Socket.io
-JWT
-MongoDB
+- Nodejs
+- Socket.io
+- JWT
+- Mysql
+- Sequelize
+- Firebase Messaging
 
 ### DEMO
 
 <div style="display:flex">
-<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/1.gif" width="200">
-<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/2.gif" width="200">
-<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/3.gif" width="200">
-<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/4.gif" width="200">
-<img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/5.gif" width="200">
+  <img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/1.gif" width="150">
+  <img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/2.gif" width="150">
+  <img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/3.gif" width="150">
+  <img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/4.gif" width="150">
+  <img src="https://github.com/LoakickBangu/madcamp_week_3/blob/master/images/5.gif" width="150">
 </div>
