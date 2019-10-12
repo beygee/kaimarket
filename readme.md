@@ -1,13 +1,32 @@
-# 카이마켓
+<h1 align="center">Kaimarket</h1>
+<div align="center">
+  👩🎁🎁🎁🎁🎁👨
+</div>
+<div align="center">
+  카이스트 학생들을 위한 중고물품 판매 어플
+</div>
 
-카이스트 학생들을 위한 중고 판매 어플 제작 프로젝트
+<br/>
+<div align="center" style="display:flex;">
+  <img src="https://img.shields.io/static/v1?label=KAIST&message=Market&color=orange" />
+  <img src="https://img.shields.io/github/languages/top/beygee/kaimarket" />
+  <img src="https://img.shields.io/github/commit-activity/m/beygee/kaimarket"/>
+  <img src="https://img.shields.io/github/last-commit/beygee/kaimarket"/>
+  <img src="https://img.shields.io/github/license/beygee/kaimarket" />
+</div>
 
-## Stack
+## Tech Stack
 
-### FrontEnd
+<table>
+<tr>
+<td>
 
-Flutter
-Socket.io
+- Flutter
+- Socket.io
+
+</td>
+</tr>
+</table>
 
 ### BackEnd
 
