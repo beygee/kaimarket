@@ -98,11 +98,11 @@ class _ChatViewPageState extends State<ChatViewPage> {
     super.initState();
     //로그인 유저 정보 가져오기.
     _userBloc = BlocProvider.of<UserBloc>(context);
-    final UserLoaded user = _userBloc.currentState;
+    final UserLoaded user = _userBloc.state;
     loggedUserId = user.id;
 
     _socketBloc = BlocProvider.of<SocketBloc>(context);
-    _socketBloc.dispatch(SocketChatEnter(onMessage: (data) async {
+    _socketBloc.add(SocketChatEnter(onMessage: (data) async {
       updateMessage(data);
     }));
 
@@ -111,7 +111,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
 
   @override
   void dispose() {
-    _socketBloc.dispatch(SocketChatLeave());
+    _socketBloc.add(SocketChatLeave());
     super.dispose();
   }
 
@@ -294,7 +294,7 @@ class _ChatViewPageState extends State<ChatViewPage> {
       // height: screenAwareSize(50.0, context),
       child: TextField(
         onSubmitted: (value) =>
-            callback((_socketBloc.currentState as SocketChatLoaded).socket),
+            callback((_socketBloc.state as SocketChatLoaded).socket),
         decoration: InputDecoration(
           border: InputBorder.none,
           contentPadding: EdgeInsets.all(screenAwareSize(10.0, context)),

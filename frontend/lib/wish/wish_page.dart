@@ -24,7 +24,7 @@ class WishPageState extends State<WishPage> {
     super.initState();
     _postBloc = BlocProvider.of<PostBloc>(context);
     _userBloc = BlocProvider.of<UserBloc>(context);
-    _userBloc.dispatch(UserGetWish());
+    _userBloc.add(UserGetWish());
   }
 
   @override
@@ -123,7 +123,7 @@ class WishPageState extends State<WishPage> {
           var res = await dio.postUri(getUri('/api/posts/${post.id}/wish'));
 
           bool bWish = res.data['wish'];
-          _userBloc.dispatch(SearchWishInUser(postId: post.id, wish: bWish));
+          _userBloc.add(SearchWishInUser(postId: post.id, wish: bWish));
           if (bWish) {
             Fluttertoast.showToast(
               msg: "찜 목록에 추가하였습니다.",

@@ -54,7 +54,7 @@ class _PostViewPageState extends State<PostViewPage> {
     scrollController = ScrollController();
 
     _userBloc = BlocProvider.of<UserBloc>(context);
-    final UserLoaded user = _userBloc.currentState;
+    final UserLoaded user = _userBloc.state;
     loggedUserId = user.id;
   }
 
@@ -290,7 +290,7 @@ class _PostViewPageState extends State<PostViewPage> {
                                       final postBloc =
                                           BlocProvider.of<PostBloc>(context);
                                       log.i(post.id);
-                                      postBloc.dispatch(
+                                      postBloc.add(
                                           PostDelete(postId: post.id));
                                       Navigator.of(context).pop();
                                       Navigator.of(context).pop();
@@ -341,7 +341,7 @@ class _PostViewPageState extends State<PostViewPage> {
                             });
 
                             final postBloc = BlocProvider.of<PostBloc>(context);
-                            postBloc.dispatch(StatusUpdate(
+                            postBloc.add(StatusUpdate(
                                 postId: post.id, status: post.status));
                           },
                           value: _currentStatus,
@@ -389,7 +389,7 @@ class _PostViewPageState extends State<PostViewPage> {
 
                         final _postBloc = BlocProvider.of<PostBloc>(context);
                         _postBloc
-                            .dispatch(SearchWish(postId: post.id, wish: bWish));
+                            .add(SearchWish(postId: post.id, wish: bWish));
                         setState(() {
                           post.isWish = bWish;
                         });
@@ -458,7 +458,7 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 
   void _onPressChatSeller() {
-    _loadingWrapperKey.currentState.loadFuture(() async {
+    _loadingWrapperKey.state.loadFuture(() async {
       var res = await dio.postUri(getUri('/api/chats'), data: {
         'postId': post.id,
         'sellerId': post.user.id,

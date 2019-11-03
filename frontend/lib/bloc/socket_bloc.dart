@@ -15,7 +15,7 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
   Stream<SocketState> mapEventToState(
     SocketEvent event,
   ) async* {
-    if (event is SocketInit && currentState is SocketUninitialized) {
+    if (event is SocketInit && state is SocketUninitialized) {
       //액세스 토큰을 얻어온다.
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.containsKey("access_token")
@@ -43,22 +43,22 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
       await socket.connect();
 
       yield SocketLoaded(manager: manager, socket: socket);
-    } else if (event is SocketDelete && currentState is SocketLoaded) {
-      (currentState as SocketLoaded).dispose();
+    } else if (event is SocketDelete && state is SocketLoaded) {
+      (state as SocketLoaded).dispose();
       yield SocketUninitialized();
-    } else if (event is SocketDelete && currentState is SocketChatLoaded) {
-      (currentState as SocketChatLoaded).dispose();
+    } else if (event is SocketDelete && state is SocketChatLoaded) {
+      (state as SocketChatLoaded).dispose();
       yield SocketUninitialized();
-    } else if (event is SocketChatEnter && currentState is SocketLoaded) {
+    } else if (event is SocketChatEnter && state is SocketLoaded) {
       //소켓 이벤트 붙이기
-      final socket = (currentState as SocketLoaded).socket;
-      final manager = (currentState as SocketLoaded).manager;
+      final socket = (state as SocketLoaded).socket;
+      final manager = (state as SocketLoaded).manager;
       await socket.on("message", event.onMessage);
       yield SocketChatLoaded(manager: manager, socket: socket);
-    } else if (event is SocketChatLeave && currentState is SocketChatLoaded) {
+    } else if (event is SocketChatLeave && state is SocketChatLoaded) {
       //소켓 이벤트 빼버리기
-      final socket = (currentState as SocketChatLoaded).socket;
-      final manager = (currentState as SocketChatLoaded).manager;
+      final socket = (state as SocketChatLoaded).socket;
+      final manager = (state as SocketChatLoaded).manager;
       await socket.off('message');
       yield SocketLoaded(manager: manager, socket: socket);
     }
@@ -66,11 +66,11 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
 
   @override
   void dispose() {
-    if (currentState is SocketLoaded) {
-      (currentState as SocketLoaded).dispose();
+    if (state is SocketLoaded) {
+      (state as SocketLoaded).dispose();
     }
-    if (currentState is SocketChatLoaded) {
-      (currentState as SocketChatLoaded).dispose();
+    if (state is SocketChatLoaded) {
+      (state as SocketChatLoaded).dispose();
     }
     super.dispose();
   }

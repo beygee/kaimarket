@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //구글로 연결
   void _loginWithGoogle(context) {
-    _loadingWrapperKey.currentState.loadFuture(() async {
+    _loadingWrapperKey.state.loadFuture(() async {
       final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
 
       GoogleSignInAccount googleUser = await googleSignIn.signIn();
@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //네이버로 연결
   // void _loginWithNaver(context) {
-  //   _loadingWrapperKey.currentState.loadFuture(() async {
+  //   _loadingWrapperKey.state.loadFuture(() async {
   //     NaverLoginResult result = await FlutterNaverLogin.logIn();
   //     switch (result.status) {
   //       case NaverLoginStatus.loggedIn:
@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //카카오로 연결
   // void _loginWithKakao(context) {
-  //   _loadingWrapperKey.currentState.loadFuture(() async {
+  //   _loadingWrapperKey.state.loadFuture(() async {
   //     FlutterKakaoLogin kakaoSignIn = FlutterKakaoLogin();
   //     final KakaoLoginResult result = await kakaoSignIn.logIn();
 
@@ -226,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //페이스북으로 연결
   void _loginWithFacebook(context) {
-    _loadingWrapperKey.currentState.loadFuture(() async {
+    _loadingWrapperKey.state.loadFuture(() async {
       var facebookLogin = FacebookLogin();
 
       var result = await facebookLogin.logInWithReadPermissions(['email']);
@@ -255,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginWithGuest(context) {
-    _loadingWrapperKey.currentState.loadFuture(() async {
+    _loadingWrapperKey.state.loadFuture(() async {
       var res = await dio.postUri(getUri('/api/auth/guest'));
 
       _authUserWithValid(context, res);

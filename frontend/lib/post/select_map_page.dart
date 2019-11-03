@@ -97,7 +97,7 @@ class SelectMapPageState extends State<SelectMapPage> {
 
   //데이터 작성 완료
   _onTapComplete(context) {
-    _loadingWrapperKey.currentState.loadFuture(() async {
+    _loadingWrapperKey.state.loadFuture(() async {
       if (widget.post.locationLat == null) {
         showSnackBar(context, "선호 지역을 선택해주세요.");
         return;
@@ -120,7 +120,7 @@ class SelectMapPageState extends State<SelectMapPage> {
       }
       //데이터 새로 페치
       final postBloc = BlocProvider.of<PostBloc>(context);
-      postBloc.dispatch(PostFetch(reload: true));
+      postBloc.add(PostFetch(reload: true));
     });
   }
 

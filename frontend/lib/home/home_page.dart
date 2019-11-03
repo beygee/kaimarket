@@ -36,7 +36,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _postBloc = BlocProvider.of<PostBloc>(context);
-    _postBloc.dispatch(PostFetch(reload: true));
+    _postBloc.add(PostFetch(reload: true));
     _userBloc = BlocProvider.of<UserBloc>(context);
 
     scrollController.addListener(_onInfiniteScroll);
@@ -115,7 +115,7 @@ class HomePageState extends State<HomePage> {
     final currentScroll = scrollController.position.pixels;
     if (maxScroll - currentScroll <= 250) {
       thr.throttle(() {
-        _postBloc.dispatch(PostFetch(
+        _postBloc.add(PostFetch(
             searchText: searchController.text,
             selectedCategory: selectedCategory));
       });
@@ -152,7 +152,7 @@ class HomePageState extends State<HomePage> {
   }
 
   void _searchPosts() {
-    _postBloc.dispatch(PostFetch(
+    _postBloc.add(PostFetch(
         searchText: searchController.text,
         selectedCategory: selectedCategory,
         reload: true));
@@ -172,7 +172,7 @@ class HomePageState extends State<HomePage> {
             onPressed: () {
               setState(() {
                 selectedCategory = idx;
-                _postBloc.dispatch(PostFetch(
+                _postBloc.add(PostFetch(
                     selectedCategory: selectedCategory,
                     searchText: searchController.text,
                     reload: true));
@@ -229,9 +229,9 @@ class HomePageState extends State<HomePage> {
 
           bool bWish = res.data['wish'];
 
-          // _userBloc.dispatch(UserChangeWish(postId: post.id));
+          // _userBloc.add(UserChangeWish(postId: post.id));
           // post.isWish = !post.isWish;
-          _postBloc.dispatch(SearchWish(postId: post.id, wish: bWish));
+          _postBloc.add(SearchWish(postId: post.id, wish: bWish));
 
           if (bWish) {
             Fluttertoast.showToast(
