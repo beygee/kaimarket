@@ -97,7 +97,7 @@ class SelectMapPageState extends State<SelectMapPage> {
 
   //데이터 작성 완료
   _onTapComplete(context) {
-    _loadingWrapperKey.state.loadFuture(() async {
+    _loadingWrapperKey.currentState.loadFuture(() async {
       if (widget.post.locationLat == null) {
         showSnackBar(context, "선호 지역을 선택해주세요.");
         return;

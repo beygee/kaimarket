@@ -458,7 +458,7 @@ class _PostViewPageState extends State<PostViewPage> {
   }
 
   void _onPressChatSeller() {
-    _loadingWrapperKey.state.loadFuture(() async {
+    _loadingWrapperKey.currentState.loadFuture(() async {
       var res = await dio.postUri(getUri('/api/chats'), data: {
         'postId': post.id,
         'sellerId': post.user.id,

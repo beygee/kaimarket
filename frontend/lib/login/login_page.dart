@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //구글로 연결
   void _loginWithGoogle(context) {
-    _loadingWrapperKey.state.loadFuture(() async {
+    _loadingWrapperKey.currentState.loadFuture(() async {
       final GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
 
       GoogleSignInAccount googleUser = await googleSignIn.signIn();
@@ -226,7 +226,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //페이스북으로 연결
   void _loginWithFacebook(context) {
-    _loadingWrapperKey.state.loadFuture(() async {
+    _loadingWrapperKey.currentState.loadFuture(() async {
       var facebookLogin = FacebookLogin();
 
       var result = await facebookLogin.logInWithReadPermissions(['email']);
@@ -255,7 +255,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginWithGuest(context) {
-    _loadingWrapperKey.state.loadFuture(() async {
+    _loadingWrapperKey.currentState.loadFuture(() async {
       var res = await dio.postUri(getUri('/api/auth/guest'));
 
       _authUserWithValid(context, res);

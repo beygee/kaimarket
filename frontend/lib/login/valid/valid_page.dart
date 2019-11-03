@@ -109,7 +109,7 @@ class _ValidPageState extends State<ValidPage> {
   }
 
   _validUser(context) {
-    _loadingWrapperKey.state.loadFuture(() async {
+    _loadingWrapperKey.currentState.loadFuture(() async {
       String id = idController.text;
       String password = passwordController.text;
 

@@ -160,7 +160,7 @@ class _PostBookSelectPageState extends State<PostBookSelectPage> {
   }
 
   void _onSearchBooks() {
-    _loadingWrapperKey.state.loadFuture(() async {
+    _loadingWrapperKey.currentState.loadFuture(() async {
       var res = await dio
           .getUri(getUri('/api/search/books', {'q': searchController.text}));
       if (res.statusCode == 200) {
