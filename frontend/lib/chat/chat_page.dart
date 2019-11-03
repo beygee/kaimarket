@@ -24,7 +24,7 @@ class ChatListsState extends State<ChatLists> {
   void initState() {
     super.initState();
     _userBloc = BlocProvider.of<UserBloc>(context);
-    final UserLoaded user = _userBloc.currentState;
+    final UserLoaded user = _userBloc.state;
     loggedUserId = user.id;
     fetchList();
   }

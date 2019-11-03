@@ -25,7 +25,7 @@ class _MyPageState extends State<MyPage> {
   void initState() {
     super.initState();
     _userBloc = BlocProvider.of<UserBloc>(context);
-    final UserLoaded user = _userBloc.currentState;
+    final UserLoaded user = _userBloc.state;
     loggedUserId = user.id;
     fetchList();
   }
@@ -95,7 +95,7 @@ class _MyPageState extends State<MyPage> {
             width: screenAwareSize(16, context),
           ),
           Text(
-            (_userBloc.currentState as UserLoaded).name,
+            (_userBloc.state as UserLoaded).name,
             style: TextStyle(
                 color: Colors.grey[600],
                 fontSize: screenAwareSize(16.0, context)),

@@ -22,7 +22,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   Stream<UserState> mapEventToState(UserEvent event) async* {
     try {
       if (event is UserInit &&
-          (currentState is UserUninitialized || currentState is UserError)) {
+          (state is UserUninitialized || state is UserError)) {
         //유저를 초기화해준다.
         var res = await dio.getUri(getUri('/api/me'));
 
@@ -42,9 +42,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       if (event is UserDelete) {
         yield UserUninitialized();
       }
-      if (event is UserGetWish && currentState is UserLoaded) {
+      if (event is UserGetWish && state is UserLoaded) {
         var res = await dio.getUri(getUri('/api/me/wish'));
-        final currentstate = (currentState as UserLoaded);
+        final _state = (state as UserLoaded);
         List<Post> posts = res.data
             .map((p) {
               return Post.fromJson(p);
@@ -53,14 +53,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             .cast<Post>();
 
         yield UserLoaded(
-            name: currentstate.name,
-            id: currentstate.id,
+            name: _state.name,
+            id: _state.id,
             wish: posts,
-            sales: currentstate.sales,
-            chats: currentstate.chats);
+            sales: _state.sales,
+            chats: _state.chats);
       }
-      if (event is SearchWishInUser && currentState is UserLoaded) {
-        List<Post> wishlist = (currentState as UserLoaded).wish;
+      if (event is SearchWishInUser && state is UserLoaded) {
+        final _state = (state as UserLoaded);
+        List<Post> wishlist = _state.wish;
         int postId = (event as SearchWishInUser).postId;
         bool wish = (event as SearchWishInUser).wish;
 
@@ -70,31 +71,29 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           return post;
         }).toList();
 
-        var currentstate = (currentState as UserLoaded);
-
         yield UserLoaded(
-            id: currentstate.id,
-            name: currentstate.name,
+            id: _state.id,
+            name: _state.name,
             wish: wishlist,
-            sales: currentstate.sales,
-            chats: currentstate.chats);
+            sales: _state.sales,
+            chats: _state.chats);
       }
-      if (event is UserChangeProfile && currentState is UserLoaded) {
+      if (event is UserChangeProfile && state is UserLoaded) {
         log.i("userchangeprofile");
-        String profilename = (event as UserChangeProfile).profilename;
+        String profilename = event.profilename;
         await dio
             .postUri(getUri('/api/auth/name'), data: {"name": profilename});
-        var currentstate = (currentState as UserLoaded);
+        var _state = (state as UserLoaded);
         yield UserLoaded(
-            id: currentstate.id,
+            id: _state.id,
             name: profilename,
-            wish: currentstate.wish,
-            sales: currentstate.sales,
-            chats: currentstate.chats);
+            wish: _state.wish,
+            sales: _state.sales,
+            chats: _state.chats);
       }
     } catch (_) {
       print(_);
-      yield currentState;
+      yield state;
     }
   }
 }

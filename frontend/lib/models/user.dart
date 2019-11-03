@@ -34,6 +34,10 @@ class User extends Equatable {
     salesCount = p.salesCount;
   }
 
+  @override
+  List<Object> get props =>
+      [id, name, email, purchases, sales, wish, keywords, chats, salesCount];
+
   User.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
@@ -94,14 +98,14 @@ class User extends Equatable {
     };
   }
 
-  @override
-  bool operator ==(Object other) {
-      Function deepEq = const DeepCollectionEquality().equals;
-      return identical(this, other) ||
-      other is User &&
-          runtimeType == other.runtimeType &&
-          name == other.name &&
-          id == other.id &&
-          deepEq(wish,other.wish);
-  }
+  // @override
+  // bool operator ==(Object other) {
+  //     Function deepEq = const DeepCollectionEquality().equals;
+  //     return identical(this, other) ||
+  //     other is User &&
+  //         runtimeType == other.runtimeType &&
+  //         name == other.name &&
+  //         id == other.id &&
+  //         deepEq(wish,other.wish);
+  // }
 }

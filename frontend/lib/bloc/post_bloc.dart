@@ -24,8 +24,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
           {
             'q': searchText,
             'category': selectedCategory.toString(),
-            'offset': currentState is PostLoaded && !event.reload
-                ? (currentState as PostLoaded).posts.length.toString()
+            'offset': state is PostLoaded && !event.reload
+                ? (state as PostLoaded).posts.length.toString()
                 : '0'
           },
         ));
@@ -38,14 +38,14 @@ class PostBloc extends Bloc<PostEvent, PostState> {
             .cast<Post>();
 
         yield PostLoaded(
-            posts: currentState is PostLoaded && !event.reload
-                ? (currentState as PostLoaded).posts + posts
+            posts: state is PostLoaded && !event.reload
+                ? (state as PostLoaded).posts + posts
                 : posts,
             bReachedMax: posts.length != 5);
       }
 
-      if (event is SearchWish && currentState is PostLoaded) {
-        List<Post> list = (currentState as PostLoaded).posts;
+      if (event is SearchWish && state is PostLoaded) {
+        List<Post> list = (state as PostLoaded).posts;
         int postId = (event as SearchWish).postId;
         bool wish = (event as SearchWish).wish;
 
@@ -59,8 +59,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         yield PostLoaded(posts: list);
       }
 
-      if (event is PostDelete && currentState is PostLoaded) {
-        List<Post> list = (currentState as PostLoaded).posts;
+      if (event is PostDelete && state is PostLoaded) {
+        List<Post> list = (state as PostLoaded).posts;
         int postId = (event as PostDelete).postId;
 
         // 서버에서 지우기
@@ -81,8 +81,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       }
 
       if (event is StatusUpdate) {
-        final loaded = currentState as PostLoaded;
-        List<Post> list = (currentState as PostLoaded).posts;
+        final loaded = state as PostLoaded;
+        List<Post> list = (state as PostLoaded).posts;
         int postId = (event as StatusUpdate).postId;
         int status = (event as StatusUpdate).status;
 

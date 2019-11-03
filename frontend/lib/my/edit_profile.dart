@@ -78,7 +78,7 @@ class _EditProfileState extends State<EditProfile> {
             onTap: () async => {
               // 완료.
               _userBloc
-                  .dispatch(UserChangeProfile(profilename: nameController.text)),
+                  .add(UserChangeProfile(profilename: nameController.text)),
               Navigator.of(context).pop()
             },
             child: Padding(

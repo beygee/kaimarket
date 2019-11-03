@@ -46,9 +46,9 @@ class _DefaultLayoutState extends State<DefaultLayout>
 
     //소켓 초기화
     _socketBloc = BlocProvider.of<SocketBloc>(context);
-    _socketBloc.dispatch(SocketInit());
+    _socketBloc.add(SocketInit());
     _userBloc = BlocProvider.of<UserBloc>(context);
-    _userBloc.dispatch(UserInit());
+    _userBloc.add(UserInit());
 
     _sellButtonController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 200));
@@ -65,10 +65,10 @@ class _DefaultLayoutState extends State<DefaultLayout>
   @override
   void dispose() {
     //소켓 제거
-    _socketBloc.dispatch(SocketDelete());
+    _socketBloc.add(SocketDelete());
 
     //유저 정보 제거
-    _userBloc.dispatch(UserDelete());
+    _userBloc.add(UserDelete());
 
     _pageController.dispose();
     _sellButtonController.dispose();

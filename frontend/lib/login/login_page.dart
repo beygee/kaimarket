@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //네이버로 연결
   // void _loginWithNaver(context) {
-  //   _loadingWrapperKey.currentState.loadFuture(() async {
+  //   _loadingWrapperKey.state.loadFuture(() async {
   //     NaverLoginResult result = await FlutterNaverLogin.logIn();
   //     switch (result.status) {
   //       case NaverLoginStatus.loggedIn:
@@ -201,7 +201,7 @@ class _LoginPageState extends State<LoginPage> {
 
   //카카오로 연결
   // void _loginWithKakao(context) {
-  //   _loadingWrapperKey.currentState.loadFuture(() async {
+  //   _loadingWrapperKey.state.loadFuture(() async {
   //     FlutterKakaoLogin kakaoSignIn = FlutterKakaoLogin();
   //     final KakaoLoginResult result = await kakaoSignIn.logIn();
 

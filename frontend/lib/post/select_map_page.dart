@@ -120,7 +120,7 @@ class SelectMapPageState extends State<SelectMapPage> {
       }
       //데이터 새로 페치
       final postBloc = BlocProvider.of<PostBloc>(context);
-      postBloc.dispatch(PostFetch(reload: true));
+      postBloc.add(PostFetch(reload: true));
     });
   }
 

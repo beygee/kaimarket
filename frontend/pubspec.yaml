@@ -37,9 +37,9 @@ dependencies:
   fluttertoast: ^3.1.0
   html: ^0.14.0+2
   intl: ^0.15.8
-  equatable: ^0.2.6
-  bloc: ^0.14.4
-  flutter_bloc: ^0.19.0
+  equatable: ^0.6.1
+  bloc: ^1.0.0
+  flutter_bloc: ^1.0.0
   provider: ^3.0.0+1
   cached_network_image: ^1.1.0
   date_format: ^1.0.6
