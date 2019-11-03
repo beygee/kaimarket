@@ -5,7 +5,10 @@ import 'package:week_3/utils/utils.dart';
 
 @immutable
 abstract class SocketState extends Equatable {
-  SocketState([List props = const []]) : super(props);
+  SocketState([List props = const []]);
+
+  @override
+  List<Object> get props => [];
 }
 
 class SocketUninitialized extends SocketState {
@@ -26,12 +29,14 @@ class SocketLoaded extends SocketState {
   final SocketIOManager manager;
   final SocketIO socket;
 
-  SocketLoaded({@required this.manager, @required this.socket})
-      : super([manager, socket]);
+  SocketLoaded({@required this.manager, @required this.socket});
 
   void dispose() {
     manager.clearInstance(socket).then((_) {});
   }
+
+  @override
+  List<Object> get props => [manager, socket];
 
   @override
   String toString() {
@@ -44,8 +49,10 @@ class SocketChatLoaded extends SocketState {
   final SocketIOManager manager;
   final SocketIO socket;
 
-  SocketChatLoaded({@required this.manager, @required this.socket})
-      : super([manager, socket]);
+  SocketChatLoaded({@required this.manager, @required this.socket});
+
+  @override
+  List<Object> get props => [manager, socket];
 
   void dispose() {
     manager.clearInstance(socket).then((_) {});

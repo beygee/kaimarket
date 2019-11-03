@@ -5,7 +5,10 @@ import 'package:week_3/models/chat.dart';
 
 @immutable
 abstract class UserState extends Equatable {
-  UserState([List props = const []]) : super(props);
+  UserState([List props = const []]);
+
+  @override
+  List<Object> get props => [];
 }
 
 class UserUninitialized extends UserState {
@@ -32,7 +35,10 @@ class UserLoaded extends UserState {
     @required this.wish,
     @required this.sales,
     @required this.chats,
-  }) : super([id, name, wish, sales, chats]);
+  });
+
+  @override
+  List<Object> get props => [id, name, wish, sales, chats];
 
   @override
   String toString() {

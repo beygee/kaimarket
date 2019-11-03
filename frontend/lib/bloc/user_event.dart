@@ -5,7 +5,10 @@ import 'package:week_3/models/post.dart';
 
 @immutable
 abstract class UserEvent extends Equatable {
-  UserEvent([List props = const []]) : super(props);
+  UserEvent([List props = const []]);
+
+  @override
+  List<Object> get props => [];
 }
 
 class UserInit extends UserEvent {
@@ -48,7 +51,7 @@ class UserAddPurchase extends UserEvent {
   }
 }
 
-class UserGetWish extends UserEvent{
+class UserGetWish extends UserEvent {
   @override
   String toString() {
     return "UserGetWish";
@@ -67,13 +70,13 @@ class SearchWishInUser extends UserEvent {
   }
 }
 
-class UserChangeProfile extends UserEvent{
+class UserChangeProfile extends UserEvent {
   final String profilename;
-  
+
   UserChangeProfile({this.profilename});
 
   @override
-  String toString(){
+  String toString() {
     return "UserChangeProfile";
   }
 }

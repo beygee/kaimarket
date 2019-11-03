@@ -5,7 +5,10 @@ import 'package:meta/meta.dart';
 
 @immutable
 abstract class SocketEvent extends Equatable {
-  SocketEvent([List props = const []]) : super(props);
+  SocketEvent([List props = const []]);
+  
+  @override
+  List<Object> get props => [];
 }
 
 class SocketInit extends SocketEvent {
@@ -24,7 +27,7 @@ class SocketDelete extends SocketEvent {
 
 class SocketChatEnter extends SocketEvent {
   final ValueChanged<dynamic> onMessage;
-  
+
   SocketChatEnter({@required this.onMessage});
 
   @override

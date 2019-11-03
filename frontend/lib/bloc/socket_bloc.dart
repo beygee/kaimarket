@@ -72,6 +72,6 @@ class SocketBloc extends Bloc<SocketEvent, SocketState> {
     if (state is SocketChatLoaded) {
       (state as SocketChatLoaded).dispose();
     }
-    super.dispose();
+    // super.dispose();
   }
 }

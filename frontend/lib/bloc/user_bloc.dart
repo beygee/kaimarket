@@ -44,7 +44,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       }
       if (event is UserGetWish && state is UserLoaded) {
         var res = await dio.getUri(getUri('/api/me/wish'));
-        final state = (state as UserLoaded);
+        final _state = (state as UserLoaded);
         List<Post> posts = res.data
             .map((p) {
               return Post.fromJson(p);
@@ -53,14 +53,15 @@ class UserBloc extends Bloc<UserEvent, UserState> {
             .cast<Post>();
 
         yield UserLoaded(
-            name: state.name,
-            id: state.id,
+            name: _state.name,
+            id: _state.id,
             wish: posts,
-            sales: state.sales,
-            chats: state.chats);
+            sales: _state.sales,
+            chats: _state.chats);
       }
       if (event is SearchWishInUser && state is UserLoaded) {
-        List<Post> wishlist = (state as UserLoaded).wish;
+        final _state = (state as UserLoaded);
+        List<Post> wishlist = _state.wish;
         int postId = (event as SearchWishInUser).postId;
         bool wish = (event as SearchWishInUser).wish;
 
@@ -70,27 +71,25 @@ class UserBloc extends Bloc<UserEvent, UserState> {
           return post;
         }).toList();
 
-        var state = (state as UserLoaded);
-
         yield UserLoaded(
-            id: state.id,
-            name: state.name,
+            id: _state.id,
+            name: _state.name,
             wish: wishlist,
-            sales: state.sales,
-            chats: state.chats);
+            sales: _state.sales,
+            chats: _state.chats);
       }
       if (event is UserChangeProfile && state is UserLoaded) {
         log.i("userchangeprofile");
-        String profilename = (event as UserChangeProfile).profilename;
+        String profilename = event.profilename;
         await dio
             .postUri(getUri('/api/auth/name'), data: {"name": profilename});
-        var state = (state as UserLoaded);
+        var _state = (state as UserLoaded);
         yield UserLoaded(
-            id: state.id,
+            id: _state.id,
             name: profilename,
-            wish: state.wish,
-            sales: state.sales,
-            chats: state.chats);
+            wish: _state.wish,
+            sales: _state.sales,
+            chats: _state.chats);
       }
     } catch (_) {
       print(_);
