@@ -61,6 +61,7 @@ class _PostViewPageState extends State<PostViewPage> {
     if (res.data == "") {
       _showDeleteDialog();
     }
+
     Post p = Post.fromJson(res.data);
     relatedPosts = res.data['relatedPosts']
         .map((p) {
@@ -423,7 +424,7 @@ class _PostViewPageState extends State<PostViewPage> {
                                 color: Colors.amber[200]),
                       )),
                   SizedBox(width: 5.0),
-                  Text('찜', style: TextStyle(color: ThemeColor.primary)),
+                  Text('Ï', style: TextStyle(color: ThemeColor.primary)),
                 ],
               ),
               RaisedButton(
